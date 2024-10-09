@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "../globals.css";
 import Header from "./_components/header";
 import Footer from "./_components/footer";
+import BackToTop from "./_components/backToTop";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -47,6 +48,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <BackToTop />
       </body>
     </html>
   );

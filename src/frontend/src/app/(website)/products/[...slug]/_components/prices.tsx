@@ -1,5 +1,8 @@
 "use client";
 
+import Image from 'next/image';
+import report from '@/resources/icons/report.svg';
+
 export default function Prices() {
   return (
     <div className="p-6 border border-gray-200 rounded-xl w-80">
@@ -51,6 +54,10 @@ export default function Prices() {
         </div>
       </div>
       <div className="bg-purple-600 mt-4 text-white font-bold flex items-center justify-center h-11 rounded cursor-pointer hover:opacity-80">Mua</div>
+      <div className='flex items-center justify-center select-none cursor-pointer mt-4'>
+        <svg width={24} height={24} x="0" y="0" viewBox="0 0 24 24" xmlSpace="preserve"><path d="M6.2 19H5v1h3.5v-1H7.3v-5.8h5.9V5h-7z"></path><path d="M16.7 10.2l2.1-4h-4.5v8.1H19z"></path></svg>
+        Báo cáo sản phẩm
+      </div>
     </div>
   );
 }

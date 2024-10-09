@@ -1,6 +1,6 @@
 "use client";
 
-import Card from "@/components/user/card";
+import Card from "@/components/user/cardVertical";
 
 export default function Sellers() {
   return (

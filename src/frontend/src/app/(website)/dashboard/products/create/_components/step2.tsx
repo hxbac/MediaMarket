@@ -1,5 +1,6 @@
 "use client";
 
+import CustomEditor from "@/components/form/editor";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Form, Input } from "antd";
 
@@ -28,6 +29,7 @@ export default function Step2() {
         >
           <Input placeholder="input placeholder" />
         </Form.Item>
+        <CustomEditor />
       </Form>
     </div>
   );

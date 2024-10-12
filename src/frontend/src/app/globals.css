@@ -14,3 +14,17 @@
   );
   border-radius: 8px;
 }
+.ck-editor__editable {
+  min-height: 350px;
+}
+
+.category-item {
+  position: relative;
+}
+
+.category-item .delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  
+}

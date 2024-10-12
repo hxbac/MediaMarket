@@ -1,6 +1,7 @@
 "use client";
 
 import Card from "@/components/product/card";
+import Category from "@/components/tag/category";
 
 export default function Products() {
   const categories = [
@@ -63,12 +64,9 @@ export default function Products() {
           <div className="flex flex-wrap justify-center gap-x-2 gap-y-1">
             {categories.map((item, index) => {
               return (
-                <div
-                  key={index}
-                  className="py-1 px-4 font-bold whitespace-nowrap transition-all border border-gray-700 rounded-[100px] hover:bg-purple-600 hover:border-purple-600 hover:text-white cursor-pointer"
-                >
+                <Category key={index}>
                   {item.name}
-                </div>
+                </Category>
               );
             })}
           </div>

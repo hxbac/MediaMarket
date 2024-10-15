@@ -37,7 +37,7 @@ export default function Page() {
   return (
     <section className="bg-white pt-16">
       <div className="items-center max-w-screen-xl px-4 py-8 mx-auto lg:gap-16 xl:gap-24 lg:py-24 lg:px-6">
-        <h1 className="text-center uppercase text-xl font-bold mb-4">Quản lý sản phẩm</h1>
+        <h1 className="text-center uppercase text-xl font-bold mb-4">Lịch sử mua hàng</h1>
         <Tabs
           defaultActiveKey="1"
           items={tabs.map((item, i) => {

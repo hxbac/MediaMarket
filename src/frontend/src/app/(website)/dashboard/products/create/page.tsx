@@ -9,6 +9,7 @@ import {
 import { Steps } from "antd";
 import Step1 from "./_components/step1";
 import Step2 from "./_components/step2";
+import Step3 from "./_components/step3";
 
 export default function Page() {
   return (
@@ -40,6 +41,7 @@ export default function Page() {
         />
         <Step1 />
         <Step2 />
+        <Step3 />
       </div>
     </section>
   );

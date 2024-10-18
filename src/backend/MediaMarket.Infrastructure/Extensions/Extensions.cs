@@ -1,6 +1,10 @@
-﻿using MediaMarket.Domain.Entities;
+﻿using MediaMarket.Application.Configs;
+using MediaMarket.Application.Contracts.Services;
+using MediaMarket.Application.Services;
+using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,25 +18,27 @@ namespace MediaMarket.Infrastructure.Extensions
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             var sqlServerConnectionString = configuration.GetConnectionString("SqlServer");
-            Console.WriteLine(sqlServerConnectionString);
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(sqlServerConnectionString)
                     .EnableSensitiveDataLogging();
             });
 
+            services.Configure<JwtConfig>(configuration.GetSection("JwtConfig"));
+            var jwtConfig = configuration.GetSection("JwtConfig").Get<JwtConfig>();
+
             services.AddIdentityCore<User>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            Byte[]? accessSecretKey = Encoding.ASCII.GetBytes(configuration["JwtConfig:AccessSecretKey"]);
-            TokenValidationParameters? tokenValidationParams = new TokenValidationParameters
+            Byte[]? accessSecretKey = Encoding.ASCII.GetBytes(jwtConfig.SecretKey);
+            var tokenValidationParams = new TokenValidationParameters
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = "practical aspnetcore",
-                ValidAudience = "https://localhost:5001/",
+                ValidIssuer = jwtConfig.Issuer,
+                ValidAudience = jwtConfig.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(accessSecretKey),
             };
 
@@ -43,7 +49,19 @@ namespace MediaMarket.Infrastructure.Extensions
             }).AddJwtBearer(jwt =>
             {
                 jwt.TokenValidationParameters = tokenValidationParams;
+
+                jwt.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        context.Response.ContentType = "application/json";
+                        return context.Response.WriteAsync("{\"error\": \"Invalid token\"}");
+                    }
+                };
             });
+
+            services.AddScoped<IAuthService, AuthService>();
 
             return services;
         }

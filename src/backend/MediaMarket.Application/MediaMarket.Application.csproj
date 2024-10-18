@@ -7,12 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MediaMarket.Domain\MediaMarket.Domain.csproj" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\Services\" />
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\MediaMarket.Domain\MediaMarket.Domain.csproj" />
   </ItemGroup>
 
 </Project>

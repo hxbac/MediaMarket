@@ -1,4 +1,5 @@
 ﻿using MediaMarket.Domain.Entities;
+using MediaMarket.Domain.EntityConfigurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ namespace MediaMarket.Infrastructure.Data
         : base(options)
         {
         }
+
+        public DbSet<Product> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -33,6 +36,8 @@ namespace MediaMarket.Infrastructure.Data
             builder.Ignore<IdentityUserToken<string>>();
             builder.Ignore<IdentityUserLogin<string>>();
             builder.Ignore<IdentityUserClaim<string>>();
+
+            builder.ApplyConfiguration(new ProductEntityTypeConfiguration());
         }
     }
 }

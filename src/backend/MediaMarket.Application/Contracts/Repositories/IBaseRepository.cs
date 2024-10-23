@@ -4,7 +4,7 @@ namespace MediaMarket.Application.Contracts.Repositories
 {
     public interface IBaseRepository<T> where T : class
     {
-        Task<T> FindByIdAsync(int id);
+        Task<T> FindByIdAsync(Guid id);
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes = null);
         Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, int skip, int take);
@@ -16,6 +16,7 @@ namespace MediaMarket.Application.Contracts.Repositories
         Task<int> CountAsync(Expression<Func<T, bool>> criteria);
         Task<bool> IsExistAsync(Expression<Func<T, bool>> predicate);
         Task SaveChangesAsync();
+        void Remove(T entity);
     }
 
     public static class OrderBy

@@ -17,5 +17,18 @@
                 public const string Register = Prefix + "/register";
             }
         }
+
+        public static class TagRouting
+        {
+            public const string Prefix = rule + "tags";
+
+            public static class Action
+            {
+                public const string Index = Prefix;
+                public const string Create = Prefix;
+                public const string Update = Prefix + singleRoute;
+                public const string Delete = Prefix + singleRoute;
+            }
+        }
     }
 }

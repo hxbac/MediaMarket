@@ -1,8 +1,10 @@
 ﻿using MediaMarket.Application.Configs;
+using MediaMarket.Application.Contracts.Repositories;
 using MediaMarket.Application.Contracts.Services;
 using MediaMarket.Application.Services;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Data;
+using MediaMarket.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +64,9 @@ namespace MediaMarket.Infrastructure.Extensions
             });
 
             services.AddScoped<IAuthService, AuthService>();
+
+            services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<ITagService, TagService>();
 
             return services;
         }

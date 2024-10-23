@@ -14,6 +14,10 @@ namespace MediaMarket.Infrastructure.Data
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<EventDiscount> EventDiscounts { get; set; }
+        public DbSet<ProductDiscount> ProductDiscounts { get; set; }
+        public DbSet<Tag> Tags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

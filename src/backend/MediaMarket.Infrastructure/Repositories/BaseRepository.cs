@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace MediaMarket.Infrastructure.Repositories
 {
-    internal class BaseRepository<T> : IBaseRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         private readonly ApplicationDbContext _context;
 
@@ -34,6 +34,11 @@ namespace MediaMarket.Infrastructure.Repositories
         public async Task<int> CountAsync(Expression<Func<T, bool>> criteria)
         {
             return await _context.Set<T>().CountAsync(criteria);
+        }
+
+        public void Remove(T entity)
+        {
+            _context.Set<T>().Remove(entity);
         }
 
         public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, int skip, int take)
@@ -85,9 +90,9 @@ namespace MediaMarket.Infrastructure.Repositories
             return await query.SingleOrDefaultAsync(criteria);
         }
 
-        public Task<T> FindByIdAsync(int id)
+        public async Task<T> FindByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Set<T>().FindAsync(id);
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()

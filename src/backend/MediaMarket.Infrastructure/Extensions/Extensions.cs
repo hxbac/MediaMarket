@@ -5,6 +5,7 @@ using MediaMarket.Application.Services;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Data;
 using MediaMarket.Infrastructure.Repositories;
+using MediaMarket.Infrastructure.Seeders;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -67,6 +68,14 @@ namespace MediaMarket.Infrastructure.Extensions
 
             services.AddScoped<ITagRepository, TagRepository>();
             services.AddScoped<ITagService, TagService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddMigrations(this IServiceCollection services)
+        {
+            services.AddMigration<ApplicationDbContext, CategorySeeder>();
+            services.AddMigration<ApplicationDbContext, ProductSeeder>();
 
             return services;
         }

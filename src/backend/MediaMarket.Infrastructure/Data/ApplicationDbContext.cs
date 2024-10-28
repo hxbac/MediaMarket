@@ -42,6 +42,10 @@ namespace MediaMarket.Infrastructure.Data
             builder.Ignore<IdentityUserClaim<string>>();
 
             builder.ApplyConfiguration(new ProductEntityTypeConfiguration());
+            builder.ApplyConfiguration(new ImageEntityTypeConfiguration());
+            builder.ApplyConfiguration(new PreviewEntityTypeConfiguration());
+            builder.ApplyConfiguration(new ProductDetailEntityTypeConfiguration());
+            builder.ApplyConfiguration(new VideoSolutionEntityTypeConfiguration());
         }
     }
 }

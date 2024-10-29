@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
 namespace MediaMarket.Infrastructure.Extensions
@@ -20,6 +21,17 @@ namespace MediaMarket.Infrastructure.Extensions
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File(
+                    "storage/logs/log-.log",
+                    rollingInterval: RollingInterval.Day,
+                    shared: true,
+                    flushToDiskInterval: TimeSpan.FromSeconds(1)
+                )
+                .CreateLogger();
+            services.AddSerilog();
+
             var sqlServerConnectionString = configuration.GetConnectionString("SqlServer");
             services.AddDbContext<ApplicationDbContext>(options =>
             {

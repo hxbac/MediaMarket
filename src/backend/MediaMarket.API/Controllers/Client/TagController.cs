@@ -3,7 +3,7 @@ using MediaMarket.Application.DTO.Request.Tag;
 using MediaMarket.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediaMarket.API.Controllers
+namespace MediaMarket.API.Controllers.Client
 {
     [ApiController]
     public class TagController(ITagService tagService) : ApiBaseController

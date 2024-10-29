@@ -79,7 +79,14 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddScoped<IAuthService, AuthService>();
 
             services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IPreviewRepository, PreviewRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+
             services.AddScoped<ITagService, TagService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
 
             return services;
         }

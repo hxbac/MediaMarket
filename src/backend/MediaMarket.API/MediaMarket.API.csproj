@@ -19,4 +19,9 @@
     <ProjectReference Include="..\MediaMarket.Infrastructure\MediaMarket.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Admin\" />
+    <Folder Include="Controllers\Auth\" />
+  </ItemGroup>
+
 </Project>

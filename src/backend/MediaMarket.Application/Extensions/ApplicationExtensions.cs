@@ -8,6 +8,7 @@ namespace MediaMarket.Application.Extensions
         public static IServiceCollection AddAutoMappers(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(TagMappingProfile));
+            services.AddAutoMapper(typeof(CategoryMappingProfile));
             return services;
         }
     }

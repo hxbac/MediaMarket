@@ -30,5 +30,23 @@
                 public const string Delete = Prefix + singleRoute;
             }
         }
+
+        public static class ProductRouting
+        {
+            public const string Prefix = rule + "products";
+            public static class Action
+            {
+                public const string Show = Prefix + singleRoute;
+            }
+        }
+
+        public static class CategoryRouting
+        {
+            public const string Prefix = rule + "categories";
+            public static class Action
+            {
+                public const string Index = Prefix;
+            }
+        }
     }
 }

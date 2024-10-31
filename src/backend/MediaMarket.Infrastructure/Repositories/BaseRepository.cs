@@ -8,10 +8,12 @@ namespace MediaMarket.Infrastructure.Repositories
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         private readonly ApplicationDbContext _context;
+        protected readonly DbSet<T> _model;
 
         public BaseRepository(ApplicationDbContext context)
         {
             _context = context;
+            _model = _context.Set<T>();
         }
 
         public async Task<T> AddAsync(T entity)

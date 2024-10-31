@@ -7,6 +7,8 @@ import BackToTop from "./_components/backToTop";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ConfigProvider } from "antd";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -57,6 +59,7 @@ export default function RootLayout({
           {children}
           <Footer />
           <BackToTop />
+          <ToastContainer />
         </body>
       </html>
     </ConfigProvider>

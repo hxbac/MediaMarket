@@ -8,11 +8,8 @@ using MediaMarket.Domain.Entities;
 
 namespace MediaMarket.Application.Services
 {
-    public class TagService(ITagRepository tagRepository, IMapper mapper) : BaseResponseHandler, ITagService
+    public class TagService(ITagRepository _tagRepository, IMapper _mapper) : BaseResponseHandler, ITagService
     {
-        private readonly ITagRepository _tagRepository = tagRepository;
-        private readonly IMapper _mapper = mapper;
-
         public async Task<BaseResponse<IEnumerable<TagResponse>>> GetAll()
         {
             var tags = await _tagRepository.GetAllAsync();

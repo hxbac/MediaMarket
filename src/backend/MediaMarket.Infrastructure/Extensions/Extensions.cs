@@ -5,7 +5,6 @@ using MediaMarket.Application.Services;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Data;
 using MediaMarket.Infrastructure.Repositories;
-using MediaMarket.Infrastructure.Seeders;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -76,6 +75,15 @@ namespace MediaMarket.Infrastructure.Extensions
                 };
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "frontend",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:8080");
+                    });
+            });
+
             services.AddScoped<IAuthService, AuthService>();
 
             services.AddScoped<ITagRepository, TagRepository>();
@@ -93,8 +101,9 @@ namespace MediaMarket.Infrastructure.Extensions
 
         public static IServiceCollection AddMigrations(this IServiceCollection services)
         {
-            services.AddMigration<ApplicationDbContext, CategorySeeder>();
-            services.AddMigration<ApplicationDbContext, ProductSeeder>();
+            //services.AddMigration<ApplicationDbContext, TagSeeder>();
+            //services.AddMigration<ApplicationDbContext, CategorySeeder>();
+            //services.AddMigration<ApplicationDbContext, ProductSeeder>();
 
             return services;
         }

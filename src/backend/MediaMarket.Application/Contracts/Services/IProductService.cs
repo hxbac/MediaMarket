@@ -5,6 +5,7 @@ namespace MediaMarket.Application.Contracts.Services
 {
     public interface IProductService
     {
+        Task<BaseResponse<IEnumerable<ProductHomePageResponse>>> GetListProductsHomePageByCategory(Guid categoryId);
         Task<BaseResponse<ProductDetailResponse>> GetProductDetail(Guid productId);
     }
 }

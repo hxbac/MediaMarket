@@ -9,6 +9,7 @@ namespace MediaMarket.Application.Extensions
         {
             services.AddAutoMapper(typeof(TagMappingProfile));
             services.AddAutoMapper(typeof(CategoryMappingProfile));
+            services.AddAutoMapper(typeof(ProductMappingProfile));
             return services;
         }
     }

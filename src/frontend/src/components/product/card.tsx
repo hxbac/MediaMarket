@@ -1,12 +1,21 @@
+import { ProductHomePage } from "@/interfaces/products";
 import Image from "next/image";
 
-export default function Card() {
+import { ProductType } from "@/enums/ProductType";
+
+export default function Card({ data }: { data: ProductHomePage }) {
+  const productTypeTexts = {
+    [ProductType.Video.toString()]: 'Video',
+    [ProductType.Image.toString()]: 'Hình Ảnh',
+    [ProductType.Ebook.toString()]: 'Sách Điện Tử',
+  }
+
   return (
     <div className="relative max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-      <div className="card-top-overlay text-white font-bold pt-3 pl-3 text-lg">abc</div>
+      <div className="card-top-overlay text-white font-bold pt-3 pl-3 text-lg">{productTypeTexts[data.productType.toString()]}</div>
       <div>
         <Image
-          src="https://static.skillshare.com/uploads/video/thumbnails/dc94003f94071d4bbf5e7f68775803db/448-252"
+          src={data.thumbnail}
           alt=""
           width={150}
           height={268}
@@ -19,10 +28,10 @@ export default function Card() {
           <span className="text-xs font-semibold">51m</span>
         </div>
         <h5 className="mb-2 text-base font-bold tracking-tight text-gray-900">
-          Noteworthy technology acquisitions 2021
+          {data.name}
         </h5>
         <p className="mb-3 font-sm text-gray-700">
-          Here are the biggest enterprise technology acquisitions of 2021 so
+          {data.shortDescription}
         </p>
       </div>
     </div>

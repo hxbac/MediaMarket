@@ -1,12 +1,10 @@
 ﻿using MediaMarket.Domain.Common;
 using MediaMarket.Domain.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace MediaMarket.Domain.Entities
 {
     public class Product : BaseAuditableEntity<Guid>
     {
-        [MaxLength(150)]
         public required string Name { get; set; }
         public string? Thumbnail { get; set; }
         public string? ShortDescription { get; set; }

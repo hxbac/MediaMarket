@@ -15,5 +15,12 @@ namespace MediaMarket.API.Controllers.Client
             var response = await _productService.GetProductDetail(id);
             return CustomResult(response);
         }
+
+        [HttpGet(Router.ProductRouting.Action.GetProductsHomePage)]
+        public async Task<IActionResult> GetProductsHomePage([FromQuery] Guid categoryId)
+        {
+            var response = await _productService.GetListProductsHomePageByCategory(categoryId);
+            return CustomResult(response);
+        }
     }
 }

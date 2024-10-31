@@ -37,6 +37,7 @@
             public static class Action
             {
                 public const string Show = Prefix + singleRoute;
+                public const string GetProductsHomePage = Prefix + "/get-list-by-category";
             }
         }
 

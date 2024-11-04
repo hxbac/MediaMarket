@@ -6,3 +6,15 @@ export interface ProductHomePage {
     shortDescription: string;
     thumbnail: string;
 }
+
+export interface ProductTypeInterface {
+    type: number,
+    title: string,
+    description: string
+};
+
+export interface ProductInfo {
+    type: number,
+    name: string,
+    description: string,
+}

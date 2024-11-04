@@ -57,7 +57,7 @@ export default function Step2() {
   const [form] = Form.useForm();
 
   return (
-    <div className="hidden">
+    <div className="">
       <h2 className="text-2xl font-bold mt-8 mb-4">Thông tin sản phẩm</h2>
       <Form form={form} layout="vertical">
         <Form.Item

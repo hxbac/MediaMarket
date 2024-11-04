@@ -2,7 +2,6 @@
 using MediaMarket.Application.DTO.Response.Product;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Data;
-using MediaMarket.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediaMarket.Infrastructure.Repositories

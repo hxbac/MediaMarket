@@ -1,7 +1,6 @@
 ﻿using MediaMarket.Application.Contracts.Repositories;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Data;
-using MediaMarket.Infrastructure.Extensions;
 
 namespace MediaMarket.Infrastructure.Repositories
 {

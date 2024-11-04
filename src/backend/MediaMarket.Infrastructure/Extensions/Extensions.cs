@@ -68,9 +68,17 @@ namespace MediaMarket.Infrastructure.Extensions
                 {
                     OnAuthenticationFailed = context =>
                     {
+                        var errorMessage = context.Exception.Message;
+
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         context.Response.ContentType = "application/json";
-                        return context.Response.WriteAsync("{\"error\": \"Invalid token\"}");
+                        var response = new
+                        {
+                            error = true,
+                            message = "Invalid token",
+                            detail = errorMessage
+                        };
+                        return context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(response));
                     }
                 };
             });
@@ -80,7 +88,10 @@ namespace MediaMarket.Infrastructure.Extensions
                 options.AddPolicy(name: "frontend",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:8080");
+                        policy.WithOrigins("http://localhost:8080")
+                            .AllowAnyMethod()
+                            .AllowCredentials()
+                            .AllowAnyHeader();
                     });
             });
 

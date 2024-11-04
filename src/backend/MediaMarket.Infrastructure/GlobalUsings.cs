@@ -1,0 +1,1 @@
+﻿global using MediaMarket.Infrastructure.Extensions;

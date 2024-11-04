@@ -3,7 +3,7 @@ using MediaMarket.Application.DTO.Request.Auth;
 using MediaMarket.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MediaMarket.API.Controllers
+namespace MediaMarket.API.Controllers.Client
 {
     [ApiController]
     public class AuthController : ApiBaseController
@@ -19,6 +19,13 @@ namespace MediaMarket.API.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             var response = await _authService.Register(request);
+            return CustomResult(response);
+        }
+
+        [HttpPost(Router.AuthRouting.Action.Login)]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            var response = await _authService.Login(request);
             return CustomResult(response);
         }
     }

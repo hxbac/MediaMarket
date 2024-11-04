@@ -1,4 +1,5 @@
-﻿using MediaMarket.Application.Bases;
+﻿using AutoMapper;
+using MediaMarket.Application.Bases;
 using MediaMarket.Application.Configs;
 using MediaMarket.Application.Contracts.Services;
 using MediaMarket.Application.DTO.Request.Auth;
@@ -18,11 +19,13 @@ namespace MediaMarket.Application.Services
         private readonly UserManager<User> _userManager;
         private readonly JwtConfig _jwtConfig;
         private readonly string _algorithm = SecurityAlgorithms.HmacSha256Signature;
+        private readonly IMapper _mapper;
 
-        public AuthService(UserManager<User> userManager, IOptionsMonitor<JwtConfig> jwtConfig)
+        public AuthService(UserManager<User> userManager, IOptionsMonitor<JwtConfig> jwtConfig, IMapper mapper)
         {
             _userManager = userManager;
             _jwtConfig = jwtConfig.CurrentValue;
+            _mapper = mapper;
         }
 
         public async Task<BaseResponse<RegisterResponse>> Register(RegisterRequest request)
@@ -40,10 +43,11 @@ namespace MediaMarket.Application.Services
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
+                    var userResponse = _mapper.Map<UserResponse>(user);
                     return Created(new RegisterResponse
                     {
                         Token = GenerateToken(user),
-                        User = user,
+                        User = userResponse,
                     });
                 }
                 else
@@ -75,10 +79,12 @@ namespace MediaMarket.Application.Services
             }
 
             string token = GenerateToken(user);
+
+            var userResponse = _mapper.Map<UserResponse>(user);
             return Success(new LoginResponse
             {
                 Token = token,
-                user = user,
+                User = userResponse,
             });
         }
 
@@ -97,7 +103,9 @@ namespace MediaMarket.Application.Services
                     new Claim(JwtRegisteredClaimNames.Email, user.Email!)
                 }),
                 Expires = DateTime.Now.AddMinutes(_jwtConfig.ExpirationMinutes),
-                SigningCredentials = new(new SymmetricSecurityKey(accessSecretKey), _algorithm)
+                SigningCredentials = new(new SymmetricSecurityKey(accessSecretKey), _algorithm),
+                Audience = _jwtConfig.Audience,
+                Issuer = _jwtConfig.Issuer,
             };
 
             SecurityToken token = jwtSecurityTokenHandler.CreateToken(tokenDescriptor);

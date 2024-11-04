@@ -16,6 +16,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseStaticFiles();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -27,9 +29,14 @@ app.UseHttpsRedirection();
 
 app.UseCors("frontend");
 
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();

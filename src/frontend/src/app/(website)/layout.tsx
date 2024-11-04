@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { ConfigProvider } from "antd";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import StoreProvider from '@/store/StoreProvider';
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -55,11 +56,13 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased w-screen overflow-x-hidden`}
         >
-          <Header />
-          {children}
-          <Footer />
-          <BackToTop />
-          <ToastContainer />
+          <StoreProvider>
+            <Header />
+            {children}
+            <Footer />
+            <BackToTop />
+            <ToastContainer />
+          </StoreProvider>
         </body>
       </html>
     </ConfigProvider>

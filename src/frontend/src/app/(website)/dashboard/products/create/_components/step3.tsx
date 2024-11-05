@@ -10,7 +10,7 @@ const { Dragger } = Upload;
 const props: UploadProps = {
   name: 'file',
   multiple: true,
-  action: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
+  action: process.env.NEXT_PUBLIC_API_URL + 'files/upload',
   onChange(info) {
     const { status } = info.file;
     if (status !== 'uploading') {

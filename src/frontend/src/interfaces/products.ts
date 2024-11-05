@@ -17,4 +17,6 @@ export interface ProductInfo {
     type: number,
     name: string,
     description: string,
+    categories: string[],
+    tags: string[],
 }

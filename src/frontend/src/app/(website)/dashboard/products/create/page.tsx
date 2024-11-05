@@ -10,20 +10,44 @@ import { Button, Steps } from "antd";
 import Step1 from "./_components/step1";
 import Step2 from "./_components/step2";
 import Step3 from "./_components/step3";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ProductType } from "@/enums/ProductType";
 import { ProductContextProvider } from "../_context/ProductContext";
 import { ProductInfo } from "@/interfaces/products";
+import { CategoryHomePage } from "@/interfaces/categories";
+import categoryService from "@/services/categoryService";
+import { toast } from "react-toastify";
 
 export default function Page() {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<number>(2);
+  const [categories, setCategories] = useState<CategoryHomePage[]>([]);
   const [productInfo, setProductInfo] = useState<ProductInfo>({
     type: ProductType.Video,
     name: '',
-    description: ''
+    description: '',
+    categories: [],
+    tags: [],
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await categoryService.getAll();
+        if (result.succeeded) {
+          setCategories(result.data);
+        } else {
+          throw new Error(result.message);
+        }
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+        toast.error(errorMessage);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handlePrevStep = () => {
     const prevStep = currentStep - 1;
@@ -74,7 +98,7 @@ export default function Page() {
             (() => {
               switch (currentStep) {
                 case 2:
-                  return <Step2 />;
+                  return <Step2 categories={categories} />;
                 case 3:
                   return <Step3 />;
                 default:
@@ -83,7 +107,7 @@ export default function Page() {
             })()
           }
         </ProductContextProvider>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-6">
           <Button onClick={handlePrevStep}>Quay Lại</Button>
           <Button onClick={handleNextStep} type="primary">{currentStep === 3 ? 'Hoàn Tất' : 'Tiếp Tục'}</Button>
         </div>

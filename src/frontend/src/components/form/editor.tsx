@@ -1,9 +1,15 @@
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import { ClassicEditor, Bold, Essentials, Italic, Mention, Paragraph, Undo, Image, ImageCaption, ImageResize, ImageStyle, ImageToolbar, LinkImage, ImageUpload } from 'ckeditor5';
+import { ClassicEditor, Bold, Essentials, Italic, Mention, Paragraph, Undo, Image, ImageCaption, ImageResize, ImageStyle, ImageToolbar, LinkImage, ImageUpload, Editor, EventInfo } from 'ckeditor5';
 
+// Todo import once
 import 'ckeditor5/ckeditor5.css';
 
-export default function CustomEditor() {
+export default function CustomEditor({ value, onChange }: { value: string, onChange: (value: string) => void }) {
+  const handleEditorChange = (event: EventInfo<string, unknown>, editor: Editor) => {
+    const data = editor.getData();
+    onChange(data);
+  };
+
   return (
     <CKEditor
       editor={ ClassicEditor }
@@ -14,8 +20,9 @@ export default function CustomEditor() {
         plugins: [
             Bold, Essentials, Italic, Mention, Paragraph, Undo, Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageUpload
         ],
-        initialData: '<p>Hello from CKEditor 5 in React!</p>',
       } }
+      data={value}
+      onChange={handleEditorChange}
     />
   );
 }

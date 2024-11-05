@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
@@ -30,6 +32,8 @@ namespace MediaMarket.Infrastructure.Extensions
                 )
                 .CreateLogger();
             services.AddSerilog();
+
+            //services.AddHostedService<InitialStorageFolder>();
 
             var sqlServerConnectionString = configuration.GetConnectionString("SqlServer");
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -95,7 +99,6 @@ namespace MediaMarket.Infrastructure.Extensions
                     });
             });
 
-            services.AddScoped<IAuthService, AuthService>();
 
             services.AddScoped<ITagRepository, TagRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -106,6 +109,8 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddSingleton<IFileService, LocalStorageFileService>();
 
             return services;
         }
@@ -117,6 +122,45 @@ namespace MediaMarket.Infrastructure.Extensions
             //services.AddMigration<ApplicationDbContext, ProductSeeder>();
 
             return services;
+        }
+    }
+
+    public class InitialStorageFolder(ILogger<InitialStorageFolder> _logger) : BackgroundService
+    {
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            _logger.LogDebug("Start initial folder");
+
+            var root = Directory.GetCurrentDirectory();
+            string publicFolderPath = Path.Combine(root, "wwwroot/storage");
+            string targetFolderPath = Path.Combine(root, "storage/uploads/public");
+
+            if (File.Exists(publicFolderPath))
+            {
+                var fileInfo = new FileInfo(publicFolderPath);
+                if (fileInfo.Attributes.HasFlag(FileAttributes.ReparsePoint))
+                {
+                    _logger.LogDebug("Symlink đã tồn tại.");
+                }
+                else
+                {
+                    _logger.LogError("Tệp đã tồn tại nhưng không phải là symlink.");
+                }
+            }
+            else
+            {
+                try
+                {
+                    Directory.CreateSymbolicLink(publicFolderPath, targetFolderPath);
+                    _logger.LogDebug($"Đã tạo symlink từ {publicFolderPath} tới {targetFolderPath}.");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Lỗi khi tạo symlink: {ex.Message}");
+                }
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

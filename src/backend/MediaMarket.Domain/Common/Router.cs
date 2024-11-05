@@ -49,5 +49,14 @@
                 public const string Index = Prefix;
             }
         }
+
+        public static class FileRouting
+        {
+            public const string Prefix = rule + "files";
+            public static class Action
+            {
+                public const string UploadSingle = Prefix + "/upload";
+            }
+        }
     }
 }

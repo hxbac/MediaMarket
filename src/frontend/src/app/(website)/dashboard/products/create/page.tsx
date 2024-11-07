@@ -7,9 +7,9 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Button, Steps } from "antd";
-import Step1 from "./_components/step1";
-import Step2 from "./_components/step2";
-import Step3 from "./_components/step3";
+import Step1 from "../_components/step1";
+import Step2 from "../_components/step2";
+import Step3 from "../_components/step3";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ProductType } from "@/enums/ProductType";
@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 
 export default function Page() {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState<number>(2);
+  const [currentStep, setCurrentStep] = useState<number>(3);
   const [categories, setCategories] = useState<CategoryHomePage[]>([]);
   const [productInfo, setProductInfo] = useState<ProductInfo>({
     type: ProductType.Video,
@@ -29,6 +29,7 @@ export default function Page() {
     description: '',
     categories: [],
     tags: [],
+    originalFiles: [],
   });
 
   useEffect(() => {

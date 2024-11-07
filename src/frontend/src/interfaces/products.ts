@@ -13,10 +13,16 @@ export interface ProductTypeInterface {
     description: string
 };
 
+export interface FileInfo {
+    id: string|null;
+    url: string;
+}
+
 export interface ProductInfo {
     type: number,
     name: string,
     description: string,
     categories: string[],
     tags: string[],
+    originalFiles: FileInfo[]
 }

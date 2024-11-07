@@ -3,7 +3,7 @@
 import CustomEditor from "@/components/form/editor";
 import { CategoryHomePage } from "@/interfaces/categories";
 import { Form, Input } from "antd";
-import { useProductContext } from "../../_context/ProductContext";
+import { useProductContext } from "../_context/ProductContext";
 import Tags from "./tags";
 
 export default function Step2({ categories }: { categories: CategoryHomePage[] }) {

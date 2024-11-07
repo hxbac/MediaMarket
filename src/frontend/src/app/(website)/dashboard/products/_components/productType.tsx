@@ -1,7 +1,7 @@
 "use client";
 
 import { ProductTypeInterface } from "@/interfaces/products";
-import { useProductContext } from "../../_context/ProductContext";
+import { useProductContext } from "../_context/ProductContext";
 
 export default function ProductType({ data, isSelected } : 
   { 

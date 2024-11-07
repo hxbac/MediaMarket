@@ -3,7 +3,7 @@
 import { ProductTypeInterface } from "@/interfaces/products";
 import ProductType from "./productType";
 import { ProductType as ProductTypeEnum } from "@/enums/ProductType";
-import { useProductContext } from "../../_context/ProductContext";
+import { useProductContext } from "../_context/ProductContext";
 
 const productTypes : ProductTypeInterface[] = [
   {

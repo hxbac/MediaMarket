@@ -24,7 +24,7 @@ export default function Page() {
   const [currentStep, setCurrentStep] = useState<number>(3);
   const [categories, setCategories] = useState<CategoryHomePage[]>([]);
   const [productInfo, setProductInfo] = useState<ProductInfo>({
-    type: ProductType.Video,
+    type: ProductType.Image,
     name: '',
     description: '',
     categories: [],

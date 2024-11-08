@@ -3,6 +3,7 @@
 import { ProductType } from "@/enums/ProductType";
 import { useProductContext } from "../_context/ProductContext";
 import UploadVideo from "./uploads/uploadVideo";
+import UploadImage from "./uploads/uploadImage";
 
 export default function Step3() {
   const { value } = useProductContext();
@@ -15,7 +16,7 @@ export default function Step3() {
             case ProductType.Video:
               return <UploadVideo />;
             case ProductType.Image:
-              return <></>;
+              return <UploadImage />;
             default:
               return <></>;
           }

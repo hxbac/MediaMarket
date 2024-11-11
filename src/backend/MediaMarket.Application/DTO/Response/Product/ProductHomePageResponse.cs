@@ -5,7 +5,8 @@ namespace MediaMarket.Application.DTO.Response.Product
     public class ProductHomePageResponse
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
+        public string? Slug { get; set; }
         public string? Thumbnail { get; set; }
         public string? ShortDescription { get; set; }
         public required long Price { get; set; }

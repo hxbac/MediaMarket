@@ -4,7 +4,6 @@ using MediaMarket.Application.Contracts.Repositories;
 using MediaMarket.Application.Contracts.Services;
 using MediaMarket.Application.DTO.Request.Product;
 using MediaMarket.Application.DTO.Response.Product;
-using MediaMarket.Application.Utils;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Domain.Enums;
 
@@ -37,9 +36,10 @@ namespace MediaMarket.Application.Services
                 ProductType = request.Type,
                 ProductStatus = request.Status,
                 ProductContentStatus = ProductContentStatus.Waiting,
-                Categories = (ICollection<Category>)categories,
+                Categories = categories.ToList(),
                 Tags = tags,
             };
+            product.Slug = await GenerateSlugProduct(product.Name);
 
             await _productRepository.AddAsync(product);
 
@@ -64,6 +64,20 @@ namespace MediaMarket.Application.Services
             return Success(_mapper.Map<CreateProductResponse>(product));
         }
 
+        private async Task<string> GenerateSlugProduct(string productName)
+        {
+            string slugOriginal = productName.ToSlug();
+            while (true)
+            {
+                var newSlug = slugOriginal + "-" + string.Empty.GenerateRandomString(5);
+                bool isExistSlug = await _productRepository.IsExistAsync(x => x.Slug == newSlug);
+                if (!isExistSlug)
+                {
+                    return newSlug;
+                }
+            }
+        }
+
         private async Task<List<Tag>> GetTagsByName(List<string> tagsName)
         {
             var result = new List<Tag>();
@@ -75,7 +89,7 @@ namespace MediaMarket.Application.Services
                 {
                     Id = Guid.NewGuid(),
                     Name = tagName,
-                    Slug = Helper.StringToSlug(tagName)
+                    Slug = tagName.ToSlug(),
                 });
             }
 

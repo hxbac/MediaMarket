@@ -37,12 +37,8 @@ namespace MediaMarket.Domain.EntityConfigurations
                 .HasDefaultValue(ProductContentStatus.Waiting)
                 .HasConversion<byte>();
 
-            entity.HasMany(p => p.Tags)
-                .WithMany(t => t.Products)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ProductTags",
-                    j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId"),
-                    j => j.HasOne<Product>().WithMany().HasForeignKey("ProductId"));
+            entity.HasIndex(x => x.Slug)
+                .IsUnique();
 
             entity.HasMany(p => p.Categories)
                 .WithMany(c => c.Products)
@@ -51,6 +47,12 @@ namespace MediaMarket.Domain.EntityConfigurations
                     j => j.HasOne<Category>().WithMany().HasForeignKey("CategoryId"),
                     j => j.HasOne<Product>().WithMany().HasForeignKey("ProductId"));
 
+            entity.HasMany(p => p.Tags)
+                .WithMany(t => t.Products)
+                .UsingEntity<Dictionary<string, object>>(
+                    "ProductTags",
+                    j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId"),
+                    j => j.HasOne<Product>().WithMany().HasForeignKey("ProductId"));
         }
     }
 }

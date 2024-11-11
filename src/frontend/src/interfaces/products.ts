@@ -21,8 +21,11 @@ export interface FileInfo {
 export interface ProductInfo {
     type: number,
     name: string,
+    shortDescription: string,
     description: string,
-    categories: string[],
+    categoryIds: string[],
+    price: number,
+    thumbnail: string,
     tags: string[],
     originalFiles: FileInfo[]
 }

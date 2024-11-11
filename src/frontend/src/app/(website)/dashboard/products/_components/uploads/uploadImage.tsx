@@ -12,8 +12,8 @@ const { Dragger } = Upload;
 
 const props: UploadProps = {
   name: 'file',
-  multiple: false,
-  action: process.env.NEXT_PUBLIC_API_URL + 'files/upload'
+  multiple: true,
+  action: process.env.NEXT_PUBLIC_API_UPLOAD_SINGLE_FILE
 };
 
 export default function UploadImage() {

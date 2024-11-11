@@ -38,6 +38,7 @@
             {
                 public const string Show = Prefix + singleRoute;
                 public const string GetProductsHomePage = Prefix + "/get-list-by-category";
+                public const string Create = Prefix;
             }
         }
 

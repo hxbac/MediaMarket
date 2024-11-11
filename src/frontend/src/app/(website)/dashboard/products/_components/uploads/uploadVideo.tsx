@@ -12,7 +12,8 @@ const { Dragger } = Upload;
 const props: UploadProps = {
   name: 'file',
   multiple: false,
-  action: process.env.NEXT_PUBLIC_API_URL + 'files/upload'
+  action: process.env.NEXT_PUBLIC_API_UPLOAD_SINGLE_FILE,
+  maxCount: 1
 };
 
 function formatSeconds(seconds: number): string {

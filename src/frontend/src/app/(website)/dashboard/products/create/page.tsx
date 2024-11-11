@@ -18,16 +18,20 @@ import { ProductInfo } from "@/interfaces/products";
 import { CategoryHomePage } from "@/interfaces/categories";
 import categoryService from "@/services/categoryService";
 import { toast } from "react-toastify";
+import productService from "@/services/productService";
 
 export default function Page() {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState<number>(3);
+  const [currentStep, setCurrentStep] = useState<number>(1);
   const [categories, setCategories] = useState<CategoryHomePage[]>([]);
   const [productInfo, setProductInfo] = useState<ProductInfo>({
     type: ProductType.Image,
     name: '',
+    thumbnail: '',
+    shortDescription: '',
+    price: 0,
     description: '',
-    categories: [],
+    categoryIds: [],
     tags: [],
     originalFiles: [],
   });
@@ -59,9 +63,28 @@ export default function Page() {
     setCurrentStep(prevStep);
   }
 
+  const handleSubmitCreateProduct = async () => {
+    console.log(productInfo);
+    try {
+      const result = await productService.create(productInfo);
+      if (result.succeeded) {
+        console.log(result);
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      toast.error(errorMessage);
+    }
+  }
+
   const handleNextStep = () => {
     const nextStep = currentStep + 1;
-    setCurrentStep(nextStep);
+    if (nextStep === 4) {
+      handleSubmitCreateProduct();
+    } else {
+      setCurrentStep(nextStep);
+    }
   }
 
   return (

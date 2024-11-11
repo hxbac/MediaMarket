@@ -10,6 +10,14 @@ const productService = {
         } catch (error) {
             throw new Error(error.message || 'Error fetching product');
         }
+    },
+    create: async (params) => {
+        try {
+            const response = await axiosInstance.post(prefix, params);
+            return response.data;
+        } catch (error) {
+            throw new Error(error.message || 'Error fetching product');
+        }
     }
 }
 

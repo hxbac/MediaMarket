@@ -48,18 +48,18 @@ namespace MediaMarket.Infrastructure.Repositories
             return await _context.Set<T>().Where(criteria).Skip(skip).Take(take).ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, int? skip, int? take, Expression<Func<T, object>> orderBy = null, string orderByDirection = OrderBy.Ascending)
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, int skip = 0, int take = 0, Expression<Func<T, object>> orderBy = null, string orderByDirection = OrderBy.Ascending)
         {
             var query = _context.Set<T>().Where(criteria);
 
-            if (skip.HasValue)
+            if (skip != 0)
             {
-                query = query.Skip(skip.Value);
+                query = query.Skip(skip);
             }
 
-            if (take.HasValue)
+            if (take != 0)
             {
-                query = query.Take(take.Value);
+                query = query.Take(take);
             }
 
             if (orderBy != null)

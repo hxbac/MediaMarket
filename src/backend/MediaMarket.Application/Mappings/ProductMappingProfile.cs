@@ -9,6 +9,7 @@ namespace MediaMarket.Application.Mappings
         public ProductMappingProfile()
         {
             CreateMap<Product, ProductHomePageResponse>();
+            CreateMap<Product, CreateProductResponse>();
         }
     }
 }

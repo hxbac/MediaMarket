@@ -5,6 +5,7 @@ using MediaMarket.Application.Services;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Data;
 using MediaMarket.Infrastructure.Repositories;
+using MediaMarket.Infrastructure.Seeders;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -99,11 +100,12 @@ namespace MediaMarket.Infrastructure.Extensions
                     });
             });
 
-
+            services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
             services.AddScoped<ITagRepository, TagRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IPreviewRepository, PreviewRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IVideoSolutionRepository, VideoSolutionRepository>();
 
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IProductService, ProductService>();
@@ -118,7 +120,7 @@ namespace MediaMarket.Infrastructure.Extensions
         public static IServiceCollection AddMigrations(this IServiceCollection services)
         {
             //services.AddMigration<ApplicationDbContext, TagSeeder>();
-            //services.AddMigration<ApplicationDbContext, CategorySeeder>();
+            services.AddMigration<ApplicationDbContext, CategorySeeder>();
             //services.AddMigration<ApplicationDbContext, ProductSeeder>();
 
             return services;

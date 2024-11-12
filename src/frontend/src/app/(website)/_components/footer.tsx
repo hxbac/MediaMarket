@@ -140,11 +140,6 @@ export default function Footer() {
             href="#"
             className="flex items-center justify-center mb-5 text-2xl font-semibold text-gray-900"
           >
-            <img
-              src="./images/logo.svg"
-              className="h-6 mr-3 sm:h-9"
-              alt="Landwind Logo"
-            />
             Landwind
           </a>
           <span className="block text-sm text-center text-gray-500">

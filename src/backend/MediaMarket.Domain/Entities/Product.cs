@@ -17,11 +17,12 @@ namespace MediaMarket.Domain.Entities
         public ProductContentStatus ProductContentStatus { get; set; }
 
         public User? Seller { get; }
-        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
-        public ICollection<Category> Categories { get; set; } = new List<Category>();
-        public ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
-        public ICollection<Image> Images { get; set; } = new List<Image>();
+        public ICollection<Tag>? Tags { get; set; }
+        public ICollection<Category>? Categories { get; set; }
+        public ICollection<ProductDetail>? ProductDetails { get; set; }
+        public ICollection<Image>? Images { get; set; }
         public Preview? Preview { get; set; }
-        public ICollection<VideoSolution> VideoSolutions { get; set; } = new List<VideoSolution>();
+        public ICollection<VideoSolution>? VideoSolutions { get; set; }
+        public ICollection<Order>? Orders { get; set; }
     }
 }

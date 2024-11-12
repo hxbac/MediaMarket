@@ -18,6 +18,14 @@ const productService = {
         } catch (error) {
             throw new Error(error.message || 'Error fetching product');
         }
+    },
+    getDetail: async (slug) => {
+        try {
+            const response = await axiosInstance.get(prefix + '/' + slug);
+            return response.data;
+        } catch (error) {
+            throw new Error(error.message || 'Error fetching product');
+        }
     }
 }
 

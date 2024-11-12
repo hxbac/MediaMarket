@@ -4,8 +4,10 @@ using MediaMarket.Application.Contracts.Services;
 using MediaMarket.Application.Services;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Data;
+using MediaMarket.Infrastructure.Payment;
 using MediaMarket.Infrastructure.Repositories;
 using MediaMarket.Infrastructure.Seeders;
+using MediaMarket.Infrastructure.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -106,13 +108,17 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddScoped<IPreviewRepository, PreviewRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IVideoSolutionRepository, VideoSolutionRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
 
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IOrderService, OrderService>();
+
             services.AddSingleton<IFileService, LocalStorageFileService>();
+            services.AddSingleton<IPaymentService, StripePaymentService>();
 
             return services;
         }

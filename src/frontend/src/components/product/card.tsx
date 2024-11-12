@@ -2,6 +2,7 @@ import { ProductHomePage } from "@/interfaces/products";
 import Image from "next/image";
 
 import { ProductType } from "@/enums/ProductType";
+import Link from "next/link";
 
 export default function Card({ data }: { data: ProductHomePage }) {
   const productTypeTexts = {
@@ -12,6 +13,7 @@ export default function Card({ data }: { data: ProductHomePage }) {
 
   return (
     <div className="relative max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+      <Link href={`/products/${data.slug}`} className="absolute inset-0 z-50"></Link>
       <div className="card-top-overlay text-white font-bold pt-3 pl-3 text-lg">{productTypeTexts[data.productType.toString()]}</div>
       <div>
         <Image
@@ -19,6 +21,7 @@ export default function Card({ data }: { data: ProductHomePage }) {
           alt=""
           width={150}
           height={268}
+          unoptimized
           className="w-full h-[168px] rounded-t-lg object-cover object-center"
         />
       </div>

@@ -12,12 +12,12 @@ namespace MediaMarket.Infrastructure.Repositories
         {
         }
 
-        public async Task<ProductDetailResponse> GetProductActiveWithRelationship(Guid productId)
+        public async Task<ProductDetailResponse> GetProductActiveWithRelationship(string slug)
         {
             var product = await _model.Include(x => x.Categories)
                 .Include(x => x.Tags)
                 .Include(x => x.Preview)
-                .Where(x => x.Id == productId)
+                .Where(x => x.Slug == slug)
                 .Select(x => new ProductDetailResponse
                 {
                     Id = x.Id,

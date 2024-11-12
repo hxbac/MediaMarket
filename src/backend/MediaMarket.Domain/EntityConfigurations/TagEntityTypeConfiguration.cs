@@ -8,7 +8,7 @@ namespace MediaMarket.Domain.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Tag> builder)
         {
-            builder.ToTable("images");
+            builder.ToTable("Tags");
 
             builder.HasKey(x => x.Id);
 

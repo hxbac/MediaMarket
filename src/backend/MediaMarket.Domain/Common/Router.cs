@@ -3,6 +3,7 @@
     public static class Router
     {
         public const string singleRoute = "/{id}";
+        public const string slug = "/{slug}";
         public const string root = "api";
         public const string version = "v1";
         public const string rule = root + "/" + version + "/";
@@ -36,7 +37,7 @@
             public const string Prefix = rule + "products";
             public static class Action
             {
-                public const string Show = Prefix + singleRoute;
+                public const string Show = Prefix + slug;
                 public const string GetProductsHomePage = Prefix + "/get-list-by-category";
                 public const string Create = Prefix;
             }
@@ -57,6 +58,17 @@
             public static class Action
             {
                 public const string UploadSingle = Prefix + "/upload";
+            }
+        }
+
+        public static class OrderRouting
+        {
+            public const string Prefix = rule + "orders";
+            public const string Callback = Prefix + "/callback";
+            public static class Action
+            {
+                public const string Create = Prefix + "/create";
+                public const string StripeCallback = Callback + "/stripe";
             }
         }
     }

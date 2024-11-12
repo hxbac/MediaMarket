@@ -8,6 +8,6 @@ namespace MediaMarket.Application.Contracts.Services
     {
         Task<BaseResponse<CreateProductResponse>> CreateProduct(CreateProductRequest request, Guid UserIdCreate);
         Task<BaseResponse<IEnumerable<ProductHomePageResponse>>> GetListProductsHomePageByCategory(Guid categoryId);
-        Task<BaseResponse<ProductDetailResponse>> GetProductDetail(Guid productId);
+        Task<BaseResponse<ProductDetailResponse>> GetProductDetail(string slug);
     }
 }

@@ -114,9 +114,9 @@ namespace MediaMarket.Application.Services
             return Success(_mapper.Map<IEnumerable<ProductHomePageResponse>>(products));
         }
 
-        public async Task<BaseResponse<ProductDetailResponse>> GetProductDetail(Guid productId)
+        public async Task<BaseResponse<ProductDetailResponse>> GetProductDetail(string slug)
         {
-            var product = await _productRepository.GetProductActiveWithRelationship(productId);
+            var product = await _productRepository.GetProductActiveWithRelationship(slug);
             return Success(product);
         }
     }

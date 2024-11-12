@@ -5,6 +5,6 @@ namespace MediaMarket.Application.Contracts.Repositories
 {
     public interface IProductRepository : IBaseRepository<Product>
     {
-        Task<ProductDetailResponse> GetProductActiveWithRelationship(Guid productId);
+        Task<ProductDetailResponse> GetProductActiveWithRelationship(string slug);
     }
 }

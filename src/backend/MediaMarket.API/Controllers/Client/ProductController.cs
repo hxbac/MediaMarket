@@ -21,9 +21,9 @@ namespace MediaMarket.API.Controllers.Client
         }
 
         [HttpGet(Router.ProductRouting.Action.Show)]
-        public async Task<IActionResult> Show(Guid id)
+        public async Task<IActionResult> Show(string slug)
         {
-            var response = await _productService.GetProductDetail(id);
+            var response = await _productService.GetProductDetail(slug);
             return CustomResult(response);
         }
 

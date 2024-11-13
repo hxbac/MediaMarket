@@ -1,4 +1,5 @@
 ﻿using MediaMarket.Application.Contracts.Repositories;
+using MediaMarket.Application.DTO.Product;
 using MediaMarket.Application.DTO.Response.Product;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Data;
@@ -22,6 +23,7 @@ namespace MediaMarket.Infrastructure.Repositories
                 {
                     Id = x.Id,
                     Name = x.Name,
+                    Slug = x.Slug,
                     Thumbnail = x.Thumbnail,
                     ShortDescription = x.ShortDescription,
                     Description = x.Description,
@@ -35,6 +37,22 @@ namespace MediaMarket.Infrastructure.Repositories
                 })
                 .FirstOrFailAsync();
 
+            return product;
+        }
+
+        public async Task<ProductLatestVersionDTO> GetProductWithLatestVersion(string slug)
+        {
+            var product = await _model.Where(p => p.Slug == slug)
+                .Where(p => p.ProductStatus == Domain.Enums.ProductStatus.Active)
+                .Select(p => new ProductLatestVersionDTO
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    Version = p.ProductDetails
+                        .Max(pd => pd.Version)
+                }).
+                FirstOrFailAsync();
             return product;
         }
     }

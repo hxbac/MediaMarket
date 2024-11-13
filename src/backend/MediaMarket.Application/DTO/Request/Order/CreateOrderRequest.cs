@@ -2,5 +2,6 @@
 {
     public class CreateOrderRequest
     {
+        public string ProductSlug { get; set; } = string.Empty;
     }
 }

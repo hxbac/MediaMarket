@@ -1,4 +1,6 @@
 ﻿using MediaMarket.Application.Contracts.Services;
+using MediaMarket.Application.DTO.Payment;
+using MediaMarket.Application.DTO.Product;
 using Stripe;
 using Stripe.Checkout;
 
@@ -11,7 +13,7 @@ namespace MediaMarket.Infrastructure.Payment
             StripeConfiguration.ApiKey = "sk_test_51QJpfyGOIY1d15fJqpCqCaqKVpiyd54j6YRs45TRMDBGfTgJAIwcazenx2CCQqt8WrQi9uc30WOE1yEDlZrpEh6S00Auquaj9H";
         }
 
-        public string Create()
+        public CreatePaymentDTO Create(ProductLatestVersionDTO product)
         {
             var options = new SessionCreateOptions
             {
@@ -21,54 +23,42 @@ namespace MediaMarket.Infrastructure.Payment
                 {
                 PriceData = new SessionLineItemPriceDataOptions
                 {
-                    UnitAmount = 2000,
-                    Currency = "usd",
+                    UnitAmount = product.Price,
+                    Currency = "VND",
                     ProductData = new SessionLineItemPriceDataProductDataOptions
                     {
-                    Name = "T-shirt",
+                        Name = product.Name,
                     },
                 },
                     Quantity = 1,
                 },
             },
                 Mode = "payment",
-                SuccessUrl = "http://localhost:4242/success",
-                CancelUrl = "http://localhost:4242/cancel",
+                SuccessUrl = "http://localhost:8080/payment/result?session_id={CHECKOUT_SESSION_ID}",
+                CancelUrl = "http://localhost:8080",
             };
 
             var service = new SessionService();
             Session session = service.Create(options);
 
-            return session.Url;
+            return new CreatePaymentDTO()
+            {
+                RedirectUrl = session.Url,
+                PaymentSession = session.Id
+            };
         }
 
-        public void FulfillCheckout(String sessionId)
+        public bool IsPaymentSuccess(string sessionId)
         {
-
-            // TODO: Make this function safe to run multiple times,
-            // even concurrently, with the same session ID
-
-            // TODO: Make sure fulfillment hasn't already been
-            // peformed for this Checkout Session
-
-            // Retrieve the Checkout Session from the API with line_items expanded
-            var options = new SessionGetOptions
-            {
-                Expand = new List<string> { "line_items" },
-            };
-
             var service = new SessionService();
-            var checkoutSession = service.Get(sessionId, options);
+            var checkoutSession = service.Get(sessionId);
 
-            // Check the Checkout Session's payment_status property
-            // to determine if fulfillment should be peformed
-            if (checkoutSession.PaymentStatus != "unpaid")
+            if (checkoutSession.PaymentStatus == "paid")
             {
-                // TODO: Perform fulfillment of the line items
-
-                // TODO: Record/save fulfillment status for this
-                // Checkout Session
+                return true;
             }
+
+            return false;
         }
     }
 }

@@ -6,14 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace MediaMarket.API.Controllers.Client
 {
     [ApiController]
-    public class AuthController : ApiBaseController
+    public class AuthController(IAuthService authService) : ApiBaseController
     {
-        private readonly IAuthService _authService;
-
-        public AuthController(IAuthService authService)
-        {
-            _authService = authService;
-        }
+        private readonly IAuthService _authService = authService;
 
         [HttpPost(Router.AuthRouting.Action.Register)]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)

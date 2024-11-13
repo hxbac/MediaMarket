@@ -12,6 +12,7 @@ namespace MediaMarket.Domain.Entities
         public string? PaymentMethod { get; set; }
         public Guid PaymentId { get; set; }
         public int ProductVersion { get; set; }
+        public string? PaymentSession { get; set; }
 
         public Product? Product { get; set; }
     }

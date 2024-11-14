@@ -11,6 +11,14 @@ const authService = {
         } catch (error) {
             throw new Error(error.message || 'Error fetching authentication');
         }
+    },
+    getProfile: async () => {
+        try {
+            const response = await axiosInstance.get(prefix + '/get-profile');
+            return response.data;
+        } catch (error) {
+            throw new Error(error.message || 'Error fetching ' + prefix);
+        }
     }
 }
 

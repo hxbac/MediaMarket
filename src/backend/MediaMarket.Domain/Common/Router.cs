@@ -16,6 +16,7 @@
             {
                 public const string Login = Prefix + "/login";
                 public const string Register = Prefix + "/register";
+                public const string GetProfile = Prefix + "/get-profile";
             }
         }
 

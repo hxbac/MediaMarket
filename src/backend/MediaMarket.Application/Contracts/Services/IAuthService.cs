@@ -8,5 +8,6 @@ namespace MediaMarket.Application.Contracts.Services
     {
         Task<BaseResponse<RegisterResponse>> Register(RegisterRequest request);
         Task<BaseResponse<LoginResponse>> Login(LoginRequest request);
+        Task<BaseResponse<UserResponse>> GetProfile();
     }
 }

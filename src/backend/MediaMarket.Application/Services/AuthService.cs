@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediaMarket.Application.Bases;
 using MediaMarket.Application.Configs;
+using MediaMarket.Application.Contracts.Common;
 using MediaMarket.Application.Contracts.Services;
 using MediaMarket.Application.DTO.Request.Auth;
 using MediaMarket.Application.DTO.Response.Auth;
@@ -20,12 +21,19 @@ namespace MediaMarket.Application.Services
         private readonly JwtConfig _jwtConfig;
         private readonly string _algorithm = SecurityAlgorithms.HmacSha256Signature;
         private readonly IMapper _mapper;
+        private readonly IUser _user;
 
-        public AuthService(UserManager<User> userManager, IOptionsMonitor<JwtConfig> jwtConfig, IMapper mapper)
+        public AuthService(
+            UserManager<User> userManager,
+            IOptionsMonitor<JwtConfig> jwtConfig,
+            IMapper mapper,
+            IUser user
+        )
         {
             _userManager = userManager;
             _jwtConfig = jwtConfig.CurrentValue;
             _mapper = mapper;
+            _user = user;
         }
 
         public async Task<BaseResponse<RegisterResponse>> Register(RegisterRequest request)
@@ -110,6 +118,12 @@ namespace MediaMarket.Application.Services
 
             SecurityToken token = jwtSecurityTokenHandler.CreateToken(tokenDescriptor);
             return jwtSecurityTokenHandler.WriteToken(token);
+        }
+
+        public async Task<BaseResponse<UserResponse>> GetProfile()
+        {
+            var currentUser = await _userManager.FindByIdAsync(_user.Id.ToString()!);
+            return Success(_mapper.Map<UserResponse>(currentUser));
         }
     }
 }

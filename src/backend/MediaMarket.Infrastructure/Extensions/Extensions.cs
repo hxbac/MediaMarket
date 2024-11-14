@@ -1,16 +1,20 @@
 ﻿using MediaMarket.Application.Configs;
+using MediaMarket.Application.Contracts.Common;
 using MediaMarket.Application.Contracts.Repositories;
 using MediaMarket.Application.Contracts.Services;
 using MediaMarket.Application.Services;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Data;
+using MediaMarket.Infrastructure.Interceptors;
 using MediaMarket.Infrastructure.Payment;
 using MediaMarket.Infrastructure.Repositories;
 using MediaMarket.Infrastructure.Seeders;
+using MediaMarket.Infrastructure.Services;
 using MediaMarket.Infrastructure.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,9 +42,13 @@ namespace MediaMarket.Infrastructure.Extensions
 
             //services.AddHostedService<InitialStorageFolder>();
 
+            services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+
             var sqlServerConnectionString = configuration.GetConnectionString("SqlServer");
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
+                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+
                 options.UseSqlServer(sqlServerConnectionString)
                     .EnableSensitiveDataLogging();
             });
@@ -101,6 +109,9 @@ namespace MediaMarket.Infrastructure.Extensions
                             .AllowAnyHeader();
                     });
             });
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<IUser, CurrentUser>();
 
             services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
             services.AddScoped<ITagRepository, TagRepository>();

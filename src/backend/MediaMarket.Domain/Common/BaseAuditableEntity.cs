@@ -3,8 +3,8 @@
     public abstract class BaseAuditableEntity<T> : BaseEntity<T>
     {
         public DateTimeOffset CreatedOn { get; set; } = DateTimeOffset.Now;
-        public string? CreatedBy { get; set; }
+        public Guid? CreatedBy { get; set; }
         public DateTimeOffset? LastModified { get; set; }
-        public string? LastModifiedBy { get; set; }
+        public Guid? LastModifiedBy { get; set; }
     }
 }

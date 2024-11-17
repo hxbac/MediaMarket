@@ -30,3 +30,7 @@ export interface ProductInfo {
     tags: string[],
     originalFiles: FileInfo[]
 }
+
+export interface SearchProductParams {
+    name: string;
+}

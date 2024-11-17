@@ -6,6 +6,7 @@ import { Space, Table, TablePaginationConfig, TableProps, Tag } from "antd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useSearchProductContext } from "../../_context/SearchProductContext";
 
 interface DataType {
   key: string;
@@ -22,6 +23,7 @@ export default function Video() {
     pageSize: 2,
     total: 0,
   });
+  const { value } = useSearchProductContext();
 
   const fetchData = async (page = 1, pageSize = 10) => {
     try {
@@ -29,11 +31,10 @@ export default function Video() {
         params: {
           page,
           pageSize,
-          productType: ProductType.Video
+          productType: ProductType.Video,
+          name: value.name
         },
       });
-
-      console.log(response);
 
       setData(response.data);
       setPagination({
@@ -50,7 +51,7 @@ export default function Video() {
   useEffect(() => {
     fetchData(pagination.current, pagination.pageSize);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [value]);
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
     fetchData(pagination.current, pagination.pageSize);

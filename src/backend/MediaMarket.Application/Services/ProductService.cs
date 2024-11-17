@@ -133,7 +133,7 @@ namespace MediaMarket.Application.Services
 
         public async Task<BaseResponse<PaginatedResult<ProductUserResponse>>> GetMyProductsPaginated(GetProductListRequest request)
         {
-            var result = await _productRepository.GetListProductsForUser(_user.Id, request.ProductType, request.Page, request.PageSize);
+            var result = await _productRepository.GetListProductsForUser(_user.Id, request.ProductType, request.Name, request.Page, request.PageSize);
             return Success(result);
         }
     }

@@ -8,7 +8,7 @@ namespace MediaMarket.Application.Contracts.Repositories
 {
     public interface IProductRepository : IBaseRepository<Product>
     {
-        Task<PaginatedResult<ProductUserResponse>> GetListProductsForUser(Guid userId, ProductType productType, int page, int pageSize);
+        Task<PaginatedResult<ProductUserResponse>> GetListProductsForUser(Guid userId, ProductType productType, string? name, int page, int pageSize);
         Task<ProductDetailResponse> GetProductActiveWithRelationship(string slug);
         Task<ProductLatestVersionDTO> GetProductWithLatestVersion(string slug);
     }

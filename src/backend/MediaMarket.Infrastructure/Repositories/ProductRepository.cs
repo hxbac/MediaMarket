@@ -19,9 +19,9 @@ namespace MediaMarket.Infrastructure.Repositories
             _mapper = mapper;
         }
 
-        public async Task<PaginatedResult<ProductUserResponse>> GetListProductsForUser(Guid userId, ProductType productType, int page, int pageSize)
+        public async Task<PaginatedResult<ProductUserResponse>> GetListProductsForUser(Guid userId, ProductType productType, string? name, int page, int pageSize)
         {
-            return await _model
+            var query = _model
                 .Include(p => p.Tags)
                 .Include(p => p.Categories)
                 .Where(p => p.CreatedBy == userId && p.ProductType == productType)
@@ -33,10 +33,15 @@ namespace MediaMarket.Infrastructure.Repositories
                     Thumbnail = p.Thumbnail,
                     Price = p.Price,
                     ProductContentStatus = p.ProductContentStatus,
-                    Tags = p.Tags,
                     Categories = p.Categories,
-                })
-                .ToPaginatedListAsync<Product, ProductUserResponse>(page, pageSize, _mapper);
+                });
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(p => p.Name != null && p.Name.Contains(name));
+            }
+
+            return await query.ToPaginatedListAsync<Product, ProductUserResponse>(page, pageSize, _mapper);
         }
 
         public async Task<ProductDetailResponse> GetProductActiveWithRelationship(string slug)

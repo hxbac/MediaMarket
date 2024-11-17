@@ -2,14 +2,17 @@
 
 import { ProductType } from "@/enums/ProductType";
 import productService from "@/services/productService";
-import { Space, Table, TablePaginationConfig, TableProps, Tag } from "antd";
+import { Button, Space, Table, TablePaginationConfig, TableProps, Tag } from "antd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSearchProductContext } from "../../_context/SearchProductContext";
+import Link from "next/link";
+import { formatPrice } from "@/utils/helpers";
 
 interface DataType {
   key: string;
+  slug: string;
   thumbnail: number;
   name: string;
   price: number;
@@ -74,6 +77,7 @@ export default function Video() {
       title: "Giá",
       dataIndex: "price",
       key: "price",
+      render: (price) => formatPrice(price)
     },
     {
       title: "Danh mục",
@@ -96,40 +100,20 @@ export default function Video() {
       ),
     },
     {
-      title: "Action",
+      title: "Hành Động",
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
+          <Link href={`/products/${record.slug}`} target="_blank">
+            <Button>Xem</Button>
+          </Link>
+          <Link href={`/products/${record.key}`}>
+            <Button type="primary" danger>Xóa</Button>
+          </Link>
         </Space>
       ),
     },
   ];
-
-  // const data1: DataType[] = [
-  //   {
-  //     key: "1",
-  //     name: "John Brown",
-  //     age: 32,
-  //     address: "New York No. 1 Lake Park",
-  //     tags: ["nice", "developer"],
-  //   },
-  //   {
-  //     key: "2",
-  //     name: "Jim Green",
-  //     age: 42,
-  //     address: "London No. 1 Lake Park",
-  //     tags: ["loser"],
-  //   },
-  //   {
-  //     key: "3",
-  //     name: "Joe Black",
-  //     age: 32,
-  //     address: "Sydney No. 1 Lake Park",
-  //     tags: ["cool", "teacher"],
-  //   },
-  // ];
 
   return (
     <Table<DataType>

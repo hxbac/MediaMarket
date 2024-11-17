@@ -27,13 +27,6 @@ const productService = {
             throw new Error(error.message || 'Error fetching product');
         }
     },
-    // interface DataType {
-    //     key: string;
-    //     thumbnail: number;
-    //     name: string;
-    //     price: number;
-    //     categories: string[];
-    //   }
     getMyProducts: async (params) => {
         try {
             const response = await axiosInstance.get(prefix + '/my-products', params);
@@ -41,6 +34,7 @@ const productService = {
             result.data = result.data.map(item => {
                 return {
                     key: item.id,
+                    slug: item.slug,
                     thumbnail: item.thumbnail,
                     name: item.name,
                     price: item.price,

@@ -4,6 +4,7 @@ import CardHorizontal from "@/components/user/cardHorizontal";
 import productService from "@/services/productService";
 import { Tag } from "@/interfaces/tag";
 import Link from "next/link";
+import { formatPrice } from "@/utils/helpers";
 
 interface ProductParams {
   slug: string;
@@ -49,7 +50,7 @@ export default async function Page({ params }: { params: ProductParams }) {
             <div className="rounded-xl border-2 border-purple-600 p-4">
               <div>
                 <h1>{data.name}</h1>
-                <p>{data.price}đ</p>
+                <p>{formatPrice(data.price)}</p>
               </div>
               {/* <div className="flex items-center justify-between font-bold mb-4">
                 <span>Giảm giá</span>

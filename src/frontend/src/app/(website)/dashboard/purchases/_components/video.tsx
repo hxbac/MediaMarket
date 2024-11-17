@@ -1,43 +1,49 @@
 'use client';
 
 import { ProductType } from "@/enums/ProductType";
-import productService from "@/services/productService";
-import { Space, Table, TablePaginationConfig, TableProps, Tag } from "antd";
+import { Button, Space, Table, TablePaginationConfig, TableProps, Tag } from "antd";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Link from "next/link";
+import { formatPrice } from "@/utils/helpers";
+import { useSearchProductContext } from "../../products/_context/SearchProductContext";
+import orderService from "@/services/orderService";
 
 interface DataType {
   key: string;
+  slug: string;
+  thumbnail: number;
   name: string;
-  age: number;
-  address: string;
-  tags: string[];
+  price: number;
+  categories: string[];
 }
 
 export default function Video() {
-  console.log(1);
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
+    pageSize: 2,
     total: 0,
   });
+  const { value } = useSearchProductContext();
 
   const fetchData = async (page = 1, pageSize = 10) => {
     try {
-      const response = await productService.getMyProducts({
+      const response = await orderService.getMyPurchases({
         params: {
           page,
           pageSize,
-          productType: ProductType.Video
+          productType: ProductType.Video,
+          name: value.name
         },
       });
 
-      setData(response.data.data);
+      setData(response.data);
       setPagination({
         current: page,
         pageSize,
-        total: response.data.total,
+        total: response.totalCount,
       });
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
@@ -48,7 +54,7 @@ export default function Video() {
   useEffect(() => {
     fetchData(pagination.current, pagination.pageSize);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [value]);
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
     fetchData(pagination.current, pagination.pageSize);
@@ -56,35 +62,37 @@ export default function Video() {
 
   const columns: TableProps<DataType>["columns"] = [
     {
-      title: "Name",
+      title: "Hình ảnh",
+      dataIndex: "thumbnail",
+      key: "thumbnail",
+      render: (text) => <Image src={text} width={100} height={100} alt={text} unoptimized />,
+    },
+    {
+      title: "Tên sản phẩm",
       dataIndex: "name",
       key: "name",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
+      title: "Giá",
+      dataIndex: "price",
+      key: "price",
+      render: (price) => formatPrice(price)
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Tags",
-      key: "tags",
-      dataIndex: "tags",
-      render: (_, { tags }) => (
+      title: "Danh mục",
+      key: "categories",
+      dataIndex: "categories",
+      render: (_, { categories }) => (
         <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? "geekblue" : "green";
-            if (tag === "loser") {
+          {categories.map((category) => {
+            let color = category.length > 5 ? "geekblue" : "green";
+            if (category === "loser") {
               color = "volcano";
             }
             return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
+              <Tag color={color} key={category}>
+                {category.toUpperCase()}
               </Tag>
             );
           })}
@@ -92,12 +100,16 @@ export default function Video() {
       ),
     },
     {
-      title: "Action",
+      title: "Hành Động",
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
+          <Link href={`/products/${record.slug}`} target="_blank">
+            <Button>Xem</Button>
+          </Link>
+          <Link href={`/products/${record.key}`}>
+            <Button type="primary" danger>Xóa</Button>
+          </Link>
         </Space>
       ),
     },

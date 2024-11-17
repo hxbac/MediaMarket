@@ -1,10 +1,9 @@
 ﻿using MediaMarket.Application.Contracts.Services;
 using MediaMarket.Application.DTO.Request.Order;
+using MediaMarket.Application.DTO.Request.Product;
 using MediaMarket.Domain.Common;
-using MediaMarket.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace MediaMarket.API.Controllers.Client
 {
@@ -17,14 +16,7 @@ namespace MediaMarket.API.Controllers.Client
         [HttpPost(Router.OrderRouting.Action.Create)]
         public async Task<IActionResult> Create([FromBody] CreateOrderRequest request)
         {
-            var subJwt = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var isGuidValid = Guid.TryParse(subJwt, out var userId);
-            if (!isGuidValid)
-            {
-                throw new SecurityTokenException();
-            }
-
-            var response = await _orderService.CreateOrder(request, userId);
+            var response = await _orderService.CreateOrder(request);
             return CustomResult(response);
         }
 
@@ -33,6 +25,22 @@ namespace MediaMarket.API.Controllers.Client
         public async Task<IActionResult> StripeCallback(CallbackStripeRequest request)
         {
             var response = await _orderService.CallbackStripe(request);
+            return CustomResult(response);
+        }
+
+        [Authorize]
+        [HttpGet(Router.OrderRouting.Action.MyPurchases)]
+        public async Task<IActionResult> GetMyPurchases([FromQuery] GetProductListRequest request)
+        {
+            var response = await _orderService.GetMyPurchasesPaginated(request);
+            return CustomResult(response);
+        }
+
+        [Authorize]
+        [HttpGet(Router.OrderRouting.Action.MyOrders)]
+        public async Task<IActionResult> GetMyOrders([FromQuery] GetProductListRequest request)
+        {
+            var response = await _orderService.GetMyOrdersPaginated(request);
             return CustomResult(response);
         }
     }

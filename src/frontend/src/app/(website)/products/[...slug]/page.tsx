@@ -1,5 +1,4 @@
 import TagRounded from "@/components/tag/tagRounded";
-import Prices from "./_components/prices";
 import CardHorizontal from "@/components/user/cardHorizontal";
 import productService from "@/services/productService";
 import { Tag } from "@/interfaces/tag";

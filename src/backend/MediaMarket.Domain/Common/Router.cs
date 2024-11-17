@@ -72,6 +72,8 @@
             {
                 public const string Create = Prefix + "/create";
                 public const string StripeCallback = Callback + "/stripe";
+                public const string MyPurchases = Prefix + "/my-purchases";
+                public const string MyOrders = Prefix + "/my-orders";
             }
         }
     }

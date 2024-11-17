@@ -26,6 +26,32 @@ const productService = {
         } catch (error) {
             throw new Error(error.message || 'Error fetching product');
         }
+    },
+    // interface DataType {
+    //     key: string;
+    //     thumbnail: number;
+    //     name: string;
+    //     price: number;
+    //     categories: string[];
+    //   }
+    getMyProducts: async (params) => {
+        try {
+            const response = await axiosInstance.get(prefix + '/my-products', params);
+            const result = response.data.data;
+            result.data = result.data.map(item => {
+                return {
+                    key: item.id,
+                    thumbnail: item.thumbnail,
+                    name: item.name,
+                    price: item.price,
+                    categories: item.categories.map(category => category.name)
+                };
+            });
+
+            return result;
+        } catch (error) {
+            throw new Error(error.message || 'Error fetching product');
+        }
     }
 }
 

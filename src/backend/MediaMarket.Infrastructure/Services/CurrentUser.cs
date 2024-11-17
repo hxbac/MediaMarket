@@ -13,12 +13,12 @@ namespace MediaMarket.Infrastructure.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public Guid? Id
+        public Guid Id
         {
             get
             {
                 var idString = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-                return Guid.TryParse(idString, out var id) ? id : null;
+                return Guid.TryParse(idString, out var id) ? id : Guid.NewGuid();
             }
         }
     }

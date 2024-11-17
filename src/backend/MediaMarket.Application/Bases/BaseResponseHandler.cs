@@ -4,7 +4,7 @@ namespace MediaMarket.Application.Bases
 {
     public class BaseResponseHandler
     {
-        public BaseResponse<T> Created<T>(T entity, object meta = null)
+        public BaseResponse<T> Created<T>(T entity)
         {
             return new BaseResponse<T>()
             {
@@ -12,7 +12,6 @@ namespace MediaMarket.Application.Bases
                 StatusCode = HttpStatusCode.Created,
                 Succeeded = true,
                 Message = "Create successfully",
-                Meta = meta
             };
         }
 
@@ -26,7 +25,7 @@ namespace MediaMarket.Application.Bases
             };
         }
 
-        public BaseResponse<T> Success<T>(T entity, object meta = null)
+        public BaseResponse<T> Success<T>(T entity)
         {
             return new BaseResponse<T>()
             {
@@ -34,7 +33,6 @@ namespace MediaMarket.Application.Bases
                 StatusCode = HttpStatusCode.OK,
                 Succeeded = true,
                 Message = "Successfully",
-                Meta = meta
             };
         }
 

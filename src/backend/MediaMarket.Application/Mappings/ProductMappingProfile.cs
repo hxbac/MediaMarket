@@ -10,6 +10,7 @@ namespace MediaMarket.Application.Mappings
         {
             CreateMap<Product, ProductHomePageResponse>();
             CreateMap<Product, CreateProductResponse>();
+            CreateMap<Product, ProductUserResponse>();
         }
     }
 }

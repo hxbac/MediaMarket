@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediaMarket.Application.Bases;
+using MediaMarket.Application.Contracts.Common;
 using MediaMarket.Application.Contracts.Repositories;
 using MediaMarket.Application.Contracts.Services;
 using MediaMarket.Application.DTO.Request.Product;
@@ -10,15 +11,25 @@ using MediaMarket.Domain.Enums;
 namespace MediaMarket.Application.Services
 {
     public class ProductService(
-        IProductRepository _productRepository,
-        ICategoryRepository _categoryRepository,
-        ITagRepository _tagRepository,
-        IProductDetailRepository _productDetailRepository,
-        IPreviewRepository _previewRepository,
-        IVideoSolutionRepository _videoSolutionRepository,
-        IMapper _mapper
+        IProductRepository productRepository,
+        ICategoryRepository categoryRepository,
+        ITagRepository tagRepository,
+        IProductDetailRepository productDetailRepository,
+        IPreviewRepository previewRepository,
+        IVideoSolutionRepository videoSolutionRepository,
+        IMapper mapper,
+        IUser user
     ) : BaseResponseHandler, IProductService
     {
+        private readonly IProductRepository _productRepository = productRepository;
+        private readonly ICategoryRepository _categoryRepository = categoryRepository;
+        private readonly ITagRepository _tagRepository = tagRepository;
+        private readonly IProductDetailRepository _productDetailRepository = productDetailRepository;
+        private readonly IPreviewRepository _previewRepository = previewRepository;
+        private readonly IVideoSolutionRepository _videoSolutionRepository = videoSolutionRepository;
+        private readonly IMapper _mapper = mapper;
+        private readonly IUser _user = user;
+
         public async Task<BaseResponse<CreateProductResponse>> CreateProduct(CreateProductRequest request, Guid UserIdCreate)
         {
             var categories = await _categoryRepository.FindAllAsync(x => request.CategoryIds.Contains(x.Id));
@@ -118,6 +129,12 @@ namespace MediaMarket.Application.Services
         {
             var product = await _productRepository.GetProductActiveWithRelationship(slug);
             return Success(product);
+        }
+
+        public async Task<BaseResponse<PaginatedResult<ProductUserResponse>>> GetMyProductsPaginated(GetProductListRequest request)
+        {
+            var result = await _productRepository.GetListProductsForUser(_user.Id, request.ProductType, request.Page, request.PageSize);
+            return Success(result);
         }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IUser
     {
-        public Guid? Id { get; }
+        public Guid Id { get; }
     }
 }

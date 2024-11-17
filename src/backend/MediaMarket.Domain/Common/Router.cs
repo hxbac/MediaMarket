@@ -41,6 +41,7 @@
                 public const string Show = Prefix + slug;
                 public const string GetProductsHomePage = Prefix + "/get-list-by-category";
                 public const string Create = Prefix;
+                public const string MyProducts = Prefix + "/my-products";
             }
         }
 
@@ -50,6 +51,7 @@
             public static class Action
             {
                 public const string Index = Prefix;
+                public const string GetAll = Prefix + "/get-all";
             }
         }
 

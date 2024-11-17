@@ -1,7 +1,10 @@
-﻿using MediaMarket.Application.Contracts.Repositories;
+﻿using AutoMapper;
+using MediaMarket.Application.Bases;
+using MediaMarket.Application.Contracts.Repositories;
 using MediaMarket.Application.DTO.Product;
 using MediaMarket.Application.DTO.Response.Product;
 using MediaMarket.Domain.Entities;
+using MediaMarket.Domain.Enums;
 using MediaMarket.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,8 +12,31 @@ namespace MediaMarket.Infrastructure.Repositories
 {
     public class ProductRepository : BaseRepository<Product>, IProductRepository
     {
-        public ProductRepository(ApplicationDbContext context) : base(context)
+        private readonly IMapper _mapper;
+
+        public ProductRepository(ApplicationDbContext context, IMapper mapper) : base(context)
         {
+            _mapper = mapper;
+        }
+
+        public async Task<PaginatedResult<ProductUserResponse>> GetListProductsForUser(Guid userId, ProductType productType, int page, int pageSize)
+        {
+            return await _model
+                .Include(p => p.Tags)
+                .Include(p => p.Categories)
+                .Where(p => p.CreatedBy == userId && p.ProductType == productType)
+                .Select(p => new Product
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Slug = p.Slug,
+                    Thumbnail = p.Thumbnail,
+                    Price = p.Price,
+                    ProductContentStatus = p.ProductContentStatus,
+                    Tags = p.Tags,
+                    Categories = p.Categories,
+                })
+                .ToPaginatedListAsync<Product, ProductUserResponse>(page, pageSize, _mapper);
         }
 
         public async Task<ProductDetailResponse> GetProductActiveWithRelationship(string slug)

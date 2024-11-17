@@ -1,47 +1,93 @@
 'use client';
 
-import { Space, Table, TableProps, Tag } from "antd";
+import { ProductType } from "@/enums/ProductType";
+import productService from "@/services/productService";
+import { Space, Table, TablePaginationConfig, TableProps, Tag } from "antd";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
+interface DataType {
+  key: string;
+  thumbnail: number;
+  name: string;
+  price: number;
+  categories: string[];
+}
 
 export default function Video() {
-  interface DataType {
-    key: string;
-    name: string;
-    age: number;
-    address: string;
-    tags: string[];
-  }
+  const [data, setData] = useState([]);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 2,
+    total: 0,
+  });
+
+  const fetchData = async (page = 1, pageSize = 10) => {
+    try {
+      const response = await productService.getMyProducts({
+        params: {
+          page,
+          pageSize,
+          productType: ProductType.Video
+        },
+      });
+
+      console.log(response);
+
+      setData(response.data);
+      setPagination({
+        current: page,
+        pageSize,
+        total: response.totalCount,
+      });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      toast.error(errorMessage);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(pagination.current, pagination.pageSize);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    fetchData(pagination.current, pagination.pageSize);
+  };
 
   const columns: TableProps<DataType>["columns"] = [
     {
-      title: "Name",
+      title: "Hình ảnh",
+      dataIndex: "thumbnail",
+      key: "thumbnail",
+      render: (text) => <Image src={text} width={100} height={100} alt={text} unoptimized />,
+    },
+    {
+      title: "Tên sản phẩm",
       dataIndex: "name",
       key: "name",
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
+      title: "Giá",
+      dataIndex: "price",
+      key: "price",
     },
     {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Tags",
-      key: "tags",
-      dataIndex: "tags",
-      render: (_, { tags }) => (
+      title: "Danh mục",
+      key: "categories",
+      dataIndex: "categories",
+      render: (_, { categories }) => (
         <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? "geekblue" : "green";
-            if (tag === "loser") {
+          {categories.map((category) => {
+            let color = category.length > 5 ? "geekblue" : "green";
+            if (category === "loser") {
               color = "volcano";
             }
             return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
+              <Tag color={color} key={category}>
+                {category.toUpperCase()}
               </Tag>
             );
           })}
@@ -60,31 +106,41 @@ export default function Video() {
     },
   ];
 
-  const data: DataType[] = [
-    {
-      key: "1",
-      name: "John Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: ["nice", "developer"],
-    },
-    {
-      key: "2",
-      name: "Jim Green",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: ["loser"],
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      age: 32,
-      address: "Sydney No. 1 Lake Park",
-      tags: ["cool", "teacher"],
-    },
-  ];
+  // const data1: DataType[] = [
+  //   {
+  //     key: "1",
+  //     name: "John Brown",
+  //     age: 32,
+  //     address: "New York No. 1 Lake Park",
+  //     tags: ["nice", "developer"],
+  //   },
+  //   {
+  //     key: "2",
+  //     name: "Jim Green",
+  //     age: 42,
+  //     address: "London No. 1 Lake Park",
+  //     tags: ["loser"],
+  //   },
+  //   {
+  //     key: "3",
+  //     name: "Joe Black",
+  //     age: 32,
+  //     address: "Sydney No. 1 Lake Park",
+  //     tags: ["cool", "teacher"],
+  //   },
+  // ];
 
   return (
-    <Table<DataType> columns={columns} dataSource={data} />
+    <Table<DataType>
+      columns={columns}
+      dataSource={data}
+      pagination={{
+        current: pagination.current,
+        pageSize: pagination.pageSize,
+        total: pagination.total,
+        showSizeChanger: true,
+      }}
+      onChange={handleTableChange}
+    />
   );
 }

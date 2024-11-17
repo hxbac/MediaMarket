@@ -9,10 +9,17 @@ namespace MediaMarket.API.Controllers.Client
     {
         private readonly ICategoryService _categoryService = categoryService;
 
-        [HttpGet(Router.CategoryRouting.Action.Index)]
+        [HttpGet(Router.CategoryRouting.Action.GetAll)]
         public async Task<IActionResult> GetAll()
         {
             var response = await _categoryService.GetAllCategories();
+            return CustomResult(response);
+        }
+
+        [HttpGet(Router.CategoryRouting.Action.Index)]
+        public async Task<IActionResult> Index()
+        {
+            var response = await _categoryService.GetListPagination();
             return CustomResult(response);
         }
     }

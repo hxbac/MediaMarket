@@ -49,5 +49,13 @@ namespace MediaMarket.API.Controllers.Client
             var response = await _productService.GetMyProductsPaginated(request);
             return CustomResult(response);
         }
+
+        [Authorize]
+        [HttpGet(Router.ProductRouting.Action.MyLatestProducts)]
+        public async Task<IActionResult> GetLatestProductsProfile()
+        {
+            var response = await _productService.GetMyLatestProducts();
+            return CustomResult(response);
+        }
     }
 }

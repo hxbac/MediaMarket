@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MediaMarket.Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User>
+    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -27,19 +27,19 @@ namespace MediaMarket.Infrastructure.Data
             {
                 entity.ToTable("Users");
             });
-            builder.Entity<IdentityUserRole<string>>(entity =>
+            builder.Entity<IdentityUserRole<Guid>>(entity =>
             {
                 entity.ToTable("UserRoles");
             });
-            builder.Entity<IdentityRole>(entity =>
+            builder.Entity<IdentityRole<Guid>>(entity =>
             {
                 entity.ToTable("Roles");
             });
 
-            builder.Ignore<IdentityRoleClaim<string>>();
-            builder.Ignore<IdentityUserToken<string>>();
-            builder.Ignore<IdentityUserLogin<string>>();
-            builder.Ignore<IdentityUserClaim<string>>();
+            builder.Ignore<IdentityRoleClaim<Guid>>();
+            builder.Ignore<IdentityUserToken<Guid>>();
+            builder.Ignore<IdentityUserLogin<Guid>>();
+            builder.Ignore<IdentityUserClaim<Guid>>();
 
             builder.ApplyConfiguration(new ProductEntityTypeConfiguration());
             builder.ApplyConfiguration(new ImageEntityTypeConfiguration());

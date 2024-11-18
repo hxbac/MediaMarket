@@ -87,5 +87,25 @@ namespace MediaMarket.Infrastructure.Repositories
                 FirstOrFailAsync();
             return product;
         }
+
+        public async Task<IEnumerable<Product>> GetProductsLatest(Guid userId)
+        {
+            var products = await _model.Where(p => p.CreatedBy == userId)
+                .Where(p => p.ProductStatus == ProductStatus.Active)
+                .OrderBy(p => p.CreatedOn)
+                .Take(8)
+                .Select(p => new Product
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    Slug = p.Slug,
+                    Thumbnail = p.Thumbnail,
+                    ShortDescription = p.ShortDescription,
+                    ProductType = p.ProductType,
+                }).ToListAsync();
+
+            return products;
+        }
     }
 }

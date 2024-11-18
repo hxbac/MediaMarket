@@ -22,9 +22,6 @@ namespace MediaMarket.Domain.EntityConfigurations
             entity.Property(p => p.Price)
                 .HasDefaultValue(0);
 
-            entity.Property(p => p.SellerId)
-                .IsRequired();
-
             entity.Property(p => p.ProductType)
                 .HasDefaultValue(ProductType.Video)
                 .HasConversion<byte>();
@@ -53,6 +50,10 @@ namespace MediaMarket.Domain.EntityConfigurations
                     "ProductTags",
                     j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId"),
                     j => j.HasOne<Product>().WithMany().HasForeignKey("ProductId"));
+
+            entity.HasOne(p => p.Seller)
+                .WithMany(u => u.Products)
+                .HasForeignKey(p => p.CreatedBy);
         }
     }
 }

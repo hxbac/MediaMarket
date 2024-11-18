@@ -43,7 +43,6 @@ namespace MediaMarket.Application.Services
                 Description = request.Description,
                 ShortDescription = request.ShortDescription,
                 Price = request.Price,
-                SellerId = UserIdCreate,
                 ProductType = request.Type,
                 ProductStatus = request.Status,
                 ProductContentStatus = ProductContentStatus.Waiting,
@@ -135,6 +134,12 @@ namespace MediaMarket.Application.Services
         {
             var result = await _productRepository.GetListProductsForUser(_user.Id, request.ProductType, request.Name, request.Page, request.PageSize);
             return Success(result);
+        }
+
+        public async Task<BaseResponse<IEnumerable<ProductLatestResponse>>> GetMyLatestProducts()
+        {
+            var products = await _productRepository.GetProductsLatest(_user.Id);
+            return Success(_mapper.Map<IEnumerable<ProductLatestResponse>>(products));
         }
     }
 }

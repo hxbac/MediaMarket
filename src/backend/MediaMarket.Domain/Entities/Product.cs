@@ -11,7 +11,6 @@ namespace MediaMarket.Domain.Entities
         public string? ShortDescription { get; set; }
         public string? Description { get; set; }
         public long Price { get; set; }
-        public Guid SellerId { get; set; }
         public ProductType ProductType { get; set; }
         public ProductStatus ProductStatus { get; set; }
         public ProductContentStatus ProductContentStatus { get; set; }

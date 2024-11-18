@@ -14,6 +14,7 @@ namespace MediaMarket.Application.Mappings
             CreateMap<Product, ProductUserResponse>();
             CreateMap<Product, ProductPurchaseResponse>();
             CreateMap<Product, ProductOrderResponse>();
+            CreateMap<Product, ProductLatestResponse>();
         }
     }
 }

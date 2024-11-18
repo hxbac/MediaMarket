@@ -2,7 +2,6 @@
 using MediaMarket.Domain.Entities;
 using MediaMarket.Domain.Enums;
 using MediaMarket.Infrastructure.Data;
-using MediaMarket.Infrastructure.Extensions;
 
 namespace MediaMarket.Infrastructure.Seeders
 {
@@ -38,7 +37,6 @@ namespace MediaMarket.Infrastructure.Seeders
                 .RuleFor(p => p.ShortDescription, f => f.Lorem.Text())
                 .RuleFor(p => p.Description, f => f.Lorem.Paragraphs())
                 .RuleFor(p => p.Price, f => f.Random.Int(100000))
-                .RuleFor(p => p.SellerId, f => Guid.NewGuid())
                 .RuleFor(p => p.ProductType, f => f.PickRandom<ProductType>())
                 .RuleFor(p => p.ProductStatus, f => f.PickRandom<ProductStatus>())
                 .RuleFor(p => p.ProductContentStatus, f => f.PickRandom<ProductContentStatus>());

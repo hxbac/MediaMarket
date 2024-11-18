@@ -34,3 +34,13 @@ export interface ProductInfo {
 export interface SearchProductParams {
     name: string;
 }
+
+export interface MyProductLatest {
+    id: string;
+    name: string;
+    slug: string;
+    price: number;
+    productType: number;
+    shortDescription: string;
+    thumbnail: string;
+}

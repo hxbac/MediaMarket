@@ -42,6 +42,7 @@
                 public const string GetProductsHomePage = Prefix + "/get-list-by-category";
                 public const string Create = Prefix;
                 public const string MyProducts = Prefix + "/my-products";
+                public const string MyLatestProducts = Prefix + "/my-latest-products";
             }
         }
 

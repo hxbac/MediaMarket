@@ -5,4 +5,7 @@ export interface UserResponse {
     email: string;
     address: string | null;
     avatar: string | null;
+    description: string | null;
+    phoneNumber: string | null;
+    birthday: string | null;
 }

@@ -3,6 +3,7 @@ using MediaMarket.Application.Bases;
 using MediaMarket.Application.Contracts.Repositories;
 using MediaMarket.Application.DTO.Product;
 using MediaMarket.Application.DTO.Response.Product;
+using MediaMarket.Application.Extensions;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Domain.Enums;
 using MediaMarket.Infrastructure.Data;
@@ -106,6 +107,18 @@ namespace MediaMarket.Infrastructure.Repositories
                 }).ToListAsync();
 
             return products;
+        }
+
+        public async Task<ICollection<Guid>> GetProductIdsMatchTagName(string tagName, ProductType productType, int take)
+        {
+            var tagSlug = tagName.ToSlug();
+            return await _model
+                .Where(p => p.ProductStatus == ProductStatus.Active)
+                .Where(p => p.ProductType == productType)
+                .Where(p => p.Tags.Any(t => t.Slug.Contains(tagSlug)))
+                .Take(take)
+                .Select(p => p.Id)
+                .ToListAsync();
         }
     }
 }

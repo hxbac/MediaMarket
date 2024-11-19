@@ -12,5 +12,6 @@ namespace MediaMarket.Application.Contracts.Repositories
         Task<ProductDetailResponse> GetProductActiveWithRelationship(string slug);
         Task<ProductLatestVersionDTO> GetProductWithLatestVersion(string slug);
         Task<IEnumerable<Product>> GetProductsLatest(Guid userId);
+        Task<ICollection<Guid>> GetProductIdsMatchTagName(string tagName, ProductType productType, int take);
     }
 }

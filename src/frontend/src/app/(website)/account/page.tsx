@@ -3,6 +3,7 @@
 import Card from "@/components/product/card";
 import { MyProductLatest } from "@/interfaces/products";
 import productService from "@/services/productService";
+import { useAppSelector } from "@/store/hooks";
 import { Button, DatePicker, DatePickerProps, Form, Input, message, Modal } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import Upload, { UploadChangeParam, UploadFile } from "antd/es/upload";
@@ -22,6 +23,7 @@ export default function Page() {
   const [form] = Form.useForm();
   const [products, setProducts] = useState<MyProductLatest[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const user = useAppSelector(state => state.user.user);
   const [profile, setProfile] = useState<Profile>({
     avatar: '',
     name: '',
@@ -30,6 +32,23 @@ export default function Page() {
     address: '',
     birthday: ''
   });
+
+  useEffect(() => {
+    console.log(user);
+    if (user === null) {
+      return;
+    }
+
+
+    setProfile({
+      avatar: user.avatar ?? '',
+      name: user.name,
+      description: user.description ?? '',
+      phoneNumber: user.phoneNumber ?? '',
+      address: user.address ?? '',
+      birthday: user.birthday ?? ''
+    })
+  }, [user]);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -277,7 +296,7 @@ export default function Page() {
               { required: true, message: "Tên không được trống!" },
             ]}
           >
-            <Input placeholder="" value={profile.name} onChange={(e) => setProfile({ ...profile, name: e.target.value })} />
+            <Input placeholder="" value={profile.name ?? 'yesy'} onChange={(e) => setProfile({ ...profile, name: e.target.value })} />
           </Form.Item>
           <Form.Item
             label="Số điện thoại"

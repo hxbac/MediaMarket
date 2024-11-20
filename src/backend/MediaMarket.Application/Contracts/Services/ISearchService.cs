@@ -1,11 +1,11 @@
-﻿using MediaMarket.Domain.Enums;
+﻿using MediaMarket.Application.Bases;
+using MediaMarket.Application.DTO.Response.Product;
+using MediaMarket.Domain.Enums;
 
 namespace MediaMarket.Application.Contracts.Services
 {
     public interface ISearchService
     {
-        Task<ICollection<Guid>> SearchProductsByCategoryName(string search, ProductType productType);
-        Task<ICollection<Guid>> SearchProductsByTagName(string search, ProductType productType);
-        Task<ICollection<Guid>> SearchProductsByName(string search, ProductType productType);
+        Task<BaseResponse<ICollection<SearchProductResponse>>> GetProductsSearchResult(string search, ProductType productType);
     }
 }

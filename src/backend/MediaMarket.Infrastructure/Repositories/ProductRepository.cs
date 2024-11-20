@@ -109,15 +109,44 @@ namespace MediaMarket.Infrastructure.Repositories
             return products;
         }
 
-        public async Task<ICollection<Guid>> GetProductIdsMatchTagName(string tagName, ProductType productType, int take)
+        public async Task<ICollection<SearchProductResponse>> GetProductIdsMatchKeyword(string keyword, ProductType productType, int take)
+        {
+            return await _model
+                .Where(p => p.ProductStatus == ProductStatus.Active)
+                .Where(p => p.ProductType == productType)
+                .Where(p => p.Name.Contains(keyword) || p.Description.Contains(keyword))
+                .OrderByDescending(p => p.Name.Contains(keyword) && p.Description.Contains(keyword))
+                .ThenByDescending(p => p.Name.Contains(keyword))
+                .ThenByDescending(p => p.Description.Contains(keyword))
+                .Take(take)
+                .Select(p => new SearchProductResponse()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Thumbnail = p.Thumbnail,
+                    ShortDescription = p.ShortDescription,
+                    Price = p.Price,
+                })
+                .ToListAsync();
+        }
+
+        public async Task<ICollection<SearchProductResponse>> GetProductIdsMatchTagName(string tagName, ProductType productType, ICollection<Guid> excludedIds, int take)
         {
             var tagSlug = tagName.ToSlug();
             return await _model
                 .Where(p => p.ProductStatus == ProductStatus.Active)
                 .Where(p => p.ProductType == productType)
+                .Where(p => !excludedIds.Contains(p.Id))
                 .Where(p => p.Tags.Any(t => t.Slug.Contains(tagSlug)))
                 .Take(take)
-                .Select(p => p.Id)
+                .Select(p => new SearchProductResponse()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Thumbnail = p.Thumbnail,
+                    ShortDescription = p.ShortDescription,
+                    Price = p.Price,
+                })
                 .ToListAsync();
         }
     }

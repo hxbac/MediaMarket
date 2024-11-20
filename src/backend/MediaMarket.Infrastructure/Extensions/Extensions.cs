@@ -127,6 +127,7 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ISearchService, DatabaseSearchService>();
 
             services.AddSingleton<IFileService, LocalStorageFileService>();
             services.AddSingleton<IPaymentService, StripePaymentService>();

@@ -6,6 +6,6 @@ namespace MediaMarket.Application.Contracts.Services
 {
     public interface ISearchService
     {
-        Task<BaseResponse<ICollection<SearchProductResponse>>> GetProductsSearchResult(string search, ProductType productType);
+        Task<BaseResponse<IEnumerable<SearchProductResponse>>> GetProductsSearchResult(string search, ProductType productType);
     }
 }

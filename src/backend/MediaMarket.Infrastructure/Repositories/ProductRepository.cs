@@ -109,7 +109,7 @@ namespace MediaMarket.Infrastructure.Repositories
             return products;
         }
 
-        public async Task<ICollection<SearchProductResponse>> GetProductIdsMatchKeyword(string keyword, ProductType productType, int take)
+        public async Task<IEnumerable<Guid>> GetProductIdsMatchKeyword(string keyword, ProductType productType, int take)
         {
             return await _model
                 .Where(p => p.ProductStatus == ProductStatus.Active)
@@ -119,18 +119,11 @@ namespace MediaMarket.Infrastructure.Repositories
                 .ThenByDescending(p => p.Name.Contains(keyword))
                 .ThenByDescending(p => p.Description.Contains(keyword))
                 .Take(take)
-                .Select(p => new SearchProductResponse()
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Thumbnail = p.Thumbnail,
-                    ShortDescription = p.ShortDescription,
-                    Price = p.Price,
-                })
+                .Select(p => p.Id)
                 .ToListAsync();
         }
 
-        public async Task<ICollection<SearchProductResponse>> GetProductIdsMatchTagName(string tagName, ProductType productType, ICollection<Guid> excludedIds, int take)
+        public async Task<IEnumerable<Guid>> GetProductIdsMatchTagName(string tagName, ProductType productType, ICollection<Guid> excludedIds, int take)
         {
             var tagSlug = tagName.ToSlug();
             return await _model
@@ -139,13 +132,33 @@ namespace MediaMarket.Infrastructure.Repositories
                 .Where(p => !excludedIds.Contains(p.Id))
                 .Where(p => p.Tags.Any(t => t.Slug.Contains(tagSlug)))
                 .Take(take)
+                .Select(p => p.Id)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Guid>> GetProductIdsMatchCategoryName(string search, ProductType productType, ICollection<Guid> excludedIds, int take)
+        {
+            return await _model
+                .Where(p => p.ProductStatus == ProductStatus.Active)
+                .Where(p => p.ProductType == productType)
+                .Where(p => !excludedIds.Contains(p.Id))
+                .Where(p => p.Categories.Any(t => t.Name.Contains(search)))
+                .Take(take)
+                .Select(p => p.Id)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<SearchProductResponse>> GetListProductsByIds(IEnumerable<Guid> ids)
+        {
+            return await _model
+                .Where(p => ids.Contains(p.Id))
                 .Select(p => new SearchProductResponse()
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    Thumbnail = p.Thumbnail,
-                    ShortDescription = p.ShortDescription,
                     Price = p.Price,
+                    ShortDescription = p.ShortDescription,
+                    Thumbnail = p.Thumbnail,
                 })
                 .ToListAsync();
         }

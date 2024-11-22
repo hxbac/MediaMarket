@@ -77,5 +77,14 @@
                 public const string MyOrders = Prefix + "/my-orders";
             }
         }
+
+        public static class SearchRouting
+        {
+            public const string Prefix = rule + "search";
+            public static class Action
+            {
+                public const string SearchProduct = Prefix + "/product";
+            }
+        }
     }
 }

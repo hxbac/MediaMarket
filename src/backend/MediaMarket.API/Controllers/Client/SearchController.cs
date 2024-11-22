@@ -1,4 +1,6 @@
 ﻿using MediaMarket.Application.Contracts.Services;
+using MediaMarket.Application.DTO.Request.Product;
+using MediaMarket.Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediaMarket.API.Controllers.Client
@@ -8,10 +10,10 @@ namespace MediaMarket.API.Controllers.Client
     {
         private readonly ISearchService _searchService = searchService;
 
-        [HttpGet("/test")]
-        public async Task<IActionResult> Search()
+        [HttpGet(Router.SearchRouting.Action.SearchProduct)]
+        public async Task<IActionResult> Search([FromQuery] SearchProductWithTypeRequest request)
         {
-            var response = await _searchService.GetProductsSearchResult("T", Domain.Enums.ProductType.Video);
+            var response = await _searchService.GetProductsSearchResult(request.Search, request.Type);
             return CustomResult(response);
         }
     }

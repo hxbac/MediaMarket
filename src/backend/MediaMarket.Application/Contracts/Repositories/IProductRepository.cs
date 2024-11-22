@@ -12,7 +12,9 @@ namespace MediaMarket.Application.Contracts.Repositories
         Task<ProductDetailResponse> GetProductActiveWithRelationship(string slug);
         Task<ProductLatestVersionDTO> GetProductWithLatestVersion(string slug);
         Task<IEnumerable<Product>> GetProductsLatest(Guid userId);
-        Task<ICollection<SearchProductResponse>> GetProductIdsMatchKeyword(string keyword, ProductType productType, int take);
-        Task<ICollection<SearchProductResponse>> GetProductIdsMatchTagName(string tagName, ProductType productType, ICollection<Guid> excludedIds, int take);
+        Task<IEnumerable<Guid>> GetProductIdsMatchKeyword(string keyword, ProductType productType, int take);
+        Task<IEnumerable<Guid>> GetProductIdsMatchTagName(string tagName, ProductType productType, ICollection<Guid> excludedIds, int take);
+        Task<IEnumerable<Guid>> GetProductIdsMatchCategoryName(string search, ProductType productType, ICollection<Guid> excludedIds, int take);
+        Task<IEnumerable<SearchProductResponse>> GetListProductsByIds(IEnumerable<Guid> ids);
     }
 }

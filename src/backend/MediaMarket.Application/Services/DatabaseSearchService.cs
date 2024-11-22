@@ -7,31 +7,57 @@ using MediaMarket.Domain.Enums;
 namespace MediaMarket.Application.Services
 {
     public class DatabaseSearchService(
-        ICategoryRepository categoryRepository,
-        ITagRepository tagRepository,
         IProductRepository productRepository
-    ) : ISearchService
+    ) : BaseResponseHandler, ISearchService
     {
-        private readonly ICategoryRepository _categoryRepository = categoryRepository;
-        private readonly ITagRepository _tagRepository = tagRepository;
         private readonly IProductRepository _productRepository = productRepository;
 
-        public async Task<BaseResponse<ICollection<SearchProductResponse>>> GetProductsSearchResult(string search, ProductType productType)
+        public async Task<BaseResponse<IEnumerable<SearchProductResponse>>> GetProductsSearchResult(string search, ProductType productType)
         {
-            throw new NotImplementedException();
+            var listProductIds = await GetProductIdsByKeyword(search, productType);
+            var products = await _productRepository.GetListProductsByIds(listProductIds);
+
+            var orderIds = listProductIds.Select((id, index) => new { id, index }).ToDictionary(x => x.id, x => x.index);
+            products.OrderBy(x => orderIds[x.Id]);
+
+            return Success(products);
         }
 
-        public async Task<ICollection<SearchProductResponse>> SearchProductsByCategoryName(string search, ProductType productType)
+        private async Task<IEnumerable<Guid>> GetProductIdsByKeyword(string keyword, ProductType productType)
         {
-            throw new NotImplementedException();
+            const int numberOfResult = 8;
+            var result = new List<Guid>();
+
+            var listProductIdsMatchByName = await SearchProductsByName(keyword, productType);
+            result.AddRange(listProductIdsMatchByName);
+            if (result.Count >= numberOfResult)
+            {
+                return result;
+            }
+
+            var listProductIdsMatchByTag = await SearchProductsByTagName(keyword, productType, result, numberOfResult - result.Count());
+            result.AddRange(listProductIdsMatchByTag);
+            if (result.Count >= numberOfResult)
+            {
+                return result;
+            }
+
+            var listProductIdsMatchByCategory = await SearchProductsByCategoryName(keyword, productType, result, numberOfResult - result.Count());
+            result.AddRange(listProductIdsMatchByCategory);
+            return result;
         }
 
-        public Task<ICollection<SearchProductResponse>> SearchProductsByName(string search, ProductType productType)
+        private async Task<IEnumerable<Guid>> SearchProductsByCategoryName(string search, ProductType productType, ICollection<Guid> excludedIds, int take)
         {
-            throw new NotImplementedException();
+            return await _productRepository.GetProductIdsMatchCategoryName(search, productType, excludedIds, take);
         }
 
-        private async Task<ICollection<SearchProductResponse>> SearchProductsByTagName(string search, ProductType productType, ICollection<Guid> excludedIds, int take)
+        private async Task<IEnumerable<Guid>> SearchProductsByName(string search, ProductType productType, int take = 8)
+        {
+            return await _productRepository.GetProductIdsMatchKeyword(search, productType, take);
+        }
+
+        private async Task<IEnumerable<Guid>> SearchProductsByTagName(string search, ProductType productType, ICollection<Guid> excludedIds, int take)
         {
             return await _productRepository.GetProductIdsMatchTagName(search, productType, excludedIds, take);
         }

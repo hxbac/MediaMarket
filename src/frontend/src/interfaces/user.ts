@@ -9,3 +9,9 @@ export interface UserResponse {
     phoneNumber: string | null;
     birthday: string | null;
 }
+
+export interface Seller {
+    id: string;
+    name: string;
+    avatar: string | null;
+}

@@ -1,9 +1,9 @@
 import TagRounded from "@/components/tag/tagRounded";
-import CardHorizontal from "@/components/user/cardHorizontal";
 import productService from "@/services/productService";
 import { Tag } from "@/interfaces/tag";
 import Link from "next/link";
 import { formatPrice } from "@/utils/helpers";
+import Image from "next/image";
 
 interface ProductParams {
   slug: string;
@@ -29,7 +29,28 @@ export default async function Page({ params }: { params: ProductParams }) {
                 {data.shortDescription}
               </p>
             </div>
-            <CardHorizontal />
+            <div className="rounded-lg overflow-hidden shadow-lg px-6 py-4 flex bg-[#f8f7fa]">
+              <Link href={'/seller/' + data.seller.id} className="flex-1 flex items-stretch">
+                <div className="rounded-full w-14 h-14 mr-4 overflow-hidden">
+                  <Image
+                    src={data.seller.avatar ?? '/images/no-avatar.png'}
+                    alt={data.seller.name}
+                    width={56}
+                    height={56}
+                    className="w-14 h-14 object-cover"
+                  />
+                </div>
+                <div className="text-sm">
+                  <div className="mb-1">
+                    Bởi <b>{data.seller.name}</b> 20 followers
+                  </div>
+                  <div>105 events hosted</div>
+                </div>
+              </Link>
+              <div className="flex items-center">
+                <div className="bg-purple-600 text-white font-bold text-sm px-8 p-2 select-none cursor-pointer rounded-md hover:opacity-80">Follow</div>
+              </div>
+            </div>
             <div>
               <h2 className="text-2xl font-bold mt-8 mb-4">Mô tả</h2>
               <div className="">

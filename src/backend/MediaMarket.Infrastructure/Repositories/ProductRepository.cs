@@ -3,6 +3,7 @@ using MediaMarket.Application.Bases;
 using MediaMarket.Application.Contracts.Repositories;
 using MediaMarket.Application.DTO.Product;
 using MediaMarket.Application.DTO.Response.Product;
+using MediaMarket.Application.DTO.User;
 using MediaMarket.Application.Extensions;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Domain.Enums;
@@ -51,6 +52,7 @@ namespace MediaMarket.Infrastructure.Repositories
             var product = await _model.Include(x => x.Categories)
                 .Include(x => x.Tags)
                 .Include(x => x.Preview)
+                .Include(x => x.Seller)
                 .Where(x => x.Slug == slug)
                 .Select(x => new ProductDetailResponse
                 {
@@ -66,7 +68,8 @@ namespace MediaMarket.Infrastructure.Repositories
                     ProductContentStatus = x.ProductContentStatus,
                     Preview = x.Preview,
                     Tags = x.Tags,
-                    Categories = x.Categories
+                    Categories = x.Categories,
+                    Seller = _mapper.Map<Seller>(x.Seller),
                 })
                 .FirstOrFailAsync();
 
@@ -156,6 +159,7 @@ namespace MediaMarket.Infrastructure.Repositories
                 {
                     Id = p.Id,
                     Name = p.Name,
+                    Slug = p.Slug,
                     Price = p.Price,
                     ShortDescription = p.ShortDescription,
                     Thumbnail = p.Thumbnail,

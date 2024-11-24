@@ -1,4 +1,5 @@
-﻿using MediaMarket.Domain.Enums;
+﻿using MediaMarket.Application.DTO.User;
+using MediaMarket.Domain.Enums;
 using Entities = MediaMarket.Domain.Entities;
 
 namespace MediaMarket.Application.DTO.Response.Product
@@ -16,7 +17,8 @@ namespace MediaMarket.Application.DTO.Response.Product
         public ProductStatus ProductStatus { get; set; }
         public ProductContentStatus ProductContentStatus { get; set; }
 
-        public ICollection<Entities.Tag> Tags { get; set; }
+        public Seller? Seller { get; set; }
+        public ICollection<Entities.Tag>? Tags { get; set; }
         public ICollection<Entities.Category>? Categories { get; set; }
         public Entities.Preview? Preview { get; set; }
     }

@@ -20,7 +20,11 @@ namespace MediaMarket.Infrastructure.Repositories
 
         public async Task<PaginatedResult<ProductOrderResponse>> GetListOrdersForUser(Guid userId, ProductType productType, string? name, int page, int pageSize)
         {
-            var query = _model.Include(o => o.Product).ThenInclude(product => product.Categories)
+            var query = _model
+                .Include(o => o.Product)
+                    .ThenInclude(product => product.Categories)
+                .Include(o => o.Product)
+                    .ThenInclude(product => product.Tags)
                 .Where(o => o.Product.CreatedBy == userId);
 
             if (!string.IsNullOrEmpty(name))
@@ -37,13 +41,18 @@ namespace MediaMarket.Infrastructure.Repositories
                     Thumbnail = o.Product.Thumbnail,
                     Price = o.Price,
                     Categories = o.Product.Categories,
+                    Tags = o.Product.Tags,
                 })
                 .ToPaginatedListAsync<Product, ProductOrderResponse>(page, pageSize, _mapper);
         }
 
         public async Task<PaginatedResult<ProductPurchaseResponse>> GetListPurchasesForUser(Guid userId, ProductType productType, string? name, int page, int pageSize)
         {
-            var query = _model.Include(o => o.Product).ThenInclude(product => product.Categories)
+            var query = _model
+                .Include(o => o.Product)
+                    .ThenInclude(product => product.Categories)
+                .Include(o => o.Product)
+                    .ThenInclude(product => product.Tags)
                 .Where(o => o.CreatedBy == userId);
 
             if (!string.IsNullOrEmpty(name))
@@ -60,6 +69,7 @@ namespace MediaMarket.Infrastructure.Repositories
                     Thumbnail = o.Product.Thumbnail,
                     Price = o.Price,
                     Categories = o.Product.Categories,
+                    Tags = o.Product.Tags,
                 })
                 .ToPaginatedListAsync<Product, ProductPurchaseResponse>(page, pageSize, _mapper);
         }

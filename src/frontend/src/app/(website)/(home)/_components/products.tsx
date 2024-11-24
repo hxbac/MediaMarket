@@ -6,12 +6,12 @@ import { CategoryHomePage } from "@/interfaces/categories";
 import { useEffect, useState } from "react";
 
 import productService from "@/services/productService.js"
-import { ProductHomePage } from "@/interfaces/products";
+import { ProductCard } from "@/interfaces/products";
 import { toast } from "react-toastify";
 
 export default function Products({ categories }: { categories: CategoryHomePage[] }) {
   const [categorySelected, setCategorySelected] = useState<string>(categories[0].id);
-  const [products, setProducts] = useState<ProductHomePage[]>([]);
+  const [products, setProducts] = useState<ProductCard[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {

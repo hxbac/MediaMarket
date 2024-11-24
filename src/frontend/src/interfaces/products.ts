@@ -1,9 +1,9 @@
-export interface ProductHomePage {
+export interface ProductCard {
     id: string;
     name: string;
     slug: string;
     price: number;
-    productType: number;
+    productType: number | null;
     shortDescription: string;
     thumbnail: string;
 }

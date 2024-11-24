@@ -3,7 +3,7 @@ export default function CardHorizontal() {
     <div className="rounded-lg overflow-hidden shadow-lg px-6 py-4 flex bg-[#f8f7fa]">
       <div className="flex-1 flex items-stretch">
         <div className="rounded-full bg-purple-600 w-14 h-14 mr-4">
-          
+
         </div>
         <div className="text-sm">
           <div className="mb-1">

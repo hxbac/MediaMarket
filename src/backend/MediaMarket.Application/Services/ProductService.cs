@@ -141,5 +141,19 @@ namespace MediaMarket.Application.Services
             var products = await _productRepository.GetProductsLatest(_user.Id);
             return Success(_mapper.Map<IEnumerable<ProductLatestResponse>>(products));
         }
+
+        public async Task<BaseResponse<ProductCheckoutResponse>> GetProductCheckoutInfo(ProductCheckoutRequest request)
+        {
+            var product = await _productRepository.FindAsync(x => x.Slug == request.Slug);
+            return Success(new ProductCheckoutResponse()
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Slug = product.Slug,
+                Price = product.Price,
+                Thumbnail = product.Thumbnail,
+                ShortDescription = product.ShortDescription,
+            });
+        }
     }
 }

@@ -43,6 +43,7 @@
                 public const string Create = Prefix;
                 public const string MyProducts = Prefix + "/my-products";
                 public const string MyLatestProducts = Prefix + "/my-latest-products";
+                public const string CheckoutInfo = Prefix + "/checkout";
             }
         }
 

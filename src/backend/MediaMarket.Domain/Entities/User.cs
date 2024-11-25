@@ -12,5 +12,6 @@ namespace MediaMarket.Domain.Entities
         public string? BirthDay { get; set; }
 
         public ICollection<Product>? Products { get; set; }
+        public ICollection<Order>? Orders { get; set; }
     }
 }

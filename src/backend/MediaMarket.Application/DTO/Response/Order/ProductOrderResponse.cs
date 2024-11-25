@@ -9,6 +9,9 @@ namespace MediaMarket.Application.DTO.Response.Order
         public string? Slug { get; set; }
         public string? Thumbnail { get; set; }
         public long Price { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public Guid UserBuyerId { get; set; }
+        public string? UserBuyerName { get; set; }
         public ICollection<Entities.Category>? Categories { get; set; }
         public ICollection<Entities.Tag>? Tags { get; set; }
     }

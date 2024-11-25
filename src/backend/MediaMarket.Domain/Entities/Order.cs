@@ -15,5 +15,6 @@ namespace MediaMarket.Domain.Entities
         public string? PaymentSession { get; set; }
 
         public Product? Product { get; set; }
+        public User? Buyer { get; set; }
     }
 }

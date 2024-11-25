@@ -46,6 +46,7 @@ namespace MediaMarket.Infrastructure.Data
             builder.ApplyConfiguration(new PreviewEntityTypeConfiguration());
             builder.ApplyConfiguration(new ProductDetailEntityTypeConfiguration());
             builder.ApplyConfiguration(new VideoSolutionEntityTypeConfiguration());
+            builder.ApplyConfiguration(new OrderEntityTypeConfiguration());
         }
     }
 }

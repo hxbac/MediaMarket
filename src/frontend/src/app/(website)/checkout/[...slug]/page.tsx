@@ -1,15 +1,19 @@
+import productService from "@/services/productService";
 import OrderSummary from "./_components/summary";
+import Image from "next/image";
+import { formatPrice } from "@/utils/helpers";
+import Link from "next/link";
+import { ProductCheckoutInfo } from "@/interfaces/products";
 
 interface ProductParams {
   slug: string;
 }
 
 export default async function Page({ params }: { params: ProductParams }) {
-  // const router = useRouter()
   const { slug } = params;
 
-  // const response = await productService.getDetail(slug);
-  // const data = response.data;
+  const response = await productService.getCheckoutInfo({ slug: slug.toString() });
+  const data: ProductCheckoutInfo = response.data;
 
   return (
     <section className="bg-white pt-16">
@@ -23,74 +27,37 @@ export default async function Page({ params }: { params: ProductParams }) {
                     Sản phẩm
                   </h2>
                 </div>
-                <div className="grid grid-cols-12 mt-8 max-md:hidden pb-6 border-b border-gray-200">
-                  <div className="col-span-12 md:col-span-7">
-                    <p className="font-normal text-lg leading-8 text-gray-400">
-                      Product Details
-                    </p>
-                  </div>
-                  <div className="col-span-12 md:col-span-5">
-                    <div className="grid grid-cols-5">
-                      <div className="col-span-2">
-                        <p className="font-normal text-lg leading-8 text-gray-400 text-center">
-                          Total
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
                 <div className="flex flex-col min-[500px]:flex-row min-[500px]:items-center gap-5 py-6  border-b border-gray-200 group">
                   <div className="w-full md:max-w-[126px]">
-                    <img
-                      src="https://pagedone.io/asset/uploads/1701162850.png"
-                      alt="perfume bottle image"
-                      className="mx-auto rounded-xl object-cover"
+                    <Image
+                      src={data.thumbnail}
+                      alt={data.name}
+                      width={126}
+                      height={126}
+                      className="w-32 h-32 object-cover rounded-lg"
+                      unoptimized
                     />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-4 w-full">
                     <div className="md:col-span-2">
                       <div className="flex flex-col max-[500px]:items-center gap-3">
                         <h6 className="font-semibold text-base leading-7 text-black">
-                          Rose Petals Divine
+                          <Link href={'/products/' + data.slug}>{data.name}</Link>
                         </h6>
                         <h6 className="font-normal text-base leading-7 text-gray-500">
-                          Perfumes
-                        </h6>
-                        <h6 className="font-medium text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-indigo-600">
-                          $120.00
+                          {data.shortDescription}
                         </h6>
                       </div>
                     </div>
                     <div className="flex items-center max-[500px]:justify-center md:justify-end max-md:mt-3 h-full">
                       <p className="font-bold text-lg leading-8 text-gray-600 text-center transition-all duration-300 group-hover:text-indigo-600">
-                        $120.00
+                        {formatPrice(data.price)}
                       </p>
                     </div>
                   </div>
                 </div>
-
-                <div className="flex items-center justify-end mt-8">
-                  <button className="flex items-center px-5 py-3 rounded-full gap-2 border-none outline-0 group font-semibold text-lg leading-8 text-indigo-600 shadow-sm shadow-transparent transition-all duration-500 hover:text-indigo-700">
-                    Add Coupon Code
-                    <svg
-                      className="transition-all duration-500 group-hover:translate-x-2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="22"
-                      height="22"
-                      viewBox="0 0 22 22"
-                      fill="none"
-                    >
-                      <path
-                        d="M12.7757 5.5L18.3319 11.0562M18.3319 11.0562L12.7757 16.6125M18.3319 11.0562L1.83203 11.0562"
-                        stroke="#4F46E5"
-                        strokeWidth="1.6"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  </button>
-                </div>
               </div>
-              <OrderSummary slug={slug} />
+              <OrderSummary product={data}  />
             </div>
           </div>
         </section>

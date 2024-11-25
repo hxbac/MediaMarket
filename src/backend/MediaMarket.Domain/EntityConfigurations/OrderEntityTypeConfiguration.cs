@@ -15,9 +15,14 @@ namespace MediaMarket.Domain.EntityConfigurations
                 .HasDefaultValue(OrderStatus.Pending)
                 .HasConversion<byte>();
 
+            builder.HasOne(x => x.Buyer)
+                .WithMany(x => x.Orders)
+                .HasForeignKey(x => x.CreatedBy);
+
             builder.HasOne(x => x.Product)
                 .WithMany(x => x.Orders)
                 .HasForeignKey(x => x.ProductId);
+
         }
     }
 }

@@ -10,6 +10,7 @@ namespace MediaMarket.Application.Contracts.Services
         Task<BaseResponse<IEnumerable<ProductHomePageResponse>>> GetListProductsHomePageByCategory(Guid categoryId);
         Task<BaseResponse<IEnumerable<ProductLatestResponse>>> GetMyLatestProducts();
         Task<BaseResponse<PaginatedResult<ProductUserResponse>>> GetMyProductsPaginated(GetProductListRequest request);
+        Task<BaseResponse<ProductCheckoutResponse>> GetProductCheckoutInfo(ProductCheckoutRequest request);
         Task<BaseResponse<ProductDetailResponse>> GetProductDetail(string slug);
     }
 }

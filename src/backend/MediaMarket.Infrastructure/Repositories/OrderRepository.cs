@@ -21,6 +21,7 @@ namespace MediaMarket.Infrastructure.Repositories
         public async Task<PaginatedResult<ProductOrderResponse>> GetListOrdersForUser(Guid userId, ProductType productType, string? name, int page, int pageSize)
         {
             var query = _model
+                .Include(o => o.Buyer)
                 .Include(o => o.Product)
                     .ThenInclude(product => product.Categories)
                 .Include(o => o.Product)
@@ -33,7 +34,7 @@ namespace MediaMarket.Infrastructure.Repositories
             }
 
             return await query
-                .Select(o => new Product()
+                .Select(o => new ProductOrderResponse()
                 {
                     Id = o.Product.Id,
                     Name = o.Product.Name,
@@ -42,8 +43,11 @@ namespace MediaMarket.Infrastructure.Repositories
                     Price = o.Price,
                     Categories = o.Product.Categories,
                     Tags = o.Product.Tags,
+                    CreatedAt = o.CreatedOn,
+                    UserBuyerId = o.Buyer.Id,
+                    UserBuyerName = o.Buyer.Name,
                 })
-                .ToPaginatedListAsync<Product, ProductOrderResponse>(page, pageSize, _mapper);
+                .ToPaginatedListAsync(page, pageSize, _mapper);
         }
 
         public async Task<PaginatedResult<ProductPurchaseResponse>> GetListPurchasesForUser(Guid userId, ProductType productType, string? name, int page, int pageSize)
@@ -61,7 +65,7 @@ namespace MediaMarket.Infrastructure.Repositories
             }
 
             return await query
-                .Select(o => new Product()
+                .Select(o => new ProductPurchaseResponse()
                 {
                     Id = o.Product.Id,
                     Name = o.Product.Name,
@@ -70,8 +74,9 @@ namespace MediaMarket.Infrastructure.Repositories
                     Price = o.Price,
                     Categories = o.Product.Categories,
                     Tags = o.Product.Tags,
+                    CreatedAt = o.CreatedOn,
                 })
-                .ToPaginatedListAsync<Product, ProductPurchaseResponse>(page, pageSize, _mapper);
+                .ToPaginatedListAsync(page, pageSize, _mapper);
         }
     }
 }

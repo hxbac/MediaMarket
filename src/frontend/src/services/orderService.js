@@ -28,7 +28,7 @@ const orderService = {
 
             return result;
         } catch (error) {
-            throw new Error(error.message || 'Error fetching product');
+            throw new Error(error.message || 'Error fetching ' + prefix);
         }
     },
     getMyOrders: async (params) => {
@@ -48,7 +48,15 @@ const orderService = {
 
             return result;
         } catch (error) {
-            throw new Error(error.message || 'Error fetching product');
+            throw new Error(error.message || 'Error fetching ' + prefix);
+        }
+    },
+    fulfillStripePayment: async (params) => {
+        try {
+            const response = await axiosInstance.post(prefix + '/callback/stripe', params);
+            return response.data;
+        } catch (error) {
+            throw new Error(error.message || 'Error fetching ' + prefix);
         }
     }
 }

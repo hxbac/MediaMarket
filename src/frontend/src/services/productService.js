@@ -54,6 +54,14 @@ const productService = {
         } catch (error) {
             throw new Error(error.message || 'Error fetching product');
         }
+    },
+    getCheckoutInfo: async (params) => {
+        try {
+            const response = await axiosInstance.get(prefix + '/checkout', { params });
+            return response.data;
+        } catch (error) {
+            throw new Error(error.message || 'Error fetching ' + prefix);
+        }
     }
 }
 

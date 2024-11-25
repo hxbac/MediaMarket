@@ -57,5 +57,12 @@ namespace MediaMarket.API.Controllers.Client
             var response = await _productService.GetMyLatestProducts();
             return CustomResult(response);
         }
+
+        [HttpGet(Router.ProductRouting.Action.CheckoutInfo)]
+        public async Task<IActionResult> GetProductCheckout([FromQuery] ProductCheckoutRequest request)
+        {
+            var response = await _productService.GetProductCheckoutInfo(request);
+            return CustomResult(response);
+        }
     }
 }

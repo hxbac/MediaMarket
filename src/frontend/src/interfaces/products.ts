@@ -44,3 +44,12 @@ export interface MyProductLatest {
     shortDescription: string;
     thumbnail: string;
 }
+
+export interface ProductCheckoutInfo {
+    id: string;
+    name: string;
+    slug: string;
+    thumbnail: string;
+    price: number;
+    shortDescription: string;
+}

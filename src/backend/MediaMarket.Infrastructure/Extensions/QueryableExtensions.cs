@@ -20,7 +20,7 @@ namespace MediaMarket.Infrastructure.Extensions
             return result;
         }
 
-        public static async Task<PaginatedResult<T>> ToPaginatedListAsync<T>(this IQueryable<T> source, int pageNumber, int pageSize, IMapper mapper)
+        public static async Task<PaginatedResult<T>> ToPaginatedListAsync<T>(this IQueryable<T> source, int pageNumber, int pageSize)
             where T : class
         {
             if (source == null)
@@ -33,7 +33,7 @@ namespace MediaMarket.Infrastructure.Extensions
             int count = await source.AsNoTracking().CountAsync();
             if (count == 0) return PaginatedResult<T>.Success(new List<T>(), count, pageNumber, pageSize);
             pageNumber = pageNumber <= 0 ? 1 : pageNumber;
-            var items = await source.Skip(pageNumber).Take(pageSize).ToListAsync();
+            var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
             return PaginatedResult<T>.Success(items, count, pageNumber, pageSize);
         }
 

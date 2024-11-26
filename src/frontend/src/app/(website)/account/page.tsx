@@ -4,7 +4,7 @@ import Card from "@/components/product/card";
 import { MyProductLatest } from "@/interfaces/products";
 import productService from "@/services/productService";
 import { useAppSelector } from "@/store/hooks";
-import { Button, DatePicker, DatePickerProps, Form, Input, message, Modal } from "antd";
+import { Button, DatePicker, DatePickerProps, Form, Image, Input, message, Modal } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import Upload, { UploadChangeParam, UploadFile } from "antd/es/upload";
 import { useEffect, useState } from "react";
@@ -34,11 +34,9 @@ export default function Page() {
   });
 
   useEffect(() => {
-    console.log(user);
     if (user === null) {
       return;
     }
-
 
     setProfile({
       avatar: user.avatar ?? '',
@@ -124,11 +122,9 @@ export default function Page() {
             </div>
             <div className="grid grid-cols-12 md:gap-10 pt-4 md:pt-[40px] items-center">
               <div className="col-span-12 md:col-span-4">
-                <img
-                  alt="Day cung la my dream"
-                  src="https://hxbac.github.io/porfolio-demo/assets/about.webp"
-                  width="300"
-                  height="400"
+                <Image
+                  src={user?.avatar ?? '/images/no-avatar.png'}
+                  alt={user?.name}
                   className="w-full md:w-[330px] h-auto object-cover overflow-hidden rounded-[35px] mb-3 md:mb-0"
                   loading="lazy"
                 />
@@ -136,23 +132,15 @@ export default function Page() {
               <div className="col-span-12 md:col-span-8 space-y-2.5">
                 <div className=" md:mr-12 xl:mr-16">
                   <h3 className="text-4xl font-medium mb-2.5 ">
-                    Who am i?
+                    Tôi là ai?
                   </h3>
                   <p className="text-gray-lite leading-7">
-                    Im Creative Director and UI/UX Designer from Sydney,
-                    Australia, working in web development and print media. I
-                    enjoy turning complex problems into simple, beautiful and
-                    intuitive designs.
-                  </p>
-                  <p className="text-gray-lite leading-7 mt-2.5">
-                    My aim is to bring across your message and identity in the
-                    most creative way. I created web design for many famous
-                    brand companies.
+                    {user?.description}
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-4xl font-medium my-5">
-                    Personal Info
+                  <h3 className="text-4xl font-medium my-5 capitalize">
+                    Thông tin cơ bản
                   </h3>
                   <div className=" grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="flex">
@@ -170,15 +158,15 @@ export default function Page() {
                         </svg>
                       </span>
                       <div className="space-y-1">
-                        <p className="text-xs text-gray-lite">
-                          Phone
+                        <p className="text-xs text-gray-lite capitalize">
+                          Số điện thoại
                         </p>
                         <h6 className="font-medium">
                           <a
                             className="hover:text-[#FA5252] duration-300 transition"
                             href="tel:+1234567890"
                           >
-                            +123 456 7890
+                            {user?.phoneNumber}
                           </a>
                         </h6>
                       </div>
@@ -199,10 +187,10 @@ export default function Page() {
                       </span>
                       <div className="space-y-1">
                         <p className="text-xs text-gray-lite">
-                          Location
+                          Địa chỉ
                         </p>
                         <h6 className="font-medium">
-                          Hong kong china
+                          {user?.address}
                         </h6>
                       </div>
                     </div>
@@ -230,7 +218,7 @@ export default function Page() {
                             className="hover:text-[#FA5252] duration-300 transition"
                             href="mailto:ibthemes21@gmail.com"
                           >
-                            example@mail.com
+                            {user?.email}
                           </a>
                         </h6>
                       </div>
@@ -251,10 +239,10 @@ export default function Page() {
                       </span>
                       <div className="space-y-1">
                         <p className="text-xs text-gray-lite">
-                          Birthday
+                          Ngày Sinh
                         </p>
                         <h6 className="font-medium">
-                          May 27, 1990
+                          {user?.birthday}
                         </h6>
                       </div>
                     </div>

@@ -155,5 +155,11 @@ namespace MediaMarket.Application.Services
                 ShortDescription = product.ShortDescription,
             });
         }
+
+        public async Task<BaseResponse<IEnumerable<ProductLatestResponse>>> GetLatestProductsOfUser(LatestProductOfUserRequest request)
+        {
+            var products = await _productRepository.GetProductsLatest(request.userId);
+            return Success(_mapper.Map<IEnumerable<ProductLatestResponse>>(products));
+        }
     }
 }

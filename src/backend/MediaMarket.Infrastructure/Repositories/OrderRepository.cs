@@ -47,7 +47,7 @@ namespace MediaMarket.Infrastructure.Repositories
                     UserBuyerId = o.Buyer.Id,
                     UserBuyerName = o.Buyer.Name,
                 })
-                .ToPaginatedListAsync(page, pageSize, _mapper);
+                .ToPaginatedListAsync(page, pageSize);
         }
 
         public async Task<PaginatedResult<ProductPurchaseResponse>> GetListPurchasesForUser(Guid userId, ProductType productType, string? name, int page, int pageSize)
@@ -76,7 +76,7 @@ namespace MediaMarket.Infrastructure.Repositories
                     Tags = o.Product.Tags,
                     CreatedAt = o.CreatedOn,
                 })
-                .ToPaginatedListAsync(page, pageSize, _mapper);
+                .ToPaginatedListAsync(page, pageSize);
         }
     }
 }

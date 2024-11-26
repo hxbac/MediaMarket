@@ -7,6 +7,7 @@ namespace MediaMarket.Application.Contracts.Services
     public interface IProductService
     {
         Task<BaseResponse<CreateProductResponse>> CreateProduct(CreateProductRequest request, Guid UserIdCreate);
+        Task<BaseResponse<IEnumerable<ProductLatestResponse>>> GetLatestProductsOfUser(LatestProductOfUserRequest request);
         Task<BaseResponse<IEnumerable<ProductHomePageResponse>>> GetListProductsHomePageByCategory(Guid categoryId);
         Task<BaseResponse<IEnumerable<ProductLatestResponse>>> GetMyLatestProducts();
         Task<BaseResponse<PaginatedResult<ProductUserResponse>>> GetMyProductsPaginated(GetProductListRequest request);

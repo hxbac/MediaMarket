@@ -1,29 +1,27 @@
-import Card from "@/components/product/card";
-import { MyProductLatest } from "@/interfaces/products";
+import userService from "@/services/userService";
+import { Image } from "antd";
+import ProductUser from "./_components/productUser";
 
-export default function Page() {
-  const products : MyProductLatest[] = [
+interface Params {
+  id: string;
+}
 
-  ];
-  // const [products, setProducts] = useState<MyProductLatest[]>([]);
+interface UserResponse {
+  id: string;
+  name: string;
+  userName: string;
+  email: string;
+  avatar: string | null;
+  address: string | null;
+  description: string | null;
+  phoneNumber: string | null;
+  birthday: string | null;
+}
 
-  // useEffect(() => {
-  //   const fetchMyLatestProducts = async () => {
-  //     try {
-  //       const result = await productService.getMyLatestProducts();
-  //       if (result.succeeded) {
-  //         setProducts(result.data);
-  //       } else {
-  //         throw new Error(result.message);
-  //       }
-  //     } catch (error: unknown) {
-  //       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-  //       toast.error(errorMessage);
-  //     }
-  //   }
-
-  //   // fetchMyLatestProducts();
-  // }, []);
+export default async function Page({ params }: { params: Params }) {
+  const { id } = params;
+  const data = await userService.getUserInfo(id);
+  const user: UserResponse = data.data;
 
   return (
     <section className="bg-white pt-16">
@@ -37,11 +35,9 @@ export default function Page() {
             </div>
             <div className="grid grid-cols-12 md:gap-10 pt-4 md:pt-[40px] items-center">
               <div className="col-span-12 md:col-span-4">
-                <img
-                  alt="Day cung la my dream"
-                  src="https://hxbac.github.io/porfolio-demo/assets/about.webp"
-                  width="300"
-                  height="400"
+                <Image
+                  src={user.avatar ?? '/images/no-avatar.png'}
+                  alt={user.name}
                   className="w-full md:w-[330px] h-auto object-cover overflow-hidden rounded-[35px] mb-3 md:mb-0"
                   loading="lazy"
                 />
@@ -52,20 +48,12 @@ export default function Page() {
                     Who am i?
                   </h3>
                   <p className="text-gray-lite leading-7">
-                    Im Creative Director and UI/UX Designer from Sydney,
-                    Australia, working in web development and print media. I
-                    enjoy turning complex problems into simple, beautiful and
-                    intuitive designs.
-                  </p>
-                  <p className="text-gray-lite leading-7 mt-2.5">
-                    My aim is to bring across your message and identity in the
-                    most creative way. I created web design for many famous
-                    brand companies.
+                    {user.description}
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-4xl font-medium my-5">
-                    Personal Info
+                  <h3 className="text-4xl font-medium my-5 capitalize">
+                    Thông tin liên hệ
                   </h3>
                   <div className=" grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="flex">
@@ -91,7 +79,7 @@ export default function Page() {
                             className="hover:text-[#FA5252] duration-300 transition"
                             href="tel:+1234567890"
                           >
-                            +123 456 7890
+                            {user.phoneNumber ?? ''}
                           </a>
                         </h6>
                       </div>
@@ -112,10 +100,10 @@ export default function Page() {
                       </span>
                       <div className="space-y-1">
                         <p className="text-xs text-gray-lite">
-                          Location
+                          Địa chỉ
                         </p>
                         <h6 className="font-medium">
-                          Hong kong china
+                          {user.address}
                         </h6>
                       </div>
                     </div>
@@ -143,7 +131,7 @@ export default function Page() {
                             className="hover:text-[#FA5252] duration-300 transition"
                             href="mailto:ibthemes21@gmail.com"
                           >
-                            example@mail.com
+                            {user.email}
                           </a>
                         </h6>
                       </div>
@@ -164,10 +152,10 @@ export default function Page() {
                       </span>
                       <div className="space-y-1">
                         <p className="text-xs text-gray-lite">
-                          Birthday
+                          Ngày Sinh
                         </p>
                         <h6 className="font-medium">
-                          May 27, 1990
+                          {user.birthday}
                         </h6>
                       </div>
                     </div>
@@ -180,11 +168,7 @@ export default function Page() {
             <h3 className="text-[35px] font-medium pb-5">
               What I do!
             </h3>
-            <div className="grid gap-8 grid-cols-2 md:grid-cols-3 xl:grid-cols-4 ">
-              {
-                products.map(item => <Card key={item.id} data={item} />)
-              }
-            </div>
+            <ProductUser userId={user.id} />
           </div>
         </div>
       </div>

@@ -62,7 +62,15 @@ const productService = {
         } catch (error) {
             throw new Error(error.message || 'Error fetching ' + prefix);
         }
-    }
+    },
+    getLatestProducts: async (params) => {
+        try {
+            const response = await axiosInstance.get(prefix + '/latest-products-of-user', { params });
+            return response.data;
+        } catch (error) {
+            throw new Error(error.message || 'Error fetching product');
+        }
+    },
 }
 
 export default productService;

@@ -43,6 +43,7 @@
                 public const string Create = Prefix;
                 public const string MyProducts = Prefix + "/my-products";
                 public const string MyLatestProducts = Prefix + "/my-latest-products";
+                public const string LatestProductsOfUser = Prefix + "/latest-products-of-user";
                 public const string CheckoutInfo = Prefix + "/checkout";
             }
         }
@@ -85,6 +86,15 @@
             public static class Action
             {
                 public const string SearchProduct = Prefix + "/product";
+            }
+        }
+
+        public static class UserRouting
+        {
+            public const string Prefix = rule + "users";
+            public static class Action
+            {
+                public const string Show = Prefix + singleRoute;
             }
         }
     }

@@ -10,6 +10,14 @@ const userService = {
         } catch (error) {
             throw new Error(error.message || 'Error fetching ' + prefix);
         }
+    },
+    getUserInfo: async (id) => {
+        try {
+            const response = await axiosInstance.get(prefix + '/' + id);
+            return response.data;
+        } catch (error) {
+            throw new Error(error.message || 'Error fetching ' + prefix);
+        }
     }
 }
 

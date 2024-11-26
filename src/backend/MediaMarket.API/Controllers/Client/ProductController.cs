@@ -58,6 +58,13 @@ namespace MediaMarket.API.Controllers.Client
             return CustomResult(response);
         }
 
+        [HttpGet(Router.ProductRouting.Action.LatestProductsOfUser)]
+        public async Task<IActionResult> GetLatestProductOfUser([FromQuery] LatestProductOfUserRequest request)
+        {
+            var response = await _productService.GetLatestProductsOfUser(request);
+            return CustomResult(response);
+        }
+
         [HttpGet(Router.ProductRouting.Action.CheckoutInfo)]
         public async Task<IActionResult> GetProductCheckout([FromQuery] ProductCheckoutRequest request)
         {

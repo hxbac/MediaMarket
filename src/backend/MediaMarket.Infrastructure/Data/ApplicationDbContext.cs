@@ -26,6 +26,8 @@ namespace MediaMarket.Infrastructure.Data
             builder.Entity<User>(entity =>
             {
                 entity.ToTable("Users");
+                entity.Property(x => x.Balance)
+                    .HasDefaultValue(0);
             });
             builder.Entity<IdentityUserRole<Guid>>(entity =>
             {
@@ -47,6 +49,7 @@ namespace MediaMarket.Infrastructure.Data
             builder.ApplyConfiguration(new ProductDetailEntityTypeConfiguration());
             builder.ApplyConfiguration(new VideoSolutionEntityTypeConfiguration());
             builder.ApplyConfiguration(new OrderEntityTypeConfiguration());
+            builder.ApplyConfiguration(new BalanceHistoryEntityTypeConfiguration());
         }
     }
 }

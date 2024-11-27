@@ -10,8 +10,10 @@ namespace MediaMarket.Domain.Entities
         public string? Address { get; set; }
         public string? Description { get; set; }
         public string? BirthDay { get; set; }
+        public long Balance { get; set; } = 0;
 
         public ICollection<Product>? Products { get; set; }
         public ICollection<Order>? Orders { get; set; }
+        public ICollection<BalanceHistory>? BalanceHistories { get; set; }
     }
 }

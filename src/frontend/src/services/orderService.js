@@ -22,7 +22,8 @@ const orderService = {
                     thumbnail: item.thumbnail,
                     name: item.name,
                     price: item.price,
-                    categories: item.categories.map(category => category.name)
+                    categories: item.categories.map(category => category.name),
+                    orderStatus: item.orderStatus
                 };
             });
 
@@ -44,6 +45,7 @@ const orderService = {
                     price: item.price,
                     categories: item.categories.map(category => category.name),
                     userBuyerName: item.userBuyerName,
+                    orderStatus: item.orderStatus
                 };
             });
 

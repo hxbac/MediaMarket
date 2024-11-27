@@ -9,6 +9,7 @@ import Link from "next/link";
 import { formatPrice } from "@/utils/helpers";
 import { useSearchProductContext } from "../../products/_context/SearchProductContext";
 import orderService from "@/services/orderService";
+import OrderStatusTag from "@/components/order/orderStatus";
 
 interface DataType {
   key: string;
@@ -18,6 +19,7 @@ interface DataType {
   price: number;
   categories: string[];
   userBuyerName: string;
+  orderStatus: number;
 }
 
 export default function Video() {
@@ -105,6 +107,12 @@ export default function Video() {
           })}
         </>
       ),
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "orderStatus",
+      key: "orderStatus",
+      render: (status) => <OrderStatusTag status={status} />
     },
     {
       title: "Đánh giá",

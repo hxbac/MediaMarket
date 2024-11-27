@@ -1,4 +1,5 @@
-﻿using Entities = MediaMarket.Domain.Entities;
+﻿using MediaMarket.Domain.Enums;
+using Entities = MediaMarket.Domain.Entities;
 
 namespace MediaMarket.Application.DTO.Response.Order
 {
@@ -9,6 +10,7 @@ namespace MediaMarket.Application.DTO.Response.Order
         public string? Slug { get; set; }
         public string? Thumbnail { get; set; }
         public long Price { get; set; }
+        public OrderStatus OrderStatus { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public Guid UserBuyerId { get; set; }
         public string? UserBuyerName { get; set; }

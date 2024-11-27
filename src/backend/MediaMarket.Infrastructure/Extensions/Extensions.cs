@@ -120,6 +120,8 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IVideoSolutionRepository, VideoSolutionRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IWithdrawalRepository, WithdrawalRepository>();
+            services.AddScoped<IBalanceHistoryRepository, BalanceHistoryRepository>();
 
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<ICategoryService, CategoryService>();
@@ -128,6 +130,8 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ISearchService, DatabaseSearchService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IWithdrawalService, WithdrawalService>();
+            services.AddScoped<IBalanceHistoryService, BalanceHistoryService>();
 
             services.AddSingleton<IFileService, LocalStorageFileService>();
             services.AddSingleton<IPaymentService, StripePaymentService>();

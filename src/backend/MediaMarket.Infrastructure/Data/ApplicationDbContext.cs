@@ -50,6 +50,7 @@ namespace MediaMarket.Infrastructure.Data
             builder.ApplyConfiguration(new VideoSolutionEntityTypeConfiguration());
             builder.ApplyConfiguration(new OrderEntityTypeConfiguration());
             builder.ApplyConfiguration(new BalanceHistoryEntityTypeConfiguration());
+            builder.ApplyConfiguration(new WithdrawalEntityTypeConfiguration());
         }
     }
 }

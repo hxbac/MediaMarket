@@ -15,5 +15,6 @@ namespace MediaMarket.Domain.Entities
         public ICollection<Product>? Products { get; set; }
         public ICollection<Order>? Orders { get; set; }
         public ICollection<BalanceHistory>? BalanceHistories { get; set; }
+        public ICollection<Withdrawal>? Withdrawals { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace MediaMarket.Infrastructure.Payment
         public StripePaymentService(UserManager<User> userManager)
         {
             _userManager = userManager;
-            StripeConfiguration.ApiKey = "sk_test_51QJpfyGOIY1d15fJqpCqCaqKVpiyd54j6YRs45TRMDBGfTgJAIwcazenx2CCQqt8WrQi9uc30WOE1yEDlZrpEh6S00Auquaj9H";
+            StripeConfiguration.ApiKey = "";
         }
 
         public async Task<string> AddDebitCardForUser(User user, string cardToken)

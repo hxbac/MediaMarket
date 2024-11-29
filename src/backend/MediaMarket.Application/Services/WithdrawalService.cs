@@ -23,6 +23,7 @@ namespace MediaMarket.Application.Services
             var user = await _userManager.FindByIdAsync(_user.Id.ToString());
             var accountId = await _paymentService.AddDebitCardForUser(user, request.CardToken);
             var payoutId = await _paymentService.CreateRequestPayout(request.Amount, accountId);
+            throw new NotImplementedException();
         }
     }
 }

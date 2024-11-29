@@ -1,4 +1,5 @@
 ﻿using MediaMarket.Application.Contracts.Services;
+using MediaMarket.Application.DTO.Request.Withdrawal;
 using MediaMarket.Domain.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

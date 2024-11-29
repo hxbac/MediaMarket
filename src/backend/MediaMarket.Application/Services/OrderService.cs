@@ -26,7 +26,7 @@ namespace MediaMarket.Application.Services
             var order = await _orderRepository
                 .FindAsync(x => x.PaymentSession == request.SessionId);
 
-            var isSuccess = _paymentService.IsPaymentSuccess(request.SessionId);
+            var isSuccess = await _paymentService.IsPaymentSuccess(request.SessionId);
             if (isSuccess && order.Status == Domain.Enums.OrderStatus.Pending)
             {
                 await FulFillOrderSuccess(order);
@@ -60,7 +60,7 @@ namespace MediaMarket.Application.Services
                 PaymentId = Guid.NewGuid(),
                 PaymentMethod = "Stripe"
             };
-            var payment = _paymentService.Create(product);
+            var payment = await _paymentService.Create(product);
 
             order.PaymentSession = payment.PaymentSession;
 

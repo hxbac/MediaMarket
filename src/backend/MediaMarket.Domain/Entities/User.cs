@@ -11,6 +11,7 @@ namespace MediaMarket.Domain.Entities
         public string? Description { get; set; }
         public string? BirthDay { get; set; }
         public long Balance { get; set; } = 0;
+        public string? StripeAccountId { get; set; }
 
         public ICollection<Product>? Products { get; set; }
         public ICollection<Order>? Orders { get; set; }

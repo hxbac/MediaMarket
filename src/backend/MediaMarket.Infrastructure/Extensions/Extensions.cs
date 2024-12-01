@@ -134,6 +134,7 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddScoped<IBalanceHistoryService, BalanceHistoryService>();
 
             services.AddSingleton<IFileService, LocalStorageFileService>();
+            services.Configure<StripeConfig>(configuration.GetSection("StripeConfig"));
             services.AddSingleton<IPaymentService, StripePaymentService>();
 
             return services;

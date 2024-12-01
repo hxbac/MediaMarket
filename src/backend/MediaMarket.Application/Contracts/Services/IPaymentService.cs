@@ -8,7 +8,8 @@ namespace MediaMarket.Application.Contracts.Services
     {
         Task<CreatePaymentDTO> Create(ProductLatestVersionDTO product);
         Task<bool> IsPaymentSuccess(string sessionId);
-        Task<string> AddDebitCardForUser(User user, string cardToken);
+        Task<string> CreateAccount(User user);
+        Task AddDebitCardForUser(User user, string cardToken);
         Task<string> CreateRequestPayout(long amount, string accountId);
     }
 }

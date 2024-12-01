@@ -97,5 +97,14 @@
                 public const string Show = Prefix + singleRoute;
             }
         }
+
+        public static class WithdrawalRouting
+        {
+            public const string Prefix = rule + "withdrawal";
+            public static class Action
+            {
+                public const string Create = Prefix + "/create";
+            }
+        }
     }
 }

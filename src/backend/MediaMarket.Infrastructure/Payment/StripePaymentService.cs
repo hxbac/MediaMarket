@@ -1,8 +1,9 @@
-﻿using MediaMarket.Application.Contracts.Services;
+﻿using MediaMarket.Application.Configs;
+using MediaMarket.Application.Contracts.Services;
 using MediaMarket.Application.DTO.Payment;
 using MediaMarket.Application.DTO.Product;
 using MediaMarket.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Stripe;
 using Stripe.Checkout;
 
@@ -10,22 +11,15 @@ namespace MediaMarket.Infrastructure.Payment
 {
     public class StripePaymentService : IPaymentService
     {
-        private readonly UserManager<User> _userManager;
-
-        public StripePaymentService(UserManager<User> userManager)
+        public StripePaymentService(
+            IOptionsMonitor<StripeConfig> stripeConfig
+        )
         {
-            _userManager = userManager;
-            StripeConfiguration.ApiKey = "";
+            StripeConfiguration.ApiKey = stripeConfig.CurrentValue.SecretKey;
         }
 
-        public async Task<string> AddDebitCardForUser(User user, string cardToken)
+        public async Task AddDebitCardForUser(User user, string cardToken)
         {
-            var accountId = user.StripeAccountId;
-            if (accountId == null)
-            {
-                accountId = await CreateAccount(user);
-            }
-
             var externalAccountService = new AccountService();
 
             var options = new AccountUpdateOptions
@@ -33,8 +27,7 @@ namespace MediaMarket.Infrastructure.Payment
                 ExternalAccount = cardToken,
             };
 
-            var account = await externalAccountService.UpdateAsync(accountId, options);
-            return account.Id;
+            await externalAccountService.UpdateAsync(user.StripeAccountId, options);
         }
 
         public async Task<CreatePaymentDTO> Create(ProductLatestVersionDTO product)
@@ -83,8 +76,6 @@ namespace MediaMarket.Infrastructure.Payment
             };
 
             var account = await accountService.CreateAsync(accountOptions);
-            user.StripeAccountId = account.Id;
-            await _userManager.UpdateAsync(user);
 
             return account.Id;
         }

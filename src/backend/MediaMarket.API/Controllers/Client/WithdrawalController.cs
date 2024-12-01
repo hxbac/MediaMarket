@@ -12,7 +12,7 @@ namespace MediaMarket.API.Controllers.Client
         private readonly IWithdrawalService _withdrawalService = withdrawalService;
 
         [Authorize]
-        [HttpPost(Router.OrderRouting.Action.Create)]
+        [HttpPost(Router.WithdrawalRouting.Action.Create)]
         public async Task<IActionResult> CreateRequest([FromBody] CreateWithdrawalRequest request)
         {
             var response = await _withdrawalService.CreateRequest(request);

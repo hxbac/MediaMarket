@@ -21,7 +21,14 @@ namespace MediaMarket.Application.Services
         public async Task<BaseResponse<CreateWithdrawalResponse>> CreateRequest(CreateWithdrawalRequest request)
         {
             var user = await _userManager.FindByIdAsync(_user.Id.ToString());
-            var accountId = await _paymentService.AddDebitCardForUser(user, request.CardToken);
+
+            var accountId = user.StripeAccountId;
+            if (accountId == null)
+            {
+                accountId = await _paymentService.CreateAccount(user);
+            }
+
+            await _paymentService.AddDebitCardForUser(user, request.CardToken);
             var payoutId = await _paymentService.CreateRequestPayout(request.Amount, accountId);
             throw new NotImplementedException();
         }

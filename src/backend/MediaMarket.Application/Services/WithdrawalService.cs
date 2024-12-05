@@ -32,6 +32,8 @@ namespace MediaMarket.Application.Services
             if (accountId == null)
             {
                 accountId = await _paymentService.CreateAccount(user);
+                user.StripeAccountId = accountId;
+                await _userManager.UpdateAsync(user);
             }
 
             await _paymentService.AddDebitCardForUser(user, request.CardToken);

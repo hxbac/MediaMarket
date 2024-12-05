@@ -1,8 +1,8 @@
 "use client";
 
-import { ProductType } from "@/enums/ProductType";
 import {
   Button,
+  Input,
   Modal,
   Space,
   Table,
@@ -15,8 +15,9 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { formatPrice } from "@/utils/helpers";
-import orderService from "@/services/orderService";
 import OrderStatusTag from "@/components/order/orderStatus";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import withdrawalService from "@/services/withdrawalService";
 
 interface DataType {
   key: string;
@@ -28,7 +29,11 @@ interface DataType {
   orderStatus: number;
 }
 
-export default function Video() {
+
+export default function Page() {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [withdrawalAmount, setWithdrawalAmount] = useState(0);
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({
     current: 1,
@@ -41,8 +46,31 @@ export default function Video() {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
+  const handleOk = async () => {
+    if (!stripe || !elements) {
+      toast.error("Stripe has not loaded yet.");
+      return;
+    }
+
+    const card = elements.getElement(CardElement);
+    if (!card) {
+      toast.error("Card error");
+      return;
+    }
+
+    const { token } = await stripe.createToken(card, { 'currency': 'USD' });
+
+    const response = await withdrawalService.createRequest({
+      CardToken: token?.id,
+      amount: withdrawalAmount
+    });
+
+    if (response.succeeded) {
+      toast.success('Tạo yêu cầu rút tiền thành công');
+      setIsModalOpen(false);
+    } else {
+      toast.error(response.errors.join(', '));
+    }
   };
 
   const handleCancel = () => {
@@ -158,9 +186,16 @@ export default function Video() {
           onChange={handleTableChange}
         />
         <Modal title="Tạo yêu cầu rút tiền" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <div className="py-4">
+            <div className="mb-4">
+              <p className="text-sm font-semibold mb-2">Nhập số tiền</p>
+              <Input type="number" value={withdrawalAmount} onChange={e => setWithdrawalAmount(Number(e.target.value))} />
+            </div>
+            <div className="mb-4">
+              <p className="text-sm font-semibold mb-4">Thông tin thẻ</p>
+              <CardElement options={{ hidePostalCode: true }} />
+            </div>
+          </div>
         </Modal>
       </div>
     </section>

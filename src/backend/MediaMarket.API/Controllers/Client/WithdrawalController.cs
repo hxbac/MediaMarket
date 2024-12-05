@@ -18,5 +18,13 @@ namespace MediaMarket.API.Controllers.Client
             var response = await _withdrawalService.CreateRequest(request);
             return CustomResult(response);
         }
+
+        [Authorize]
+        [HttpGet(Router.WithdrawalRouting.Action.Index)]
+        public async Task<IActionResult> GetListWithdrawalForCurrentUser([FromQuery] GetListWithdrawalCurrentUserRequest request)
+        {
+            var response = await _withdrawalService.GetListWithdrawalForCurrentUser(request);
+            return CustomResult(response);
+        }
     }
 }

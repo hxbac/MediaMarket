@@ -11,6 +11,7 @@ namespace MediaMarket.Application.Extensions
             services.AddAutoMapper(typeof(CategoryMappingProfile));
             services.AddAutoMapper(typeof(ProductMappingProfile));
             services.AddAutoMapper(typeof(UserMappingProfile));
+            services.AddAutoMapper(typeof(WithdrawalMappingProfile));
 
             return services;
         }

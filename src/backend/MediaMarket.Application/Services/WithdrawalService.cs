@@ -51,6 +51,12 @@ namespace MediaMarket.Application.Services
             return Success(_mapper.Map<CreateWithdrawalResponse>(dataWithdrawal));
         }
 
+        public async Task<BaseResponse<PaginatedResult<WithdrawalManageResponse>>> GetListPaginated(GetListWithdrawalPaginatedRequest request)
+        {
+            var data = await _withdrawalRepository.GetListPaginated(request);
+            return Success(data);
+        }
+
         public async Task<BaseResponse<PaginatedResult<WithdrawlCurrentUserResponse>>> GetListWithdrawalForCurrentUser(GetListWithdrawalCurrentUserRequest request)
         {
             var data = await _withdrawalRepository.GetListPaginatedForUser(request, _user.Id);

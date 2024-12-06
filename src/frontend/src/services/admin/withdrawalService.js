@@ -2,10 +2,10 @@ import { getAxiosInstance } from "@/utils/helpers";
 
 const axiosInstance = getAxiosInstance(true);
 
-const prefix = "admin/users";
+const prefix = "admin/withdrawals";
 
-const userService = {
-  getListUser: async (params) => {
+const withdrawalService = {
+  getListWithdrawal: async (params) => {
     try {
       const response = await axiosInstance.get(prefix, params);
       return response.data.data;
@@ -15,4 +15,4 @@ const userService = {
   },
 };
 
-export default userService;
+export default withdrawalService;

@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Admin\" />
     <Folder Include="storage\logs\" />
     <Folder Include="storage\uploads\public\" />
     <Folder Include="wwwroot\" />

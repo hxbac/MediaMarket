@@ -8,6 +8,27 @@
         public const string version = "v1";
         public const string rule = root + "/" + version + "/";
 
+        public static class Admin
+        {
+            public const string AdminRule = rule + "admin/";
+            public static class UserRouting
+            {
+                public const string Prefix = AdminRule + "users";
+                public static class Action
+                {
+                    public const string Index = Prefix;
+                }
+            }
+            public static class WithdrawalRouting
+            {
+                public const string Prefix = AdminRule + "withdrawals";
+                public static class Action
+                {
+                    public const string Index = Prefix;
+                }
+            }
+        }
+
         public static class AuthRouting
         {
             public const string Prefix = rule + "auth";

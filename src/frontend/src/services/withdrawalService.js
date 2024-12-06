@@ -1,4 +1,6 @@
-import axiosInstance from "../utils/axios";
+import { getAxiosInstance } from "@/utils/helpers";
+
+const axiosInstance = getAxiosInstance();
 
 const prefix = "withdrawal";
 

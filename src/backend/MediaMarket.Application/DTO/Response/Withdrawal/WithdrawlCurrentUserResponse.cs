@@ -9,5 +9,6 @@ namespace MediaMarket.Application.DTO.Response.Withdrawal
         public WithdrawalStatus WithdrawalStatus { get; set; }
         public string? Note { get; set; }
         public DateTimeOffset? ProcessedAt { get; set; }
+        public DateTimeOffset CreatedOn { get; set; }
     }
 }

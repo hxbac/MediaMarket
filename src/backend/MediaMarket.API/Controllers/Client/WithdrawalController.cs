@@ -20,7 +20,7 @@ namespace MediaMarket.API.Controllers.Client
         }
 
         [Authorize]
-        [HttpGet(Router.WithdrawalRouting.Action.Index)]
+        [HttpGet(Router.WithdrawalRouting.Action.GetMyRequest)]
         public async Task<IActionResult> GetListWithdrawalForCurrentUser([FromQuery] GetListWithdrawalCurrentUserRequest request)
         {
             var response = await _withdrawalService.GetListWithdrawalForCurrentUser(request);

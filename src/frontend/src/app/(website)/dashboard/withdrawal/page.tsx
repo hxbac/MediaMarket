@@ -4,31 +4,25 @@ import {
   Button,
   Input,
   Modal,
-  Space,
   Table,
   TablePaginationConfig,
   TableProps,
-  Tag,
 } from "antd";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import Link from "next/link";
-import { formatPrice } from "@/utils/helpers";
-import OrderStatusTag from "@/components/order/orderStatus";
+import { formatDatetime, formatPrice } from "@/utils/helpers";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import withdrawalService from "@/services/withdrawalService";
+import WithdrawalStatusTag from "@/components/withdrawal/withdrawalStatus";
 
 interface DataType {
-  key: string;
-  slug: string;
-  thumbnail: number;
-  name: string;
-  price: number;
-  categories: string[];
-  orderStatus: number;
+  id: string;
+  amount: number;
+  withdrawalStatus: number;
+  note: string | null;
+  processedAt: string | null;
+  createdOn: string | null;
 }
-
 
 export default function Page() {
   const stripe = useStripe();
@@ -67,6 +61,7 @@ export default function Page() {
 
     if (response.succeeded) {
       toast.success('Tạo yêu cầu rút tiền thành công');
+      fetchData(1, pagination.pageSize);
       setIsModalOpen(false);
     } else {
       toast.error(response.errors.join(', '));
@@ -79,6 +74,19 @@ export default function Page() {
 
   const fetchData = async (page = 1, pageSize = 10) => {
     try {
+      const response = await withdrawalService.getMyRequests({
+        params: {
+          page,
+          pageSize
+        },
+      });
+
+      setData(response.data);
+      setPagination({
+        current: page,
+        pageSize,
+        total: response.totalCount,
+      });
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "An unexpected error occurred";
@@ -97,74 +105,48 @@ export default function Page() {
 
   const columns: TableProps<DataType>["columns"] = [
     {
-      title: "Hình ảnh",
-      dataIndex: "thumbnail",
-      key: "thumbnail",
-      render: (text) => (
-        <Image src={text} width={100} height={100} alt={text} unoptimized />
-      ),
+      title: "Mã yêu cầu",
+      dataIndex: "id",
+      key: "id",
+      render: (text) => <b>{text}</b>,
     },
     {
-      title: "Tên sản phẩm",
-      dataIndex: "name",
-      key: "name",
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Giá",
-      dataIndex: "price",
-      key: "price",
+      title: "Số tiền",
+      dataIndex: "amount",
+      key: "amount",
       render: (price) => formatPrice(price),
     },
     {
-      title: "Danh mục",
-      key: "categories",
-      dataIndex: "categories",
-      render: (_, { categories }) => (
-        <>
-          {categories.map((category) => {
-            let color = category.length > 5 ? "geekblue" : "green";
-            if (category === "loser") {
-              color = "volcano";
-            }
-            return (
-              <Tag color={color} key={category}>
-                {category.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
       title: "Trạng thái",
-      dataIndex: "orderStatus",
-      key: "orderStatus",
-      render: (status) => <OrderStatusTag status={status} />,
+      dataIndex: "withdrawalStatus",
+      key: "withdrawalStatus",
+      render: (withdrawalStatus) => <WithdrawalStatusTag status={withdrawalStatus} />,
     },
     {
-      title: "Hành Động",
-      key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <Link href={`/products/${record.slug}`} target="_blank">
-            <Button>Xem</Button>
-          </Link>
-          <Link href={`/products/${record.key}`}>
-            <Button type="primary" danger>
-              Xóa
-            </Button>
-          </Link>
-        </Space>
-      ),
+      title: "Ghi chú",
+      dataIndex: "note",
+      key: "note",
+      render: (note) => note ?? '',
     },
+    {
+      title: "Xử lý lúc",
+      dataIndex: "processedAt",
+      key: "processedAt",
+      render: (processedAt) => formatDatetime(processedAt),
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "createdOn",
+      key: "createdOn",
+      render: (createdOn) => formatDatetime(createdOn),
+    }
   ];
 
   return (
     <section className="bg-white pt-16">
       <div className="items-center max-w-screen-xl px-4 py-8 mx-auto lg:gap-16 xl:gap-24 lg:py-24 lg:px-6">
         <h1 className="text-center uppercase text-xl font-bold mb-4">Lịch sử rút tiền</h1>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-4">
           <div>
             Search
           </div>

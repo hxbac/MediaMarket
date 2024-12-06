@@ -16,13 +16,15 @@ namespace MediaMarket.Infrastructure.Repositories
         public Task<PaginatedResult<WithdrawlCurrentUserResponse>> GetListPaginatedForUser(GetListWithdrawalCurrentUserRequest request, Guid userId)
         {
             return _model.Where(x => x.CreatedBy == userId)
+                .OrderByDescending(x => x.CreatedOn)
                 .Select(x => new WithdrawlCurrentUserResponse()
                 {
                     Id = x.Id,
                     Amount = x.Amount,
                     Note = x.Note,
                     ProcessedAt = x.ProcessedAt,
-                    WithdrawalStatus = x.WithdrawalStatus
+                    WithdrawalStatus = x.WithdrawalStatus,
+                    CreatedOn = x.CreatedOn,
                 }).ToPaginatedListAsync(request.Page, request.PageSize);
         }
     }

@@ -104,7 +104,7 @@
             public static class Action
             {
                 public const string Create = Prefix + "/create";
-                public const string Index = Prefix;
+                public const string GetMyRequest = Prefix + "/my-requests";
             }
         }
     }

@@ -15,11 +15,6 @@ const productTypes : ProductTypeInterface[] = [
     type: ProductTypeEnum.Image,
     title: 'Hình ảnh',
     description: 'Desc hình ảnh'
-  },
-  {
-    type: ProductTypeEnum.Ebook,
-    title: 'Sách điện tử',
-    description: 'Desc Sách điện tử'
   }
 ];
 
@@ -30,7 +25,7 @@ export default function Step1() {
     <div className="">
       <div className="mb-4">
         <h2 className="text-2xl font-bold mt-8 mb-4">Loại sản phẩm</h2>
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 gap-6">
           {
             productTypes.map(item => <ProductType key={item.type} data={item} isSelected={value.type === item.type} />)
           }

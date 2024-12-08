@@ -25,7 +25,7 @@ export default function Page() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [categories, setCategories] = useState<CategoryHomePage[]>([]);
   const [productInfo, setProductInfo] = useState<ProductInfo>({
-    type: ProductType.Image,
+    type: ProductType.Video,
     name: '',
     thumbnail: '',
     shortDescription: '',
@@ -114,7 +114,7 @@ export default function Page() {
             },
           ]}
         />
-        <ProductContextProvider initial={{ 
+        <ProductContextProvider initial={{
           value: productInfo,
           setValue: setProductInfo
          }}>

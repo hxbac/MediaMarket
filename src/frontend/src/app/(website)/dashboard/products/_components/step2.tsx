@@ -38,7 +38,7 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
     });
   }
 
-  const handleChangePrice = (priceString: string) => {   
+  const handleChangePrice = (priceString: string) => {
     setValue({ ...value, price: Number(priceString) });
   }
 
@@ -59,7 +59,7 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
       <h2 className="text-2xl font-bold mt-8 mb-4">Thông tin sản phẩm</h2>
       <Form form={form} layout="vertical">
         <Form.Item
-          label="Tên sản phẩm"
+          label={<label className="text-sm font-bold">Tên sản phẩm</label>}
           name="Input2"
           rules={[
             { required: true, message: "Tên sản phẩm không được trống!" },
@@ -68,7 +68,7 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
           <Input placeholder="Nhập tên sản phẩm" value={value.name} onChange={(e) => setValue({ ...value, name: e.target.value })} />
         </Form.Item>
         <Form.Item
-          label="Giá tiền"
+          label={<label className="text-sm font-bold">Giá tiền</label>}
           name="price"
           rules={[
             { required: true, message: "Giá tiền không được trống!" },
@@ -76,26 +76,28 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
         >
           <Input placeholder="Nhập giá tiền" value={value.price} onChange={(e) => handleChangePrice(e.target.value) } />
         </Form.Item>
-        <Upload
-          action={process.env.NEXT_PUBLIC_API_UPLOAD_SINGLE_FILE}
-          listType="picture"
-          maxCount={1}
-          onChange={onChangeFileEvent}
-        >
-          <Button type="primary">
-            Upload
-          </Button>
-        </Upload>
+        <h2 className="text-sm font-bold mt-6 mb-2">Ảnh sản phẩm</h2>
+        <div className="mb-4">
+          <Upload
+            action={process.env.NEXT_PUBLIC_API_UPLOAD_SINGLE_FILE}
+            listType="picture"
+            maxCount={1}
+            onChange={onChangeFileEvent}
+          >
+            <Button type="primary">
+              Upload
+            </Button>
+          </Upload>
+        </div>
         <Form.Item
-          label="Mô tả ngắn"
+          label={<label className="text-sm font-bold">Mô tả ngắn</label>}
           name="shortDescription"
         >
           <Input placeholder="Nhập đoạn mô tả ngắn" value={value.description} onChange={(e) => setValue({...value, shortDescription: e.target.value}) } />
         </Form.Item>
-        <CustomEditor value={value.description} onChange={onChangeDescription} />
       </Form>
-      <h2 className="text-2xl font-bold mt-8 mb-4">Danh mục</h2>
-      <div className="flex flex-wrap justify-center gap-x-2 gap-y-1">
+      <h2 className="text-sm font-bold mt-6 mb-2">Danh mục</h2>
+      <div className="flex flex-wrap gap-x-2 gap-y-1 mb-4">
         {categories.map((item) => {
           const isSelected = value.categoryIds.includes(item.id);
           return (
@@ -105,7 +107,11 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
           );
         })}
       </div>
-      <h2 className="text-2xl font-bold mt-8 mb-4">Nhãn sản phẩm</h2>
+      <h2 className="text-sm font-bold mt-6 mb-2">Mô tả sản phẩm</h2>
+      <div className="mb-4">
+        <CustomEditor value={value.description} onChange={onChangeDescription} />
+      </div>
+      <h2 className="text-sm font-bold mt-8 mb-4">Nhãn sản phẩm</h2>
       <div>
         <Tags tags={value.tags} setTags={setTags} />
       </div>

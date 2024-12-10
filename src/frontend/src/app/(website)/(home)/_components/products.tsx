@@ -39,8 +39,8 @@ export default function Products({ categories }: { categories: CategoryHomePage[
     <section className="bg-white">
       <div className="items-center max-w-screen-xl px-4 py-8 mx-auto lg:py-24 lg:px-6">
         <div>
-          <h1 className="text-5xl text-center font-bold mb-8">
-            Explore Inspiring Online Courses
+          <h1 className="text-5xl text-center font-bold mb-8 capitalize">
+          Khám phá các nội dung trực tuyến đầy cảm hứng
           </h1>
           <div className="flex flex-wrap justify-center gap-x-2 gap-y-1">
             {

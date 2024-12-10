@@ -115,7 +115,7 @@ export default function Header() {
                     className="block py-2 pl-3 pr-4 text-white bg-purple-700 rounded lg:bg-transparent lg:text-purple-700 lg:p-0"
                     aria-current="page"
                   >
-                    Home
+                    Trang chủ
                   </a>
                 </li>
                 <li>
@@ -123,7 +123,7 @@ export default function Header() {
                     href="#"
                     className="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0"
                   >
-                    Company
+                    Khám phá
                   </a>
                 </li>
               </ul>
@@ -135,7 +135,7 @@ export default function Header() {
                       d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z">
                     </path>
                   </svg>
-                  <input type="email" placeholder="Search Something..." className="w-full outline-none bg-transparent text-gray-600 text-sm" />
+                  <input type="email" placeholder="Tìm Kiếm Thứ Gì Đó..." className="w-full outline-none bg-transparent text-gray-600 text-sm" />
                 </div>
                 <div className="absolute top-full left-0 p-4 rounded-lg shadow-lg z-[9999] w-[200%] bg-white hidden">
                   <div className="grid grid-cols-2 gap-x-4">

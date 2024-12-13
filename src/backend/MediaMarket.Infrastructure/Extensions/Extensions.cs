@@ -5,6 +5,7 @@ using MediaMarket.Application.Contracts.Services;
 using MediaMarket.Application.Services;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Data;
+using MediaMarket.Infrastructure.GenerativeAI;
 using MediaMarket.Infrastructure.Interceptors;
 using MediaMarket.Infrastructure.Payment;
 using MediaMarket.Infrastructure.Repositories;
@@ -30,14 +31,9 @@ namespace MediaMarket.Infrastructure.Extensions
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console()
-                .WriteTo.File(
-                    "storage/logs/log-.log",
-                    rollingInterval: RollingInterval.Day,
-                    shared: true,
-                    flushToDiskInterval: TimeSpan.FromSeconds(1)
-                )
+                .ReadFrom.Configuration(configuration)
                 .CreateLogger();
+
             services.AddSerilog();
 
             //services.AddHostedService<InitialStorageFolder>();
@@ -137,6 +133,8 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddSingleton<IFileService, LocalStorageFileService>();
             services.Configure<StripeConfig>(configuration.GetSection("StripeConfig"));
             services.AddSingleton<IPaymentService, StripePaymentService>();
+            services.Configure<AIGenerativeConfig>(configuration.GetSection("AI:Gemini"));
+            services.AddSingleton<IGenerativeAIService, GeminiAIService>();
 
             return services;
         }

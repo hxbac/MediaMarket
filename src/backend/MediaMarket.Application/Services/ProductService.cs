@@ -7,6 +7,8 @@ using MediaMarket.Application.DTO.Request.Product;
 using MediaMarket.Application.DTO.Response.Product;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Domain.Enums;
+using MediaMarket.Infrastructure.Prompts;
+using Microsoft.Extensions.Logging;
 
 namespace MediaMarket.Application.Services
 {
@@ -17,7 +19,9 @@ namespace MediaMarket.Application.Services
         IProductDetailRepository productDetailRepository,
         IPreviewRepository previewRepository,
         IVideoSolutionRepository videoSolutionRepository,
+        IGenerativeAIService generativeAIService,
         IMapper mapper,
+        ILogger<ProductService> logger,
         IUser user
     ) : BaseResponseHandler, IProductService
     {
@@ -27,8 +31,10 @@ namespace MediaMarket.Application.Services
         private readonly IProductDetailRepository _productDetailRepository = productDetailRepository;
         private readonly IPreviewRepository _previewRepository = previewRepository;
         private readonly IVideoSolutionRepository _videoSolutionRepository = videoSolutionRepository;
+        private readonly IGenerativeAIService _generativeAIService = generativeAIService;
         private readonly IMapper _mapper = mapper;
         private readonly IUser _user = user;
+        private readonly ILogger<ProductService> _logger = logger;
 
         public async Task<BaseResponse<CreateProductResponse>> CreateProduct(CreateProductRequest request, Guid UserIdCreate)
         {
@@ -162,9 +168,20 @@ namespace MediaMarket.Application.Services
             return Success(_mapper.Map<IEnumerable<ProductLatestResponse>>(products));
         }
 
-        public Task<BaseResponse<EnhanceInformationResponse>> EnhanceInformation(EnhanceInformationRequest request)
+        public async Task<BaseResponse<EnhanceInformationResponse>> EnhanceInformation(EnhanceInformationRequest request)
         {
-            throw new NotImplementedException();
+            var replaceContents = new Dictionary<string, string>()
+            {
+                { "PRODUCT_NAME", request.Name },
+                { "SHORT_DESCRIPTION", request.ShortDescription },
+                { "DESCRIPTION", request.Description },
+                { "CONTENT_TYPE", request.ProductType == ProductType.Video ? "Video" : "Image" },
+            };
+            var result = await _generativeAIService.GenerateContentAsync<EnhanceInformationResponse>(typeof(ProductPrompt.EnhanceInformation).ReflectedType.Name, replaceContents);
+
+            _logger.LogDebug(result.Description);
+            result.Description = result.Description.Replace("\n", "<br>");
+            return Success(result);
         }
     }
 }

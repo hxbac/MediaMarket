@@ -9,12 +9,12 @@ const productTypes : ProductTypeInterface[] = [
   {
     type: ProductTypeEnum.Video,
     title: 'Video',
-    description: 'Desc video'
+    description: 'Sản phẩm truyền tải nội dung trực quan và sống động, bao gồm các định dạng như phim, clip, hoặc video quảng cáo, giúp bạn tiếp cận khán giả một cách ấn tượng và hiệu quả.'
   },
   {
     type: ProductTypeEnum.Image,
     title: 'Hình ảnh',
-    description: 'Desc hình ảnh'
+    description: 'Bộ sưu tập hình ảnh chất lượng cao, được sắp xếp theo chủ đề hoặc câu chuyện, mang đến trải nghiệm hình ảnh ấn tượng và ghi dấu những khoảnh khắc đáng nhớ.'
   }
 ];
 

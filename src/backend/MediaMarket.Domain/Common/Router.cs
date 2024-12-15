@@ -66,6 +66,7 @@
                 public const string MyLatestProducts = Prefix + "/my-latest-products";
                 public const string LatestProductsOfUser = Prefix + "/latest-products-of-user";
                 public const string CheckoutInfo = Prefix + "/checkout";
+                public const string EnhanceInformation = Prefix + "/enhance-information";
             }
         }
 

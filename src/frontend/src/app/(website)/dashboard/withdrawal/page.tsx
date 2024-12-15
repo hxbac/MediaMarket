@@ -169,6 +169,7 @@ export default function Page() {
         />
         <Modal title="Tạo yêu cầu rút tiền" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
           <div className="py-4">
+            <h2 className="text-sm font-bold mb-4">Số dư hiện tại: 12.500.000 VND</h2>
             <div className="mb-4">
               <p className="text-sm font-semibold mb-2">Nhập số tiền</p>
               <Input type="number" value={withdrawalAmount} onChange={e => setWithdrawalAmount(Number(e.target.value))} />

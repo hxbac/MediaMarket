@@ -3,9 +3,12 @@
 import WithdrawalStatusTag from "@/components/withdrawal/withdrawalStatus";
 import withdrawalService from "@/services/admin/withdrawalService";
 import { formatDatetime, formatPrice } from "@/utils/helpers";
-import { Table, TablePaginationConfig, TableProps } from "antd";
+import { Input, Select, Table, TablePaginationConfig, TableProps } from "antd";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { DatePicker } from 'antd';
+
+const { RangePicker } = DatePicker;
 
 interface DataType {
   id: string;
@@ -108,7 +111,19 @@ export default function Page() {
         Danh sách yêu cầu rút tiền
       </h1>
       <div className="flex items-center justify-between mb-4">
-        <div>Search</div>
+        <div className="flex gap-x-4">
+          <RangePicker style={{ flexShrink: 0 }} />
+          <Input placeholder="Tên người yêu cầu" />
+          <Select
+            defaultValue="waiting"
+            style={{ width: 'auto' }}
+            options={[
+              { value: 'waiting', label: 'Chờ xử lý' },
+              { value: 'success', label: 'Thành công' },
+              { value: 'failed', label: 'Đã hủy' },
+            ]}
+          />
+        </div>
       </div>
       <Table<DataType>
         columns={columns}

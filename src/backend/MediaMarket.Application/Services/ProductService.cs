@@ -161,5 +161,10 @@ namespace MediaMarket.Application.Services
             var products = await _productRepository.GetProductsLatest(request.userId);
             return Success(_mapper.Map<IEnumerable<ProductLatestResponse>>(products));
         }
+
+        public Task<BaseResponse<EnhanceInformationResponse>> EnhanceInformation(EnhanceInformationRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

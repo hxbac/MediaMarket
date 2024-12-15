@@ -2,7 +2,7 @@
 
 import userService from "@/services/admin/userService";
 import { formatPrice } from "@/utils/helpers";
-import { Table, TablePaginationConfig, TableProps } from "antd";
+import { Table, TablePaginationConfig, TableProps, Tag } from "antd";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -91,6 +91,12 @@ export default function Page() {
       dataIndex: "numberProduct",
       key: "numberProduct",
       render: (numberProduct) => numberProduct,
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "abc",
+      key: "abc",
+      render: () => <Tag color="#87d068">Đang hoạt động</Tag>,
     },
   ];
 

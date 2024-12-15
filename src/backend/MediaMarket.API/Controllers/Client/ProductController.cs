@@ -71,5 +71,13 @@ namespace MediaMarket.API.Controllers.Client
             var response = await _productService.GetProductCheckoutInfo(request);
             return CustomResult(response);
         }
+
+        [Authorize]
+        [HttpPost(Router.ProductRouting.Action.EnhanceInformation)]
+        public async Task<IActionResult> EnhanceInformation([FromBody] EnhanceInformationRequest request)
+        {
+            var response = await _productService.EnhanceInformation(request);
+            return CustomResult(response);
+        }
     }
 }

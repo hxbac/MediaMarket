@@ -73,6 +73,14 @@ const productService = {
             throw new Error(error.message || 'Error fetching product');
         }
     },
+    enhanceInformation: async (params) => {
+        try {
+            const response = await axiosInstance.post(prefix + '/enhance-information', params);
+            return response.data;
+        } catch (error) {
+            throw new Error(error.message || 'Error fetching product');
+        }
+    }
 }
 
 export default productService;

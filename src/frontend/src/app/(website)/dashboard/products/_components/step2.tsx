@@ -7,18 +7,73 @@ import { useProductContext } from "../_context/ProductContext";
 import Tags from "./tags";
 import { UploadChangeParam } from "antd/es/upload";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { ProductType } from "@/enums/ProductType";
+import productService from "@/services/productService";
+
+interface EnhanceProductRequest {
+  name: string;
+  shortDescription: string;
+  description: string;
+  productType: ProductType
+}
+
+interface EnhanceProductResponse {
+  description: string,
+  tags: string[]
+}
 
 export default function Step2({ categories }: { categories: CategoryHomePage[] }) {
   const [form] = Form.useForm();
   const { value, setValue } = useProductContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoadingEnhanceProduct, setIsLoadingEnhanceProduct] = useState(false);
+  const [enhanceInformationResponse, setEnhanceInformationResponse] = useState<EnhanceProductResponse>({
+    description: '',
+    tags: []
+  });
 
-  const showModal = () => {
+  const showModal = async () => {
+    if (!value.name || !value.shortDescription || !value.description) {
+      toast.error('Vui lòng điền tên, đoạn mô tả ngắn để tiếp tục sử dụng chức năng này!');
+      return;
+    }
+
+    setIsLoadingEnhanceProduct(true);
     setIsModalOpen(true);
+
+    const enhanceRequest: EnhanceProductRequest = {
+      name: value.name,
+      shortDescription: value.shortDescription,
+      description: value.description,
+      productType: value.type
+    };
+
+    try {
+      const result = await productService.enhanceInformation(enhanceRequest);
+      if (result.succeeded) {
+        setEnhanceInformationResponse(result.data);
+        setIsLoadingEnhanceProduct(false);
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      toast.error(errorMessage);
+    }
   };
 
   const handleOk = async () => {
+    if (isLoadingEnhanceProduct) {
+      toast.info('Vui lòng chờ');
+    }
 
+    setValue({
+      ...value,
+      description: enhanceInformationResponse.description,
+      tags: value.tags
+    });
+    setIsModalOpen(false);
   };
 
   const handleCancel = () => {
@@ -67,49 +122,6 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
       message.error(`${info.file.name} file upload failed.`);
     }
   }
-
-  const suggestTags = [
-    {
-      text: 'Cố đô Huế',
-      color: 'magenta'
-    },
-    {
-      text: 'Di sản văn hóa',
-      color: 'red'
-    },
-    {
-      text: 'Phong cảnh Việt Nam',
-      color: 'volcano'
-    },
-    {
-      text: 'Kiến trúc cổ',
-      color: 'orange'
-    },
-    {
-      text: 'Sông Hương',
-      color: 'gold'
-    },
-    {
-      text: 'Lăng tẩm triều Nguyễn',
-      color: 'lime'
-    },
-    {
-      text: 'Núi Ngự Bình',
-      color: 'magenta'
-    },
-    {
-      text: 'Đại Nội Huế',
-      color: 'orange'
-    },
-    {
-      text: 'Văn hóa truyền thống',
-      color: 'gold'
-    },
-    {
-      text: 'Du lịch Huế',
-      color: 'orange'
-    }
-  ];
 
   return (
     <div className="">
@@ -184,16 +196,47 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
       </div>
       <Modal title="Hỗ trợ tạo nội dung bằng AI" open={isModalOpen} centered width={800} onOk={handleOk} onCancel={handleCancel}>
         <h2 className="text-sm font-bold mt-8 mb-4">Đoạn giới thiệu gợi ý</h2>
-        <div className="mb-8 rounded-md p-4 bg-gray-100">
-          <h4>Cố đô Huế – Hành trình khám phá vẻ đẹp lịch sử và văn hóa qua từng khung hình</h4>
-          <p>Cố đô Huế, từng là trung tâm chính trị, văn hóa và tôn giáo của Việt Nam trong hơn 140 năm triều Nguyễn, vẫn giữ nguyên vẻ đẹp cổ kính và sự trang nghiêm của một vùng đất di sản. Album hình ảnh về Cố đô Huế là một hành trình hình ảnh đầy cảm xúc, tái hiện những giá trị tinh thần và nghệ thuật đỉnh cao mà mảnh đất này mang lại.</p>
-          <p>Bước vào album, bạn sẽ được chiêm ngưỡng những khung cảnh lộng lẫy và trang nghiêm của các công trình kiến trúc di sản. Đại Nội Huế, với Ngọ Môn uy nghi, Điện Thái Hòa lộng lẫy và những cung điện, đền đài mang đậm phong cách kiến trúc triều Nguyễn, được khắc họa rõ nét qua từng bức ảnh. Những chi tiết tinh xảo trên các mái ngói lưu ly, các cột gỗ chạm trổ hoa văn hay hệ thống sân vườn hài hòa là minh chứng cho sự tài hoa của nghệ nhân xưa.</p>
-          <p>Không dừng lại ở đó, album còn dẫn dắt bạn đến những lăng tẩm nổi tiếng, nơi an nghỉ của các vị vua Nguyễn. Lăng Minh Mạng với kiến trúc đối xứng tuyệt đẹp, lăng Khải Định độc đáo với sự kết hợp giữa phong cách Á – Âu, hay lăng Tự Đức thơ mộng giữa thiên nhiên xanh mát đều được tái hiện sinh động, đưa người xem bước vào không gian hoài niệm và sâu lắng.</p>
-          <p>Ngoài các di sản kiến trúc, album cũng ghi lại vẻ đẹp tự nhiên đặc trưng của Huế. Sông Hương mềm mại như dải lụa uốn quanh thành phố, lúc hiền hòa phản chiếu ánh nắng, lúc mơ màng trong sương sớm. Núi Ngự Bình, biểu tượng thiêng liêng của Huế, hiện lên sừng sững giữa khung trời xanh, như một bức bình phong che chở cho mảnh đất cố đô.</p>
+        <div className="mb-8 rounded-md p-4 bg-gray-50">
+          {
+            isLoadingEnhanceProduct ?
+              (
+                <>
+                  <div className="h-2.5 bg-gray-200 rounded-full w-48 mb-4"></div>
+                  <div className="h-2 bg-gray-200 rounded-full max-w-[360px] mb-2.5"></div>
+                  <div className="h-2 bg-gray-200 rounded-full mb-2.5"></div>
+                  <div className="h-2 bg-gray-200 rounded-full mb-2.5"></div>
+                  <div className="h-2 bg-gray-200 rounded-full mb-2.5"></div>
+                  <div className="h-2 bg-gray-200 rounded-full max-w-[330px] mb-2.5"></div>
+                  <div className="h-2 bg-gray-200 rounded-full mb-2.5"></div>
+                  <div className="h-2 bg-gray-200 rounded-full mb-2.5"></div>
+                  <div className="h-2 bg-gray-200 rounded-full max-w-[300px] mb-2.5"></div>
+                  <div className="h-2 bg-gray-200 rounded-full mb-2.5"></div>
+                  <div className="h-2 bg-gray-200 rounded-full mb-2.5"></div>
+                  <div className="h-2 bg-gray-200 rounded-full max-w-[360px] mb-2.5"></div>
+                  <div className="h-2 bg-gray-200 rounded-full mb-2.5"></div>
+                  <div className="h-2 bg-gray-200 rounded-full mb-2.5"></div>
+                  <div className="h-2 bg-gray-200 rounded-full max-w-[360px] mb-2.5"></div>
+                </>
+              ) :
+              <>
+                {enhanceInformationResponse.description}
+              </>
+          }
+
         </div>
         <h2 className="text-sm font-bold mt-8 mb-4">Nhãn gợi ý</h2>
         <Flex gap="4px 0" wrap>
-          {suggestTags.map((item, index) => <Tag key={index} color={item.color}>{item.text}</Tag>)}
+          {
+            isLoadingEnhanceProduct ?
+              <>
+                {Array.from(Array(10).keys()).map((_, index) => (<div key={index} className="h-6 bg-gray-200 rounded-md w-12 mr-2.5"></div>))}
+              </>
+            :
+              <>
+                {enhanceInformationResponse.tags.map((item, index) => <Tag key={index} color="red">{item}</Tag>)}
+              </>
+          }
+
         </Flex>
       </Modal>
     </div>

@@ -78,6 +78,10 @@ export default function UploadImage() {
       previewImages.splice(index, 1);
       setPreviewImages([...previewImages]);
     }
+    setValue({
+      ...value,
+      previewImages: previewImages
+    });
   }
 
   return (
@@ -95,7 +99,7 @@ export default function UploadImage() {
         {
           value.originalFiles.length > 0 ?
           (
-            
+
             <div className="grid grid-cols-3 gap-x-6">
               {
                 imageGroups.map((group, index) => (
@@ -144,7 +148,7 @@ export default function UploadImage() {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Dragger 
+        <Dragger
           {...props}
           onChange={onChangeFileEvent}
         >

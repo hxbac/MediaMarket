@@ -7,6 +7,7 @@ using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Data;
 using MediaMarket.Infrastructure.GenerativeAI;
 using MediaMarket.Infrastructure.Interceptors;
+using MediaMarket.Infrastructure.Messaging.Publishers;
 using MediaMarket.Infrastructure.Payment;
 using MediaMarket.Infrastructure.Repositories;
 using MediaMarket.Infrastructure.Seeders;
@@ -136,6 +137,16 @@ namespace MediaMarket.Infrastructure.Extensions
             services.Configure<AIGenerativeConfig>(configuration.GetSection("AI:Gemini"));
             services.AddSingleton<IGenerativeAIService, GeminiAIService>();
 
+            services.AddRabbitMq(configuration);
+
+            return services;
+        }
+
+        public static IServiceCollection AddRabbitMq(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<RabbitMqConfig>(configuration.GetSection("RabbitMq"));
+            services.AddSingleton<IEventPublisher, RabbitMqEventPublisher>();
+            services.AddHostedService<EventPublisherBackgroundService>();
             return services;
         }
 
@@ -148,6 +159,31 @@ namespace MediaMarket.Infrastructure.Extensions
             return services;
         }
     }
+
+    public class EventPublisherBackgroundService : IHostedService
+    {
+        private readonly ILogger<EventPublisherBackgroundService> _logger;
+        private readonly IServiceProvider _serviceProvider;
+
+        public EventPublisherBackgroundService(ILogger<EventPublisherBackgroundService> logger, IServiceProvider serviceProvider)
+        {
+            _logger = logger;
+            _serviceProvider = serviceProvider;
+        }
+
+        public async Task StartAsync(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Start initial for connection to RabbitMq");
+            await _serviceProvider.GetRequiredService<IEventPublisher>().Initialize();
+            _logger.LogInformation("Run initial for connection to RabbitMq successfully");
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+    }
+
 
     public class InitialStorageFolder(ILogger<InitialStorageFolder> _logger) : BackgroundService
     {

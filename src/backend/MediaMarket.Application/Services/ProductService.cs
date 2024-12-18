@@ -22,7 +22,8 @@ namespace MediaMarket.Application.Services
         IGenerativeAIService generativeAIService,
         IMapper mapper,
         ILogger<ProductService> logger,
-        IUser user
+        IUser user,
+        IEventPublisher eventPublisher
     ) : BaseResponseHandler, IProductService
     {
         private readonly IProductRepository _productRepository = productRepository;
@@ -35,8 +36,9 @@ namespace MediaMarket.Application.Services
         private readonly IMapper _mapper = mapper;
         private readonly IUser _user = user;
         private readonly ILogger<ProductService> _logger = logger;
+        private readonly IEventPublisher _eventPublisher = eventPublisher;
 
-        public async Task<BaseResponse<CreateProductResponse>> CreateProduct(CreateProductRequest request, Guid UserIdCreate)
+        public async Task<BaseResponse<CreateProductResponse>> CreateProduct(CreateProductRequest request)
         {
             var categories = await _categoryRepository.FindAllAsync(x => request.CategoryIds.Contains(x.Id));
             var tags = await GetTagsByName(request.Tags);
@@ -68,16 +70,37 @@ namespace MediaMarket.Application.Services
                 Version = 1
             });
 
-            await _videoSolutionRepository.AddAsync(new VideoSolution()
+
+            switch (product.ProductType)
             {
-                Id = Guid.NewGuid(),
-                FileUrl = request.OriginalFiles[0].Url,
-                Product = product,
-            });
+                case ProductType.Video:
+                    await _videoSolutionRepository.AddAsync(new VideoSolution()
+                    {
+                        Id = Guid.NewGuid(),
+                        FileUrl = request.OriginalFiles[0].Url,
+                        Product = product,
+                    });
+
+                    await EnQueueProductFileTypeVideo(product);
+                    break;
+                case ProductType.Image:
+                    await EnQueueProductFileTypeImage(product);
+                    break;
+            }
 
             await _previewRepository.SaveChangesAsync();
 
             return Success(_mapper.Map<CreateProductResponse>(product));
+        }
+
+        private async Task EnQueueProductFileTypeImage(Product product)
+        {
+
+        }
+
+        private async Task EnQueueProductFileTypeVideo(Product product)
+        {
+
         }
 
         private async Task<string> GenerateSlugProduct(string productName)

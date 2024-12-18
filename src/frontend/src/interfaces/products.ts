@@ -28,7 +28,9 @@ export interface ProductInfo {
     price: number,
     thumbnail: string,
     tags: string[],
-    originalFiles: FileInfo[]
+    originalFiles: FileInfo[],
+    rangeVideoPreview: [string, string] | null,
+    previewImages: string[] | null
 }
 
 export interface SearchProductParams {

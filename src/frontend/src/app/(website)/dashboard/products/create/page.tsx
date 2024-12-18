@@ -34,6 +34,8 @@ export default function Page() {
     categoryIds: [],
     tags: [],
     originalFiles: [],
+    previewImages: null,
+    rangeVideoPreview: null
   });
 
   useEffect(() => {

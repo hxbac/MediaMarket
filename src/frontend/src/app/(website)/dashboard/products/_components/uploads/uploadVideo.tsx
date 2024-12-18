@@ -76,6 +76,13 @@ export default function UploadVideo() {
     }
   };
 
+  const onChange = (timeString: [string, string]) => {
+    setValue({
+      ...value,
+      rangeVideoPreview: timeString
+    });
+  };
+
   return (
     <div className="">
       <div className="flex items-center justify-between">
@@ -119,7 +126,10 @@ export default function UploadVideo() {
           (
             <div>
               <p className="mb-4">Giới hạn thời lượng có thể phát preview là từ {formatSeconds(0)} đến {formatSeconds(videoDuration)}</p>
-              <TimePicker.RangePicker  />
+              <TimePicker.RangePicker
+                onChange={(_, timeString) => onChange(timeString)}
+                format="HH:mm"
+              />
             </div>
           ) :
           (<></>)
@@ -131,7 +141,7 @@ export default function UploadVideo() {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Dragger 
+        <Dragger
           {...props}
           onChange={onChangeFileEvent}
         >

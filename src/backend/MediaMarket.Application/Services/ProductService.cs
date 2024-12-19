@@ -3,6 +3,7 @@ using MediaMarket.Application.Bases;
 using MediaMarket.Application.Contracts.Common;
 using MediaMarket.Application.Contracts.Repositories;
 using MediaMarket.Application.Contracts.Services;
+using MediaMarket.Application.DTO.Product;
 using MediaMarket.Application.DTO.Request.Product;
 using MediaMarket.Application.DTO.Response.Product;
 using MediaMarket.Domain.Entities;
@@ -20,6 +21,7 @@ namespace MediaMarket.Application.Services
         IPreviewRepository previewRepository,
         IVideoSolutionRepository videoSolutionRepository,
         IGenerativeAIService generativeAIService,
+        IImageRepository imageRepository,
         IMapper mapper,
         ILogger<ProductService> logger,
         IUser user,
@@ -33,6 +35,7 @@ namespace MediaMarket.Application.Services
         private readonly IPreviewRepository _previewRepository = previewRepository;
         private readonly IVideoSolutionRepository _videoSolutionRepository = videoSolutionRepository;
         private readonly IGenerativeAIService _generativeAIService = generativeAIService;
+        private readonly IImageRepository _imageRepository = imageRepository;
         private readonly IMapper _mapper = mapper;
         private readonly IUser _user = user;
         private readonly ILogger<ProductService> _logger = logger;
@@ -84,7 +87,21 @@ namespace MediaMarket.Application.Services
                     await EnQueueProductFileTypeVideo(product);
                     break;
                 case ProductType.Image:
-                    await EnQueueProductFileTypeImage(product);
+                    var imagesInsert = new List<Image>();
+                    var payload = new CheckProductImageContentDTO() { Id = product.Id };
+                    foreach (var file in request.OriginalFiles)
+                    {
+                        payload.ImagesUrl.Add(file.Url);
+                        imagesInsert.Add(new Image()
+                        {
+                            Id = Guid.NewGuid(),
+                            ProductId = product.Id,
+                            ImageUrl = file.Url,
+                            OrderIndex = 9999
+                        });
+                    }
+                    await _imageRepository.AddRangeAsync(imagesInsert);
+                    await _eventPublisher.PublishAsync(payload, "CreateProductImage");
                     break;
             }
 
@@ -205,6 +222,15 @@ namespace MediaMarket.Application.Services
             _logger.LogDebug(result.Description);
             result.Description = result.Description.Replace("\n", "<br>");
             return Success(result);
+        }
+
+        public async Task<BaseResponse<object>> UpdateProductContentStatus(UpdateContentStatusRequest request)
+        {
+            var product = await _productRepository.FindByIdAsync(request.Id);
+            product.ProductContentStatus = request.Status;
+            await _productRepository.SaveChangesAsync();
+
+            return Success<object>(new { Message = "Product content status updated successfully" });
         }
     }
 }

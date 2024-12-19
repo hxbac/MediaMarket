@@ -29,6 +29,19 @@
             }
         }
 
+        public static class Worker
+        {
+            public const string WorkerRule = rule + "worker/";
+            public static class ProductRouting
+            {
+                public const string Prefix = WorkerRule + "products";
+                public static class Action
+                {
+                    public const string UpdateContentStatus = Prefix + "/update-content-status";
+                }
+            }
+        }
+
         public static class AuthRouting
         {
             public const string Prefix = rule + "auth";

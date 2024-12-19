@@ -14,5 +14,6 @@ namespace MediaMarket.Application.Contracts.Services
         Task<BaseResponse<PaginatedResult<ProductUserResponse>>> GetMyProductsPaginated(GetProductListRequest request);
         Task<BaseResponse<ProductCheckoutResponse>> GetProductCheckoutInfo(ProductCheckoutRequest request);
         Task<BaseResponse<ProductDetailResponse>> GetProductDetail(string slug);
+        Task<BaseResponse<object>> UpdateProductContentStatus(UpdateContentStatusRequest request);
     }
 }

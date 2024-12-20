@@ -59,14 +59,14 @@ export default function Page({
   return (
     <section className="bg-white pt-16">
       <div className="items-center max-w-screen-xl px-4 mx-auto py-8">
-        <h1 className="text-6xl font-bold">{query}</h1>
+        <h1 className="text-6xl font-bold mb-4">Tìm kiếm: {query}</h1>
         <div>
           <div className="flex items-end justify-between">
-            <h2 className="text-6xl font-bold">Video</h2>
-            <Link href={`/search/video?query=${query}`} className="font-bold text-purple-600">Xem tất cả video</Link>
+            <h2 className="text-6xl font-bold">Sản phẩm</h2>
+            <Link href={`/search/video?query=${query}`} className="font-bold text-purple-600">Xem tất cả</Link>
           </div>
-          <p>Learn skills, tools, and techniques from industry experts and creative pros.</p>
-          <div className="grid grid-cols-4 gap-x-4 gap-y-6">
+          <p>Danh sách sản phẩm trùng với kết quả tìm kiếm.</p>
+          <div className="grid grid-cols-4 gap-x-4 gap-y-6 mt-4">
             {
               searchVideo.map(item => <Card key={item.id} data={item} />)
             }

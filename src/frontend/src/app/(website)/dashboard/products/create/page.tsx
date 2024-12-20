@@ -70,7 +70,8 @@ export default function Page() {
     try {
       const result = await productService.create(productInfo);
       if (result.succeeded) {
-        console.log(result);
+        router.push('/dashboard/products');
+        toast.success('Tạo sản phẩm thành công!');
       } else {
         throw new Error(result.message);
       }
@@ -92,30 +93,6 @@ export default function Page() {
   return (
     <section className="bg-white pt-16">
       <div className="items-center max-w-screen-xl px-4 py-8 mx-auto lg:gap-16 xl:gap-24 lg:py-24 lg:px-6">
-        <Steps
-          items={[
-            {
-              title: "Login",
-              status: "finish",
-              icon: <UserOutlined />,
-            },
-            {
-              title: "Verification",
-              status: "finish",
-              icon: <SolutionOutlined />,
-            },
-            {
-              title: "Pay",
-              status: "process",
-              icon: <LoadingOutlined />,
-            },
-            {
-              title: "Done",
-              status: "wait",
-              icon: <SmileOutlined />,
-            },
-          ]}
-        />
         <ProductContextProvider initial={{
           value: productInfo,
           setValue: setProductInfo

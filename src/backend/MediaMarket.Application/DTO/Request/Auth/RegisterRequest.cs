@@ -1,13 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MediaMarket.Application.DTO.Request.Auth
+﻿namespace MediaMarket.Application.DTO.Request.Auth
 {
     public class RegisterRequest
     {
-        [Required(ErrorMessage = "Name is required")]
-        public required string Name { get; set; }
-        public required string UserName { get; set; }
-        public required string Password { get; set; }
-        public required string Email { get; set; }
+        public string Name { get; set; }
+        public string? UserName { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

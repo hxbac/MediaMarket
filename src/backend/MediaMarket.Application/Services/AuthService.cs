@@ -44,8 +44,10 @@ namespace MediaMarket.Application.Services
                 var user = new User
                 {
                     Name = request.Name,
-                    UserName = request.UserName,
-                    Email = request.Email
+                    UserName = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
+                    Email = request.Email,
+                    Address = request.Address,
+                    PhoneNumber = request.PhoneNumber,
                 };
 
                 var result = await _userManager.CreateAsync(user, request.Password);

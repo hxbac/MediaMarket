@@ -130,7 +130,7 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddScoped<ISearchService, DatabaseSearchService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IWithdrawalService, WithdrawalService>();
-            services.AddScoped<IBalanceHistoryService, BalanceHistoryService>();
+            services.AddScoped<IBalanceService, BalanceService>();
             services.AddScoped<IImageService, ImageService>();
 
             services.AddSingleton<IFileService, LocalStorageFileService>();

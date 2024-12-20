@@ -114,7 +114,7 @@ export default function Page() {
           <div className="py-12">
             <div className="flex items-center justify-between">
               <h2 className="after-effect after:left-52 mt-12 lg:mt-0 ">
-                About Me
+                Thông Tin
               </h2>
               <div className="pr-8">
                 <Button type="primary" onClick={showModal}>Chỉnh sửa thông tin</Button>
@@ -253,7 +253,7 @@ export default function Page() {
           </div>
           <div className="pb-12 ">
             <h3 className="text-[35px] font-medium pb-5">
-              What I do!
+              Sản phẩm của tôi
             </h3>
             <div className="grid gap-8 grid-cols-2 md:grid-cols-3 xl:grid-cols-4 ">
               {

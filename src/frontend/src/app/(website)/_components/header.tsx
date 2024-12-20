@@ -53,7 +53,7 @@ const items: MenuProps['items'] = [
     key: '4',
     icon: <ProductOutlined />,
     label: (
-      <Link href="/dashboard">Trang quản trị</Link>
+      <Link href="/dashboard/withdrawal">Số dư ví</Link>
     ),
   },
   {

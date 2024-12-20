@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: ProductParams }) {
   return (
     <section className="bg-white pt-16">
       <div className="items-center max-w-screen-xl px-4 py-8 mx-auto lg:gap-16 xl:gap-24 lg:py-24 lg:px-6">
-        <div className="w-full min-h-60"></div>
+        <div className="w-full min-h-5"></div>
         <div className="flex gap-52 items-start">
           <div className="flex-1">
             <div>
@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: ProductParams }) {
                 </div>
               </Link>
               <div className="flex items-center">
-                <div className="bg-purple-600 text-white font-bold text-sm px-8 p-2 select-none cursor-pointer rounded-md hover:opacity-80">Follow</div>
+                <div className="bg-purple-600 text-white font-bold text-sm px-8 p-2 select-none cursor-pointer rounded-md hover:opacity-80 hidden">Follow</div>
               </div>
             </div>
             <div>

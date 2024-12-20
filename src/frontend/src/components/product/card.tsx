@@ -32,8 +32,8 @@ export default function Card({ data }: { data: ProductCard }) {
       </div>
       <div className="p-2">
         <div className="flex items-center justify-between mt-2 mb-1">
-          <span className="text-xs font-semibold">37,210 students</span>
-          <span className="text-xs font-semibold">51m</span>
+          <span className="text-xs font-semibold hidden">37,210 students</span>
+          <span className="text-xs font-semibold hidden">51m</span>
         </div>
         <h5 className="mb-2 text-base font-bold tracking-tight text-gray-900">
           {data.name}

@@ -39,9 +39,9 @@ export default function Home() {
       { categories ? <Slider data={categories} /> : <></> }
       <Stats />
       { categories ? <Products categories={categories} /> : <></> }
-      <Sellers />
+      {/* <Sellers /> */}
       <Slogan />
-      <FAQ />
+      {/* <FAQ /> */}
     </div>
   )
 };

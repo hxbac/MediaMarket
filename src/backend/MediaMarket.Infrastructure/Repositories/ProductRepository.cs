@@ -79,14 +79,12 @@ namespace MediaMarket.Infrastructure.Repositories
         public async Task<ProductLatestVersionDTO> GetProductWithLatestVersion(string slug)
         {
             var product = await _model.Where(p => p.Slug == slug)
-                .Where(p => p.ProductStatus == Domain.Enums.ProductStatus.Active)
                 .Select(p => new ProductLatestVersionDTO
                 {
                     Id = p.Id,
                     Name = p.Name,
                     Price = p.Price,
-                    Version = p.ProductDetails
-                        .Max(pd => pd.Version)
+                    Version = 1
                 }).
                 FirstOrFailAsync();
             return product;

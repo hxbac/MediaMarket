@@ -93,7 +93,7 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
       value.categoryIds.splice(index, 1);
     } else {
       value.categoryIds.push(id);
-      if (value.categoryIds.length > 3) {
+      if (value.categoryIds.length > 10) {
         value.categoryIds.shift();
       }
     }
@@ -218,9 +218,8 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
                   <div className="h-2 bg-gray-200 rounded-full max-w-[360px] mb-2.5"></div>
                 </>
               ) :
-              <>
-                {enhanceInformationResponse.description}
-              </>
+              <div dangerouslySetInnerHTML={{ __html: enhanceInformationResponse.description }}>
+              </div>
           }
 
         </div>

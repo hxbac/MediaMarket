@@ -13,12 +13,14 @@ namespace MediaMarket.Application.Services
         IPaymentService paymentService,
         IOrderRepository orderRepository,
         IProductRepository productRepository,
+        IBalanceService balanceService,
         IUser user
     ) : BaseResponseHandler, IOrderService
     {
         private readonly IOrderRepository _orderRepository = orderRepository;
         private readonly IPaymentService _paymentService = paymentService;
         private readonly IProductRepository _productRepository = productRepository;
+        private readonly IBalanceService _balanceService = balanceService;
         private readonly IUser _user = user;
 
         public async Task<BaseResponse<CallbackStripeResponse>> CallbackStripe(CallbackStripeRequest request)
@@ -30,6 +32,15 @@ namespace MediaMarket.Application.Services
             if (isSuccess && order.Status == Domain.Enums.OrderStatus.Pending)
             {
                 await FulFillOrderSuccess(order);
+
+                var product = await _productRepository.FindByIdAsync(order.ProductId);
+                await _balanceService.UpdateUserBalance(
+                    product.CreatedBy,
+                    order.Price,
+                    order.Id,
+                    Domain.Enums.TransactionType.Sell,
+                    Domain.Enums.BalanceType.TopUp
+                );
             }
 
             return Success(new CallbackStripeResponse()

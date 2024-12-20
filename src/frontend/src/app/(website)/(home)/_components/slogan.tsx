@@ -16,9 +16,7 @@ export default function Slogan() {
           </svg>
           <blockquote>
             <p className="text-xl font-medium text-gray-900 md:text-2xl">
-              &quot;Landwind is just awesome. It contains tons of predesigned
-              components and pages starting from login screen to complex
-              dashboard. Perfect choice for your next SaaS application.&quot;
+              &quot;Nền tảng bán nội dung trực tuyến hàng đầu, nơi sáng tạo hội tụ, kết nối giá trị, lan tỏa tri thức và chạm đến mọi thành công!&quot;
             </p>
           </blockquote>
           <figcaption className="flex items-center justify-center mt-6 space-x-3">
@@ -32,7 +30,7 @@ export default function Slogan() {
                 Micheal Gough
               </div>
               <div className="pl-3 text-sm font-light text-gray-500">
-                CEO at Google
+                CEO của MediaMarket
               </div>
             </div>
           </figcaption>

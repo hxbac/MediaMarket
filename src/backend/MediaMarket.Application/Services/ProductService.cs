@@ -190,7 +190,7 @@ namespace MediaMarket.Application.Services
 
         public async Task<BaseResponse<ProductCheckoutResponse>> GetProductCheckoutInfo(ProductCheckoutRequest request)
         {
-            var product = await _productRepository.FindAsync(x => x.Slug == request.Slug);
+            var product = await _productRepository.FindAsync(x => x.Slug == request.Slug, ["Product"]);
             return Success(new ProductCheckoutResponse()
             {
                 Id = product.Id,

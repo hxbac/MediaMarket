@@ -15,7 +15,8 @@ namespace MediaMarket.Application.Services
         IMapper mapper,
         UserManager<User> userManager,
         IPaymentService paymentService,
-        IWithdrawalRepository withdrawalRepository
+        IWithdrawalRepository withdrawalRepository,
+        IBalanceService balanceService
     ) : BaseResponseHandler, IWithdrawalService
     {
         private readonly IUser _user = user;
@@ -23,6 +24,7 @@ namespace MediaMarket.Application.Services
         private readonly UserManager<User> _userManager = userManager;
         private readonly IPaymentService _paymentService = paymentService;
         private readonly IWithdrawalRepository _withdrawalRepository = withdrawalRepository;
+        private readonly IBalanceService _balanceService = balanceService;
 
         public async Task<BaseResponse<CreateWithdrawalResponse>> CreateRequest(CreateWithdrawalRequest request)
         {
@@ -46,6 +48,13 @@ namespace MediaMarket.Application.Services
                 WithdrawalStatus = Domain.Enums.WithdrawalStatus.Pending
             };
             await _withdrawalRepository.AddAsync(dataWithdrawal);
+            await _balanceService.UpdateUserBalance(
+                user.Id,
+                dataWithdrawal.Amount,
+                dataWithdrawal.Id,
+                Domain.Enums.TransactionType.Withdrawal,
+                Domain.Enums.BalanceType.Reduce
+            );
             await _withdrawalRepository.SaveChangesAsync();
 
             return Success(_mapper.Map<CreateWithdrawalResponse>(dataWithdrawal));

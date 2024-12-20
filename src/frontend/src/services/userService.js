@@ -20,6 +20,14 @@ const userService = {
         } catch (error) {
             throw new Error(error.message || 'Error fetching ' + prefix);
         }
+    },
+    getMyCurrentBalance: async () => {
+        try {
+            const response = await axiosInstance.get(prefix + '/my/balance');
+            return response.data;
+        } catch (error) {
+            throw new Error(error.message || 'Error fetching ' + prefix);
+        }
     }
 }
 

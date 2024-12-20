@@ -8,6 +8,7 @@ namespace MediaMarket.Application.Contracts.Services
     public interface IUserService
     {
         Task<BaseResponse<PaginatedResult<UserManageResponse>>> GetListPaginated(GetListUserPaginatedRequest request);
+        Task<BaseResponse<MyCurrentBalanceResponse>> GetMyCurrentBalance();
         Task<BaseResponse<UserResponse>> GetUserInfo(Guid id);
     }
 }

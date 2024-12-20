@@ -17,5 +17,12 @@ namespace MediaMarket.API.Controllers.Client
             var response = await _userService.GetUserInfo(id);
             return CustomResult(response);
         }
+
+        [HttpGet(Router.UserRouting.Action.GetMyBalance)]
+        public async Task<IActionResult> GetMyBalance()
+        {
+            var response = await _userService.GetMyCurrentBalance();
+            return CustomResult(response);
+        }
     }
 }

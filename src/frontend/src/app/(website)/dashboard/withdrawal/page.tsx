@@ -14,6 +14,7 @@ import { formatDatetime, formatPrice } from "@/utils/helpers";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import withdrawalService from "@/services/withdrawalService";
 import WithdrawalStatusTag from "@/components/withdrawal/withdrawalStatus";
+import userService from "@/services/userService";
 
 interface DataType {
   id: string;
@@ -31,10 +32,11 @@ export default function Page() {
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 2,
+    pageSize: 10,
     total: 0,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentBalance, setCurrentBalance] = useState(0);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -94,8 +96,19 @@ export default function Page() {
     }
   };
 
+  const refreshBalance = async () => {
+    try {
+      const response = await userService.getMyCurrentBalance();
+      setCurrentBalance(response.data.balance);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      toast.error(errorMessage);
+    }
+  }
+
   useEffect(() => {
     fetchData(pagination.current, pagination.pageSize);
+    refreshBalance();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -148,7 +161,7 @@ export default function Page() {
         <h1 className="text-center uppercase text-xl font-bold mb-4">Lịch sử rút tiền</h1>
         <div className="flex items-center justify-between mb-4">
           <div>
-            Search
+            Số dư ví: {formatPrice(currentBalance)}
           </div>
           <div>
           <Button type="primary" onClick={showModal}>
@@ -169,7 +182,7 @@ export default function Page() {
         />
         <Modal title="Tạo yêu cầu rút tiền" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
           <div className="py-4">
-            <h2 className="text-sm font-bold mb-4">Số dư hiện tại: 12.500.000 VND</h2>
+            <h2 className="text-sm font-bold mb-4">Số dư hiện tại: {formatPrice(currentBalance)}</h2>
             <div className="mb-4">
               <p className="text-sm font-semibold mb-2">Nhập số tiền</p>
               <Input type="number" value={withdrawalAmount} onChange={e => setWithdrawalAmount(Number(e.target.value))} />

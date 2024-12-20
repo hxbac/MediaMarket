@@ -127,9 +127,11 @@
         public static class UserRouting
         {
             public const string Prefix = rule + "users";
+            public const string MyPrefix = Prefix + "/my";
             public static class Action
             {
                 public const string Show = Prefix + singleRoute;
+                public const string GetMyBalance = MyPrefix + "/balance";
             }
         }
 

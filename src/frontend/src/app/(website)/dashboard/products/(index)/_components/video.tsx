@@ -23,7 +23,7 @@ export default function Video() {
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 2,
+    pageSize: 10,
     total: 0,
   });
   const { value } = useSearchProductContext();

@@ -25,7 +25,7 @@ export default function Page() {
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 2,
+    pageSize: 10,
     total: 0,
   });
 

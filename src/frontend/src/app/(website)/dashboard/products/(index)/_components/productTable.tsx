@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { useSearchProductContext } from "../../_context/SearchProductContext";
 import Link from "next/link";
 import { formatPrice } from "@/utils/helpers";
+import { ProductContentStatus } from "@/enums/ProductContentStatus";
 
 interface DataType {
   key: string;
@@ -17,9 +18,12 @@ interface DataType {
   name: string;
   price: number;
   categories: string[];
+  productType: number;
+  productContentStatus: number;
+  productStatus: number;
 }
 
-export default function Video() {
+export default function ProductTable() {
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({
     current: 1,
@@ -34,7 +38,7 @@ export default function Video() {
         params: {
           page,
           pageSize,
-          productType: ProductType.Video,
+          productType: value.productType ? value.productType : 0,
           name: value.name
         },
       });
@@ -98,6 +102,42 @@ export default function Video() {
           })}
         </>
       ),
+    },
+    {
+      title: "Loại sản phẩm",
+      dataIndex: "productType",
+      key: "productType",
+      render: (productType) => {
+        if (productType === ProductType.Video) {
+          return (
+            <Tag color="#cd201f">
+              Video
+            </Tag>
+          )
+        }
+        return (
+          <Tag color="#55acee">
+            Hình ảnh
+          </Tag>
+        )
+      }
+    },
+    {
+      title: "Trạng thái nội dung",
+      dataIndex: "productContentStatus",
+      key: "productContentStatus",
+      render: (productContentStatus) => {
+        switch (productContentStatus) {
+          case ProductContentStatus.Waiting:
+            return <Tag color="#108ee9">Chờ xử lý</Tag>
+          case ProductContentStatus.Approved:
+            return <Tag color="#87d068">Đã duyệt</Tag>
+          case ProductContentStatus.Denied:
+            return <Tag color="#f50">Bị từ chối</Tag>
+          default:
+            return <Tag color="#108ee9">Chờ xử lý</Tag>
+        }
+      }
     },
     {
       title: "Hành Động",

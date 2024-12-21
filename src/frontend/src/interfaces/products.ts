@@ -35,6 +35,12 @@ export interface ProductInfo {
 
 export interface SearchProductParams {
     name: string;
+    productType: number | null;
+}
+
+export interface SearchProductOrderParams {
+    name: string;
+    productType: number | null;
 }
 
 export interface MyProductLatest {

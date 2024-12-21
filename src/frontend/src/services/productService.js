@@ -40,7 +40,10 @@ const productService = {
                     thumbnail: item.thumbnail,
                     name: item.name,
                     price: item.price,
-                    categories: item.categories.map(category => category.name)
+                    categories: item.categories.map(category => category.name),
+                    productType: item.productType,
+                    productContentStatus: item.productContentStatus,
+                    productStatus: item.productStatus
                 };
             });
 

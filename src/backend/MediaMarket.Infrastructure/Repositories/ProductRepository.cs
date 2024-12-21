@@ -26,7 +26,12 @@ namespace MediaMarket.Infrastructure.Repositories
             var query = _model
                 .Include(p => p.Tags)
                 .Include(p => p.Categories)
-                .Where(p => p.CreatedBy == userId && p.ProductType == productType);
+                .Where(p => p.CreatedBy == userId);
+
+            if (productType != ProductType.None)
+            {
+                query = query.Where(p => p.ProductType == productType);
+            }
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -34,7 +39,7 @@ namespace MediaMarket.Infrastructure.Repositories
             }
 
             return await query
-                .Select(p => new Product
+                .Select(p => new ProductUserResponse
                 {
                     Id = p.Id,
                     Name = p.Name,
@@ -43,8 +48,10 @@ namespace MediaMarket.Infrastructure.Repositories
                     Price = p.Price,
                     ProductContentStatus = p.ProductContentStatus,
                     Categories = p.Categories,
+                    ProductType = p.ProductType,
+                    ProductStatus = p.ProductStatus,
                 })
-                .ToPaginatedListAsync<Product, ProductUserResponse>(page, pageSize, _mapper);
+                .ToPaginatedListAsync(page, pageSize);
         }
 
         public async Task<ProductDetailResponse> GetProductActiveWithRelationship(string slug)

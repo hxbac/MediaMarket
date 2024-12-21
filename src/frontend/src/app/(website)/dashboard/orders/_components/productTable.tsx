@@ -1,7 +1,6 @@
 'use client';
 
-import { ProductType } from "@/enums/ProductType";
-import { Button, Space, Table, TablePaginationConfig, TableProps, Tag } from "antd";
+import { Table, TablePaginationConfig, TableProps, Tag } from "antd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -22,7 +21,7 @@ interface DataType {
   orderStatus: number;
 }
 
-export default function Video() {
+export default function ProductTable() {
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({
     current: 1,
@@ -37,8 +36,6 @@ export default function Video() {
         params: {
           page,
           pageSize,
-          productType: ProductType.Video,
-          name: value.name
         },
       });
 

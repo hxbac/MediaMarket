@@ -11,6 +11,8 @@ namespace MediaMarket.Application.DTO.Response.Product
         public string? Thumbnail { get; set; }
         public long Price { get; set; }
         public ProductContentStatus ProductContentStatus { get; set; }
+        public ProductStatus ProductStatus { get; set; }
+        public ProductType ProductType { get; set; }
         public ICollection<Entities.Category>? Categories { get; set; }
     }
 }

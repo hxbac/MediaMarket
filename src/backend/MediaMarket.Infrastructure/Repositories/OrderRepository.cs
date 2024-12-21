@@ -18,7 +18,7 @@ namespace MediaMarket.Infrastructure.Repositories
             _mapper = mapper;
         }
 
-        public async Task<PaginatedResult<ProductOrderResponse>> GetListOrdersForUser(Guid userId, ProductType productType, string? name, int page, int pageSize)
+        public Task<PaginatedResult<ProductOrderResponse>> GetListOrdersForUser(Guid userId, ProductType productType, string? name, int page, int pageSize)
         {
             var query = _model
                 .Include(o => o.Buyer)
@@ -33,7 +33,13 @@ namespace MediaMarket.Infrastructure.Repositories
                 query = query.Where(o => o.ProductName.Contains(name));
             }
 
-            return await query
+            if (productType != ProductType.None)
+            {
+                query = query.Where(o => o.Product.ProductType == productType);
+            }
+
+            return query
+                .OrderByDescending(o => o.CreatedOn)
                 .Select(o => new ProductOrderResponse()
                 {
                     Id = o.Product.Id,
@@ -51,7 +57,7 @@ namespace MediaMarket.Infrastructure.Repositories
                 .ToPaginatedListAsync(page, pageSize);
         }
 
-        public async Task<PaginatedResult<ProductPurchaseResponse>> GetListPurchasesForUser(Guid userId, ProductType productType, string? name, int page, int pageSize)
+        public Task<PaginatedResult<ProductPurchaseResponse>> GetListPurchasesForUser(Guid userId, ProductType productType, string? name, int page, int pageSize)
         {
             var query = _model
                 .Include(o => o.Product)
@@ -65,7 +71,13 @@ namespace MediaMarket.Infrastructure.Repositories
                 query = query.Where(o => o.ProductName.Contains(name));
             }
 
-            return await query
+            if (productType != ProductType.None)
+            {
+                query = query.Where(o => o.Product.ProductType == productType);
+            }
+
+            return query
+                .OrderByDescending(o => o.CreatedOn)
                 .Select(o => new ProductPurchaseResponse()
                 {
                     Id = o.Product.Id,

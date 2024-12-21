@@ -18,6 +18,7 @@ const orderService = {
             const response = await axiosInstance.get(prefix + '/my-purchases', params);
             const result = response.data.data;
             result.data = result.data.map(item => {
+                console.log(item);
                 return {
                     key: item.id,
                     slug: item.slug,
@@ -25,7 +26,8 @@ const orderService = {
                     name: item.name,
                     price: item.price,
                     categories: item.categories.map(category => category.name),
-                    orderStatus: item.orderStatus
+                    orderStatus: item.orderStatus,
+                    createdAt: item.createdAt,
                 };
             });
 
@@ -47,7 +49,8 @@ const orderService = {
                     price: item.price,
                     categories: item.categories.map(category => category.name),
                     userBuyerName: item.userBuyerName,
-                    orderStatus: item.orderStatus
+                    orderStatus: item.orderStatus,
+                    createdAt: item.createdAt,
                 };
             });
 

@@ -6,10 +6,11 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Link from "next/link";
-import { formatPrice } from "@/utils/helpers";
+import { formatDatetime, formatPrice } from "@/utils/helpers";
 import { useSearchProductContext } from "../../products/_context/SearchProductContext";
 import orderService from "@/services/orderService";
 import OrderStatusTag from "@/components/order/orderStatus";
+import { OrderStatus } from "@/enums/OrderStatus";
 
 interface DataType {
   key: string;
@@ -19,9 +20,10 @@ interface DataType {
   price: number;
   categories: string[];
   orderStatus: number;
+  createdAt: string;
 }
 
-export default function Video() {
+export default function ProductTable() {
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({
     current: 1,
@@ -40,7 +42,6 @@ export default function Video() {
           name: value.name
         },
       });
-      console.log(response.data);
 
       setData(response.data);
       setPagination({
@@ -103,6 +104,12 @@ export default function Video() {
       ),
     },
     {
+      title: "Thời gian mua",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (createdAt) => formatDatetime(createdAt)
+    },
+    {
       title: "Trạng thái",
       dataIndex: "orderStatus",
       key: "orderStatus",
@@ -111,16 +118,19 @@ export default function Video() {
     {
       title: "Hành Động",
       key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <Link href={`/products/${record.slug}`} target="_blank">
-            <Button>Xem</Button>
-          </Link>
-          <Link href={`/products/${record.key}`}>
-            <Button type="primary" danger>Xóa</Button>
-          </Link>
-        </Space>
-      ),
+      render: (_, record) => {
+        if (record.orderStatus === OrderStatus.Completed) {
+          return (
+            <Space size="middle">
+              <Link href={`/products/${record.slug}`} target="_blank">
+                <Button type="primary">Tải xuống</Button>
+              </Link>
+            </Space>
+          )
+        } else {
+          return <></>
+        }
+      },
     },
   ];
 

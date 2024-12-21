@@ -64,34 +64,39 @@ namespace MediaMarket.Application.Services
 
             await _productRepository.AddAsync(product);
 
-            //Todo: Generate product preview into a job
-            await _productDetailRepository.AddAsync(new ProductDetail()
+            var productDetail = new ProductDetail()
             {
                 Id = Guid.NewGuid(),
                 ProductId = product.Id,
-                FileUrl = request.OriginalFiles[0].Url,
                 Version = 1
-            });
-
+            };
+            await _productDetailRepository.AddAsync(productDetail);
 
             switch (product.ProductType)
             {
                 case ProductType.Video:
-                    await _videoSolutionRepository.AddAsync(new VideoSolution()
+                    var payloadVideo = new HandleProductVideoContentDTO()
                     {
-                        Id = Guid.NewGuid(),
+                        ProductId = product.Id,
                         FileUrl = request.OriginalFiles[0].Url,
-                        Product = product,
-                    });
+                        RangePreview = request.RangeVideoPreview,
+                        ProductDetailId = productDetail.Id,
+                    };
 
-                    await EnQueueProductFileTypeVideo(product);
+                    await _eventPublisher.PublishAsync(payloadVideo, "CreateProduct");
+
                     break;
                 case ProductType.Image:
                     var imagesInsert = new List<Image>();
-                    var payload = new CheckProductImageContentDTO() { Id = product.Id };
+                    var payloadImage = new CheckProductImageContentDTO()
+                    {
+                        Id = product.Id,
+                        PreviewsUrl = request.PreviewImages,
+                        ProductDetailId = productDetail.Id,
+                    };
                     foreach (var file in request.OriginalFiles)
                     {
-                        payload.ImagesUrl.Add(file.Url);
+                        payloadImage.ImagesUrl.Add(file.Url);
                         imagesInsert.Add(new Image()
                         {
                             Id = Guid.NewGuid(),
@@ -101,23 +106,13 @@ namespace MediaMarket.Application.Services
                         });
                     }
                     await _imageRepository.AddRangeAsync(imagesInsert);
-                    await _eventPublisher.PublishAsync(payload, "CreateProductImage");
+                    await _eventPublisher.PublishAsync(payloadImage, "CreateProduct");
                     break;
             }
 
             await _previewRepository.SaveChangesAsync();
 
             return Success(_mapper.Map<CreateProductResponse>(product));
-        }
-
-        private async Task EnQueueProductFileTypeImage(Product product)
-        {
-
-        }
-
-        private async Task EnQueueProductFileTypeVideo(Product product)
-        {
-
         }
 
         private async Task<string> GenerateSlugProduct(string productName)

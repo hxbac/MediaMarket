@@ -25,6 +25,7 @@
                 public static class Action
                 {
                     public const string Index = Prefix;
+                    public const string Approval = Prefix + singleRoute + "/approval";
                 }
             }
         }

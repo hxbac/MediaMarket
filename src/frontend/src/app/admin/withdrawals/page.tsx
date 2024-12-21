@@ -50,12 +50,26 @@ export default function Page() {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
+  const handleOk = async () => {
     if (withdrawalApprovalNote.trim() === '') {
       toast.error('Vui lòng điền ghi chú!');
       return;
     }
-    setIsModalOpen(false);
+
+    try {
+      await withdrawalService.approvalRequest(dataShowModal.id, {
+        status: withdrawalApprovalStatus,
+        note: withdrawalApprovalNote
+      });
+
+      await fetchData();
+      setIsModalOpen(false);
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unexpected error occurred";
+      toast.error(errorMessage);
+    }
+
   };
 
   const handleCancel = () => {

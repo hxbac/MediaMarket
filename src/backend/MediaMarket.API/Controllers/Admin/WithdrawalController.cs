@@ -16,5 +16,12 @@ namespace MediaMarket.API.Controllers.Admin
             var response = await _withdrawalService.GetListPaginated(request);
             return CustomResult(response);
         }
+
+        [HttpPut(Router.Admin.WithdrawalRouting.Action.Approval)]
+        public async Task<IActionResult> Approval(Guid id, [FromBody] ApprovalRequest request)
+        {
+            var response = await _withdrawalService.ApprovalRequest(id, request);
+            return CustomResult(response);
+        }
     }
 }

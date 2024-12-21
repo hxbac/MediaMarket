@@ -26,6 +26,22 @@ namespace MediaMarket.Application.Services
         private readonly IWithdrawalRepository _withdrawalRepository = withdrawalRepository;
         private readonly IBalanceService _balanceService = balanceService;
 
+        public async Task<BaseResponse<object>> ApprovalRequest(Guid id, ApprovalRequest request)
+        {
+            var withdrawal = await _withdrawalRepository.FindByIdAsync(id);
+            if (withdrawal.WithdrawalStatus != Domain.Enums.WithdrawalStatus.Pending)
+            {
+                //Todo 
+            }
+
+            withdrawal.WithdrawalStatus = request.Status;
+            withdrawal.Note = request.Note;
+            withdrawal.ProcessedAt = DateTime.UtcNow;
+            await _withdrawalRepository.SaveChangesAsync();
+
+            return Success<object>(null);
+        }
+
         public async Task<BaseResponse<CreateWithdrawalResponse>> CreateRequest(CreateWithdrawalRequest request)
         {
             var user = await _userManager.FindByIdAsync(_user.Id.ToString());

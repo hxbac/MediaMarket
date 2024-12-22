@@ -149,11 +149,10 @@ export default function UploadVideo() {
             <InboxOutlined />
           </p>
           <p className="ant-upload-text">
-            Click or drag file to this area to upload
+            Nhấp hoặc kéo tệp vào khu vực này để tải lên
           </p>
           <p className="ant-upload-hint">
-            Support for a single or bulk upload. Strictly prohibited from
-            uploading company data or other banned files.
+            Đối với sản phẩm loại video chỉ hỗ trợ một tệp tin duy nhât
           </p>
         </Dragger>
       </Modal>

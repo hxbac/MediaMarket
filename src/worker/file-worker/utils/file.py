@@ -1,6 +1,7 @@
 import os
 import requests
 from moviepy.video.io.VideoFileClip import VideoFileClip
+import zipfile
 
 def download_file(url, folder_path, file_name=None):
     os.makedirs(folder_path, exist_ok=True)
@@ -62,3 +63,11 @@ def upload_file(url, file_path):
         except ValueError:
             print("Invalid response format from server. Response is not valid JSON.")
             return None
+
+def create_zip_file(file_paths, output_zip_path):
+    with zipfile.ZipFile(output_zip_path, 'w') as zipf:
+        for file_path in file_paths:
+            try:
+                zipf.write(file_path, arcname=file_path.split('/')[-1])
+            except FileNotFoundError:
+                print(f"File not found: {file_path}")

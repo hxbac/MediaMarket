@@ -87,12 +87,12 @@ export default function UploadImage() {
   return (
     <div className="">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold mt-8 mb-4">Video</h2>
+        <h2 className="text-2xl font-bold mt-8 mb-4">Hình ảnh</h2>
         <div
           className="py-1 px-4 border rounded-md select-none cursor-pointer"
           onClick={showModal}
         >
-          Click to Upload
+          Tải tệp tin
         </div>
       </div>
       <div>
@@ -156,11 +156,10 @@ export default function UploadImage() {
             <InboxOutlined />
           </p>
           <p className="ant-upload-text">
-            Click or drag file to this area to upload
+            Nhấp hoặc kéo tệp vào khu vực này để tải lên
           </p>
           <p className="ant-upload-hint">
-            Support for a single or bulk upload. Strictly prohibited from
-            uploading company data or other banned files.
+            Hỗ trợ tải lên một lần hoặc hàng loạt. Nghiêm cấm tải lên các tập tin bị cấm khác.
           </p>
         </Dragger>
       </Modal>

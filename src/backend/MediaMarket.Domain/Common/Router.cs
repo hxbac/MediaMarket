@@ -39,6 +39,8 @@
                 public static class Action
                 {
                     public const string UpdateContentStatus = Prefix + "/update-content-status";
+                    public const string UpdateProductDetailFile = Prefix + "/update-product-detail";
+                    public const string CreateProductPreview = Prefix + "/create-product-preview";
                 }
             }
         }

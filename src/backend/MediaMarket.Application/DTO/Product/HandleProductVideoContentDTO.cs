@@ -6,6 +6,6 @@
         public string FileUrl { get; set; }
         public string[] RangePreview { get; set; }
         public Guid ProductDetailId { get; set; }
-        public string ProductType = "Video";
+        public string ContentType { get; } = "Video";
     }
 }

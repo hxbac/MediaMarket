@@ -10,6 +10,7 @@ using MediaMarket.Domain.Entities;
 using MediaMarket.Domain.Enums;
 using MediaMarket.Infrastructure.Prompts;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace MediaMarket.Application.Services
 {
@@ -90,7 +91,7 @@ namespace MediaMarket.Application.Services
                     var imagesInsert = new List<Image>();
                     var payloadImage = new CheckProductImageContentDTO()
                     {
-                        Id = product.Id,
+                        ProductId = product.Id,
                         PreviewsUrl = request.PreviewImages,
                         ProductDetailId = productDetail.Id,
                     };
@@ -226,6 +227,31 @@ namespace MediaMarket.Application.Services
             await _productRepository.SaveChangesAsync();
 
             return Success<object>(new { Message = "Product content status updated successfully" });
+        }
+
+        public async Task<BaseResponse<object>> UpdateProductDetailFile(UpdateProductDetailRequest request)
+        {
+            var productDetail = await _productDetailRepository.FindByIdAsync(request.ProductDetailId);
+            productDetail.FileUrl = request.FileUrl;
+            await _productRepository.SaveChangesAsync();
+
+            return Success<object>((new { Message = "Product detail updated successfully" }));
+        }
+
+        public async Task<BaseResponse<object>> CreateProductPreview(CreateProductPreviewRequest request)
+        {
+            var product = await _productRepository.FindByIdAsync(request.ProductId);
+            var previews = new Preview()
+            {
+                Id = Guid.NewGuid(),
+                ProductId = product.Id,
+                PreviewInfo = JsonSerializer.Serialize(request.PreviewUrls)
+            };
+
+            await _previewRepository.AddAsync(previews);
+            await _productRepository.SaveChangesAsync();
+
+            return Success<object>((new { Message = "Product preview created successfully" }));
         }
     }
 }

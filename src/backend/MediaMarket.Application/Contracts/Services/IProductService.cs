@@ -7,6 +7,7 @@ namespace MediaMarket.Application.Contracts.Services
     public interface IProductService
     {
         Task<BaseResponse<CreateProductResponse>> CreateProduct(CreateProductRequest request);
+        Task<BaseResponse<object>> CreateProductPreview(CreateProductPreviewRequest request);
         Task<BaseResponse<EnhanceInformationResponse>> EnhanceInformation(EnhanceInformationRequest request);
         Task<BaseResponse<IEnumerable<ProductLatestResponse>>> GetLatestProductsOfUser(LatestProductOfUserRequest request);
         Task<BaseResponse<IEnumerable<ProductHomePageResponse>>> GetListProductsHomePageByCategory(Guid categoryId);
@@ -15,5 +16,6 @@ namespace MediaMarket.Application.Contracts.Services
         Task<BaseResponse<ProductCheckoutResponse>> GetProductCheckoutInfo(ProductCheckoutRequest request);
         Task<BaseResponse<ProductDetailResponse>> GetProductDetail(string slug);
         Task<BaseResponse<object>> UpdateProductContentStatus(UpdateContentStatusRequest request);
+        Task<BaseResponse<object>> UpdateProductDetailFile(UpdateProductDetailRequest request);
     }
 }

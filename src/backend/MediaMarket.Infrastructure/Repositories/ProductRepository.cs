@@ -39,6 +39,7 @@ namespace MediaMarket.Infrastructure.Repositories
             }
 
             return await query
+                .OrderByDescending(p => p.CreatedOn)
                 .Select(p => new ProductUserResponse
                 {
                     Id = p.Id,

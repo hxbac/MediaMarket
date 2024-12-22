@@ -18,7 +18,6 @@ const orderService = {
             const response = await axiosInstance.get(prefix + '/my-purchases', params);
             const result = response.data.data;
             result.data = result.data.map(item => {
-                console.log(item);
                 return {
                     key: item.id,
                     slug: item.slug,
@@ -62,6 +61,14 @@ const orderService = {
     fulfillStripePayment: async (params) => {
         try {
             const response = await axiosInstance.post(prefix + '/callback/stripe', params);
+            return response.data;
+        } catch (error) {
+            throw new Error(error.message || 'Error fetching ' + prefix);
+        }
+    },
+    downloadContent: async (id) => {
+        try {
+            const response = await axiosInstance.get(prefix + '/download/' + id);
             return response.data;
         } catch (error) {
             throw new Error(error.message || 'Error fetching ' + prefix);

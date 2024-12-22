@@ -115,6 +115,7 @@
                 public const string StripeCallback = Callback + "/stripe";
                 public const string MyPurchases = Prefix + "/my-purchases";
                 public const string MyOrders = Prefix + "/my-orders";
+                public const string Download = Prefix + "/download" + singleRoute;
             }
         }
 

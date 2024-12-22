@@ -21,7 +21,7 @@ export default function Page({
         console.log(response);
       } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-        toast.error(errorMessage);
+        // toast.error(errorMessage);
       }
     };
 

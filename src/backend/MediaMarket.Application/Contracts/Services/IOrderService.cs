@@ -11,5 +11,6 @@ namespace MediaMarket.Application.Contracts.Services
         Task<BaseResponse<CallbackStripeResponse>> CallbackStripe(CallbackStripeRequest request);
         Task<BaseResponse<PaginatedResult<ProductPurchaseResponse>>> GetMyPurchasesPaginated(GetProductListRequest request);
         Task<BaseResponse<PaginatedResult<ProductOrderResponse>>> GetMyOrdersPaginated(GetProductListRequest request);
+        Task<BaseResponse<object>> DownloadProductOrder(Guid id);
     }
 }

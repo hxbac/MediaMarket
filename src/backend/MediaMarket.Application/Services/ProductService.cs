@@ -11,6 +11,7 @@ using MediaMarket.Domain.Enums;
 using MediaMarket.Infrastructure.Prompts;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace MediaMarket.Application.Services
 {
@@ -213,10 +214,32 @@ namespace MediaMarket.Application.Services
                 { "DESCRIPTION", request.Description },
                 { "CONTENT_TYPE", request.ProductType == ProductType.Video ? "Video" : "Image" },
             };
-            var result = await _generativeAIService.GenerateContentAsync<EnhanceInformationResponse>(typeof(ProductPrompt.EnhanceInformation).ReflectedType.Name, replaceContents);
+            EnhanceInformationResponse result = null;
+            int maxAttempts = 5;
+            int attempt = 0;
+
+            while (attempt < maxAttempts)
+            {
+                try
+                {
+                    result = await _generativeAIService.GenerateContentAsync<EnhanceInformationResponse>(typeof(ProductPrompt.EnhanceInformation).ReflectedType.Name, replaceContents);
+                }
+                catch (Exception ex)
+                {
+                    attempt++;
+
+                    if (attempt >= maxAttempts)
+                    {
+                        throw new Exception("Có lỗi xảy ra");
+                    }
+                }
+            }
 
             _logger.LogDebug(result.Description);
             result.Description = result.Description.Replace("\n", "<br>");
+            string pattern = @"(<br\s*/?>\s*)+";
+            result.Description = Regex.Replace(result.Description, pattern, "<br>");
+
             return Success(result);
         }
 

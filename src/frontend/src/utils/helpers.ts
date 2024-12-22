@@ -35,3 +35,11 @@ export const getAxiosInstance = (isAdmin = false) => {
 
   return axiosInstance;
 }
+
+export const forceDownload = (url: string, filename?: string): void => {
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename || '';  // Set the filename if provided
+  a.target = '_blank';  // Open in a new tab
+  a.click();
+}

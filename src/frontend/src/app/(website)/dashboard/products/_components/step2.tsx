@@ -59,7 +59,8 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
       }
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      toast.error(errorMessage);
+      toast.error('Có lỗi xảy ra, vui lòng thử lại sau');
+      setIsModalOpen(false);
     }
   };
 

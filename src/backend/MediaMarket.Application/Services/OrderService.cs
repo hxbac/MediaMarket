@@ -13,6 +13,7 @@ namespace MediaMarket.Application.Services
         IPaymentService paymentService,
         IOrderRepository orderRepository,
         IProductRepository productRepository,
+        IProductDetailRepository productDetailRepository,
         IBalanceService balanceService,
         IUser user
     ) : BaseResponseHandler, IOrderService
@@ -20,6 +21,7 @@ namespace MediaMarket.Application.Services
         private readonly IOrderRepository _orderRepository = orderRepository;
         private readonly IPaymentService _paymentService = paymentService;
         private readonly IProductRepository _productRepository = productRepository;
+        private readonly IProductDetailRepository _productDetailRepository = productDetailRepository;
         private readonly IBalanceService _balanceService = balanceService;
         private readonly IUser _user = user;
 
@@ -94,6 +96,14 @@ namespace MediaMarket.Application.Services
         {
             var result = await _orderRepository.GetListOrdersForUser(_user.Id, request.ProductType, request.Name, request.Page, request.PageSize);
             return Success(result);
+        }
+
+        public async Task<BaseResponse<object>> DownloadProductOrder(Guid id)
+        {
+            var order = await _orderRepository.FindByIdAsync(id);
+            var productDetail = await _productDetailRepository.FindAsync(x => x.ProductId == order.ProductId && x.Version == order.ProductVersion);
+
+            return Success<object>((new { Url = productDetail.FileUrl }));
         }
     }
 }

@@ -43,5 +43,12 @@ namespace MediaMarket.API.Controllers.Client
             var response = await _orderService.GetMyOrdersPaginated(request);
             return CustomResult(response);
         }
+
+        [HttpGet(Router.OrderRouting.Action.Download)]
+        public async Task<IActionResult> DownloadProductOrder(Guid id)
+        {
+            var response = await _orderService.DownloadProductOrder(id);
+            return CustomResult(response);
+        }
     }
 }

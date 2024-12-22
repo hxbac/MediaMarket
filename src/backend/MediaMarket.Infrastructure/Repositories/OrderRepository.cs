@@ -80,7 +80,7 @@ namespace MediaMarket.Infrastructure.Repositories
                 .OrderByDescending(o => o.CreatedOn)
                 .Select(o => new ProductPurchaseResponse()
                 {
-                    Id = o.Product.Id,
+                    Id = o.Id,
                     Name = o.Product.Name,
                     Slug = o.Product.Slug,
                     Thumbnail = o.Product.Thumbnail,

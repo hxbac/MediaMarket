@@ -89,7 +89,10 @@ export default function ProductTable() {
       dataIndex: "categories",
       render: (_, { categories }) => (
         <>
-          {categories.map((category) => {
+          {categories.map((category, index) => {
+            if (index > 2) {
+              return '';
+            }
             let color = category.length > 5 ? "geekblue" : "green";
             if (category === "loser") {
               color = "volcano";

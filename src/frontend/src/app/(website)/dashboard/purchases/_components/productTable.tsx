@@ -1,12 +1,10 @@
 'use client';
 
-import { ProductType } from "@/enums/ProductType";
 import { Button, Space, Table, TablePaginationConfig, TableProps, Tag } from "antd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import Link from "next/link";
-import { formatDatetime, formatPrice } from "@/utils/helpers";
+import { forceDownload, formatDatetime, formatPrice } from "@/utils/helpers";
 import { useSearchProductContext } from "../../products/_context/SearchProductContext";
 import orderService from "@/services/orderService";
 import OrderStatusTag from "@/components/order/orderStatus";
@@ -38,8 +36,6 @@ export default function ProductTable() {
         params: {
           page,
           pageSize,
-          productType: ProductType.Video,
-          name: value.name
         },
       });
 
@@ -54,6 +50,16 @@ export default function ProductTable() {
       toast.error(errorMessage);
     }
   };
+
+  const downloadContent = async (id: string) => {
+    try {
+      const response = await orderService.downloadContent(id);
+      forceDownload(response.data.url);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      toast.error(errorMessage);
+    }
+  }
 
   useEffect(() => {
     fetchData(pagination.current, pagination.pageSize);
@@ -89,7 +95,11 @@ export default function ProductTable() {
       dataIndex: "categories",
       render: (_, { categories }) => (
         <>
-          {categories.map((category) => {
+          {categories.map((category, index) => {
+            if (index > 2) {
+              return '';
+            }
+
             let color = category.length > 5 ? "geekblue" : "green";
             if (category === "loser") {
               color = "volcano";
@@ -122,9 +132,7 @@ export default function ProductTable() {
         if (record.orderStatus === OrderStatus.Completed) {
           return (
             <Space size="middle">
-              <Link href={`/products/${record.slug}`} target="_blank">
-                <Button type="primary">Tải xuống</Button>
-              </Link>
+              <Button onClick={() => downloadContent(record.key)} type="primary">Tải xuống</Button>
             </Space>
           )
         } else {

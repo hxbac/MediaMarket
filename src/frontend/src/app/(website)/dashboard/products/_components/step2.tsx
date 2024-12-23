@@ -2,7 +2,7 @@
 
 import CustomEditor from "@/components/form/editor";
 import { CategoryHomePage } from "@/interfaces/categories";
-import { Button, Flex, Form, Input, message, Modal, Tag, Upload, UploadFile } from "antd";
+import { Button, Flex, Form, Input, message, Modal, Radio, Tag, Upload, UploadFile } from "antd";
 import { useProductContext } from "../_context/ProductContext";
 import Tags from "./tags";
 import { UploadChangeParam } from "antd/es/upload";
@@ -10,6 +10,13 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { ProductType } from "@/enums/ProductType";
 import productService from "@/services/productService";
+import { PlusOutlined } from "@ant-design/icons";
+import { formatPrice } from "@/utils/helpers";
+import { DatePicker } from 'antd';
+import moment from 'moment';
+import { ProductDiscount } from "@/interfaces/products";
+
+const { RangePicker } = DatePicker;
 
 interface EnhanceProductRequest {
   name: string;
@@ -27,11 +34,15 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
   const [form] = Form.useForm();
   const { value, setValue } = useProductContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalDiscountOpen, setIsModalDiscountOpen] = useState(false);
   const [isLoadingEnhanceProduct, setIsLoadingEnhanceProduct] = useState(false);
   const [enhanceInformationResponse, setEnhanceInformationResponse] = useState<EnhanceProductResponse>({
     description: '',
     tags: []
   });
+  const [discountType, setDiscountType] = useState(0);
+  const [discountValue, setDiscountValue] = useState(0);
+  const [timeDiscount, setTimeDiscount] = useState<string[]>([]);
 
   const showModal = async () => {
     if (!value.name || !value.shortDescription || !value.description) {
@@ -59,6 +70,7 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
       }
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      console.log(errorMessage);
       toast.error('Có lỗi xảy ra, vui lòng thử lại sau');
       setIsModalOpen(false);
     }
@@ -124,6 +136,24 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
     }
   }
 
+  const handleCancelModalDiscount = () => {
+    setIsModalDiscountOpen(false);
+  }
+
+  const handleOkModalDiscount = () => {
+    const discount: ProductDiscount = {
+      type: discountType,
+      value: discountValue,
+      timeRange: timeDiscount
+    }
+    value.discounts.push(discount);
+    setValue({
+      ...value,
+      discounts: value.discounts
+    })
+    setIsModalDiscountOpen(false);
+  }
+
   return (
     <div className="">
       <h2 className="text-2xl font-bold mt-8 mb-4">Thông tin sản phẩm</h2>
@@ -144,7 +174,13 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
             { required: true, message: "Giá tiền không được trống!" },
           ]}
         >
-          <Input placeholder="Nhập giá tiền" value={value.price} onChange={(e) => handleChangePrice(e.target.value) } />
+          <div className="flex items-center gap-x-4">
+            <Input placeholder="Nhập giá tiền" value={value.price} onChange={(e) => handleChangePrice(e.target.value) } />
+            <Button type="primary" onClick={() => setIsModalDiscountOpen(true)} icon={<PlusOutlined />} iconPosition={'end'}>
+              Giảm giá
+            </Button>
+          </div>
+
         </Form.Item>
         <h2 className="text-sm font-bold mt-6 mb-2">Ảnh sản phẩm</h2>
         <div className="mb-4">
@@ -238,6 +274,16 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
           }
 
         </Flex>
+      </Modal>
+      <Modal title="Thêm giảm giá" open={isModalDiscountOpen} centered onOk={handleOkModalDiscount} onCancel={handleCancelModalDiscount}>
+        <h2 className="text-sm font-bold mb-4 mt-6">Giá tiền gốc: {formatPrice(value.price)}</h2>
+        <Radio.Group className="mb-4" defaultValue="0" value={discountType.toString()} onChange={(e) => setDiscountType(Number(e.target.value))} buttonStyle="solid">
+          <Radio.Button value="0">Cố định</Radio.Button>
+          <Radio.Button value="1">Phần trăm</Radio.Button>
+        </Radio.Group>
+        <Input className="mb-4" type="text" value={discountValue.toString()} onChange={(e) => setDiscountValue(Number(e.target.value))} placeholder="Giảm giá" />
+        <h2 className="text-sm font-bold mb-4">Giá dự kiến: {discountType === 0 ? formatPrice(value.price - discountValue) : formatPrice(value.price - value.price * discountValue / 100)}</h2>
+        <RangePicker disabledDate={(current) => current && current < moment().startOf('day')} onChange={(e, m) => setTimeDiscount(m)} showTime />
       </Modal>
     </div>
   );

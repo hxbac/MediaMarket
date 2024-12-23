@@ -30,7 +30,14 @@ export interface ProductInfo {
     tags: string[],
     originalFiles: FileInfo[],
     rangeVideoPreview: [string, string] | null,
-    previewImages: string[] | null
+    previewImages: string[] | null,
+    discounts: ProductDiscount[]
+}
+
+export interface ProductDiscount {
+    type: number;
+    value: number;
+    timeRange: string[];
 }
 
 export interface SearchProductParams {

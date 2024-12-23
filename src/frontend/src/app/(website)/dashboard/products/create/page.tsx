@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  LoadingOutlined,
-  SmileOutlined,
-  SolutionOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Button, Steps } from "antd";
+import { Button } from "antd";
 import Step1 from "../_components/step1";
 import Step2 from "../_components/step2";
 import Step3 from "../_components/step3";
@@ -35,7 +29,8 @@ export default function Page() {
     tags: [],
     originalFiles: [],
     previewImages: null,
-    rangeVideoPreview: null
+    rangeVideoPreview: null,
+    discounts: [],
   });
 
   useEffect(() => {

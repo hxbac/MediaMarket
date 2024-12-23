@@ -4,6 +4,7 @@ import { Tag } from "@/interfaces/tag";
 import Link from "next/link";
 import { formatPrice } from "@/utils/helpers";
 import Image from "next/image";
+import { ProductType } from "@/enums/ProductType";
 
 interface ProductParams {
   slug: string;
@@ -14,13 +15,60 @@ export default async function Page({ params }: { params: ProductParams }) {
 
   const response = await productService.getDetail(slug);
   const data = response.data;
+  const imagePreview = JSON.parse(data.preview.previewInfo);
 
   console.log(data);
 
   return (
     <section className="bg-white pt-16">
       <div className="items-center max-w-screen-xl px-4 py-8 mx-auto lg:gap-16 xl:gap-24 lg:py-24 lg:px-6">
-        <div className="w-full min-h-5"></div>
+        <div className="w-full mb-10">
+          <div className="max-h-[60vh]">
+            {data.productType === ProductType.Image ? (
+              <div className="flex items-stretch w-full gap-8 min-h-0 max-h-[60vh]">
+                <div
+                  className="min-w-0 flex-1 rounded-lg overflow-hidden"
+                  style={{ flex: 2 }}
+                >
+                  <Image
+                    src={imagePreview[0]}
+                    alt=""
+                    className="h-full w-full object-cover"
+                    width={16}
+                    height={9}
+                  />
+                </div>
+                <div
+                  className="min-w-0 flex flex-col gap-8"
+                  style={{ flex: 1 }}
+                >
+                  <div className="h-1/2 rounded-lg overflow-hidden">
+                    <Image
+                      src={imagePreview[1]}
+                      alt=""
+                      className="h-full w-full object-cover"
+                      width={16}
+                      height={9}
+                    />
+                  </div>
+                  <div className="h-1/2 rounded-lg overflow-hidden">
+                    <Image
+                      src={imagePreview[2]}
+                      alt=""
+                      className="h-full w-full object-cover"
+                      width={16}
+                      height={9}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="min-h-0 flex items-center justify-center">
+                <video className="max-h-[60vh]" src={imagePreview[0]} controls />
+              </div>
+            )}
+          </div>
+        </div>
         <div className="flex gap-52 items-start">
           <div className="flex-1">
             <div>
@@ -30,10 +78,13 @@ export default async function Page({ params }: { params: ProductParams }) {
               </p>
             </div>
             <div className="rounded-lg overflow-hidden shadow-lg px-6 py-4 flex bg-[#f8f7fa]">
-              <Link href={'/seller/' + data.seller.id} className="flex-1 flex items-stretch">
+              <Link
+                href={"/seller/" + data.seller.id}
+                className="flex-1 flex items-stretch"
+              >
                 <div className="rounded-full w-14 h-14 mr-4 overflow-hidden">
                   <Image
-                    src={data.seller.avatar ?? '/images/no-avatar.png'}
+                    src={data.seller.avatar ?? "/images/no-avatar.png"}
                     alt={data.seller.name}
                     width={56}
                     height={56}
@@ -48,13 +99,17 @@ export default async function Page({ params }: { params: ProductParams }) {
                 </div>
               </Link>
               <div className="flex items-center">
-                <div className="bg-purple-600 text-white font-bold text-sm px-8 p-2 select-none cursor-pointer rounded-md hover:opacity-80 hidden">Follow</div>
+                <div className="bg-purple-600 text-white font-bold text-sm px-8 p-2 select-none cursor-pointer rounded-md hover:opacity-80 hidden">
+                  Follow
+                </div>
               </div>
             </div>
             <div>
               <h2 className="text-2xl font-bold mt-8 mb-4">Mô tả</h2>
               <div className="">
-                <p dangerouslySetInnerHTML={{ __html: data.description }}></p>
+                <div
+                  dangerouslySetInnerHTML={{ __html: data.description }}
+                ></div>
               </div>
             </div>
             <div>

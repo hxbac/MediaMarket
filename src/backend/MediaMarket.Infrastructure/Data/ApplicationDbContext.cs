@@ -51,6 +51,7 @@ namespace MediaMarket.Infrastructure.Data
             builder.ApplyConfiguration(new OrderEntityTypeConfiguration());
             builder.ApplyConfiguration(new BalanceHistoryEntityTypeConfiguration());
             builder.ApplyConfiguration(new WithdrawalEntityTypeConfiguration());
+            builder.ApplyConfiguration(new ProductDiscountEntityTypeConfiguration());
         }
     }
 }

@@ -21,9 +21,9 @@ namespace MediaMarket.Application.Services
         ITagRepository tagRepository,
         IProductDetailRepository productDetailRepository,
         IPreviewRepository previewRepository,
-        IVideoSolutionRepository videoSolutionRepository,
         IGenerativeAIService generativeAIService,
         IImageRepository imageRepository,
+        IProductDiscountRepository productDiscountRepository,
         IMapper mapper,
         ILogger<ProductService> logger,
         IUser user,
@@ -35,9 +35,9 @@ namespace MediaMarket.Application.Services
         private readonly ITagRepository _tagRepository = tagRepository;
         private readonly IProductDetailRepository _productDetailRepository = productDetailRepository;
         private readonly IPreviewRepository _previewRepository = previewRepository;
-        private readonly IVideoSolutionRepository _videoSolutionRepository = videoSolutionRepository;
         private readonly IGenerativeAIService _generativeAIService = generativeAIService;
         private readonly IImageRepository _imageRepository = imageRepository;
+        private readonly IProductDiscountRepository _productDiscountRepository = productDiscountRepository;
         private readonly IMapper _mapper = mapper;
         private readonly IUser _user = user;
         private readonly ILogger<ProductService> _logger = logger;
@@ -73,6 +73,34 @@ namespace MediaMarket.Application.Services
                 Version = 1
             };
             await _productDetailRepository.AddAsync(productDetail);
+
+            if (request.Discounts.Count > 0)
+            {
+                var discountsInsert = new List<ProductDiscount>();
+                request.Discounts.ForEach((item) =>
+                {
+                    if (!DateTime.TryParse(item.TimeRange[0] ?? "", out DateTime startDate) ||
+                        !DateTime.TryParse(item.TimeRange[1] ?? "", out DateTime endDate))
+                    {
+                        return;
+                    }
+
+                    discountsInsert.Add(new ProductDiscount()
+                    {
+                        Id = Guid.NewGuid(),
+                        ProductId = product.Id,
+                        Type = item.Type,
+                        StartDate = startDate,
+                        EndDate = endDate,
+                        Value = item.Value
+                    });
+                });
+
+                if (discountsInsert.Count > 0)
+                {
+                    await _productDiscountRepository.AddRangeAsync(discountsInsert);
+                }
+            }
 
             switch (product.ProductType)
             {

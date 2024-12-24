@@ -62,12 +62,31 @@ namespace MediaMarket.Application.Services
         public async Task<BaseResponse<CreateOrderResponse>> CreateOrder(CreateOrderRequest request)
         {
             var product = await _productRepository.GetProductWithLatestVersion(request.ProductSlug);
+
+            var orderPrice = product.Price;
+            if (product.Discounts != null && product.Discounts.Count > 0)
+            {
+                foreach (var item in product.Discounts)
+                {
+                    switch (item.Type)
+                    {
+                        case Domain.Enums.DiscountType.Fixed:
+                            orderPrice -= (long)item.Value;
+                            break;
+                        case Domain.Enums.DiscountType.Percent:
+                            orderPrice -= (long)(product.Price * item.Value / 100);
+                            break;
+                    }
+                }
+            }
+            product.Price = orderPrice;
+
             var order = new Order()
             {
                 Id = Guid.NewGuid(),
                 ProductId = product.Id,
                 ProductName = product.Name,
-                Price = product.Price,
+                Price = orderPrice,
                 Status = Domain.Enums.OrderStatus.Pending,
                 ProductVersion = product.Version,
                 PaymentId = Guid.NewGuid(),

@@ -23,7 +23,7 @@ export default function Page() {
     name: '',
     thumbnail: '',
     shortDescription: '',
-    price: 0,
+    price: 10000000,
     description: '',
     categoryIds: [],
     tags: [],
@@ -61,7 +61,6 @@ export default function Page() {
   }
 
   const handleSubmitCreateProduct = async () => {
-    console.log(productInfo);
     try {
       const result = await productService.create(productInfo);
       if (result.succeeded) {

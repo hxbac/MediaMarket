@@ -2,7 +2,7 @@
 
 import CustomEditor from "@/components/form/editor";
 import { CategoryHomePage } from "@/interfaces/categories";
-import { Button, Flex, Form, Input, message, Modal, Radio, Tag, Upload, UploadFile } from "antd";
+import { Button, Flex, Form, Input, message, Modal, Radio, Table, TableProps, Tag, Upload, UploadFile } from "antd";
 import { useProductContext } from "../_context/ProductContext";
 import Tags from "./tags";
 import { UploadChangeParam } from "antd/es/upload";
@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import { ProductType } from "@/enums/ProductType";
 import productService from "@/services/productService";
 import { PlusOutlined } from "@ant-design/icons";
-import { formatPrice } from "@/utils/helpers";
+import { formatDatetime, formatPrice } from "@/utils/helpers";
 import { DatePicker } from 'antd';
 import moment from 'moment';
 import { ProductDiscount } from "@/interfaces/products";
@@ -154,6 +154,51 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
     setIsModalDiscountOpen(false);
   }
 
+  const handleDeleteDiscount = (index: number) => {
+    setValue({
+      ...value,
+      discounts: [...value.discounts.splice(index)]
+    });
+  }
+
+  const discountColumns: TableProps<ProductDiscount>["columns"] = [
+    {
+      title: "Loại giảm giá",
+      dataIndex: "type",
+      key: "type",
+      render: (text) => <>{text === 0 ? 'Cố định' : 'Theo phần trăm'}</>,
+    },
+    {
+      title: "Giá trị giảm",
+      dataIndex: "value",
+      key: "value",
+      render: (text, record) => record.type === 0 ? formatPrice(text) : text + '%',
+    },
+    {
+      title: "Giá dự kiến",
+      key: "est_price",
+      render: (_, record) => {
+        const price = record.type === 0 ? value.price - record.value : value.price - record.value * value.price / 100;
+        return formatPrice(price);
+      },
+    },
+    {
+      title: "Thời gian áp dụng",
+      dataIndex: "timeRange",
+      key: "timeRange",
+      render: (timeRange) => {
+        return formatDatetime(timeRange[0], 'HH:mm:ss DD-MM-YYYY') + ' - ' + formatDatetime(timeRange[1], 'HH:mm:ss DD-MM-YYYY');
+      },
+    },
+    {
+      title: "Hành động",
+      key: "action",
+      render: (_, record, index) => {
+        return <Button color="danger" variant="outlined" onClick={() => handleDeleteDiscount(index + 1)}>Xóa</Button>;
+      },
+    },
+  ];
+
   return (
     <div className="">
       <h2 className="text-2xl font-bold mt-8 mb-4">Thông tin sản phẩm</h2>
@@ -180,8 +225,17 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
               Giảm giá
             </Button>
           </div>
-
         </Form.Item>
+        {
+          value.discounts.length > 0 ? (
+            <Table<ProductDiscount>
+              pagination={false}
+              className="pb-4"
+              columns={discountColumns}
+              dataSource={value.discounts}
+            />
+          ) : <></>
+        }
         <h2 className="text-sm font-bold mt-6 mb-2">Ảnh sản phẩm</h2>
         <div className="mb-4">
           <Upload

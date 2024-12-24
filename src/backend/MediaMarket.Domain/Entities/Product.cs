@@ -23,5 +23,6 @@ namespace MediaMarket.Domain.Entities
         public Preview? Preview { get; set; }
         public ICollection<VideoSolution>? VideoSolutions { get; set; }
         public ICollection<Order>? Orders { get; set; }
+        public ICollection<ProductDiscount>? ProductDiscounts { get; set; }
     }
 }

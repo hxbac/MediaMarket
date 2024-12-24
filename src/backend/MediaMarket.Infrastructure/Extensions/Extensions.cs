@@ -121,6 +121,7 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddScoped<IBalanceHistoryRepository, BalanceHistoryRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IProductDiscountRepository, ProductDiscountRepository>();
 
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<ICategoryService, CategoryService>();

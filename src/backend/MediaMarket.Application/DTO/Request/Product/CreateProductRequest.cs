@@ -16,11 +16,19 @@ namespace MediaMarket.Application.DTO.Request.Product
         public ProductStatus Status { get; set; }
         public string[]? RangeVideoPreview { get; set; }
         public string[]? PreviewImages { get; set; }
+        public List<ProductDiscountRequest> Discounts { get; set; }
     }
 
     public class FileInfo
     {
         public string? Id { get; set; }
         public required string Url { get; set; }
+    }
+
+    public class ProductDiscountRequest
+    {
+        public DiscountType Type { get; set; }
+        public float Value { get; set; }
+        public List<string> TimeRange { get; set; }
     }
 }

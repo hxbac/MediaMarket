@@ -61,6 +61,7 @@ namespace MediaMarket.Infrastructure.Repositories
                 .Include(x => x.Tags)
                 .Include(x => x.Preview)
                 .Include(x => x.Seller)
+                .IncludeActiveDiscounts()
                 .Where(x => x.Slug == slug)
                 .Select(x => new ProductDetailResponse
                 {
@@ -78,24 +79,27 @@ namespace MediaMarket.Infrastructure.Repositories
                     Tags = x.Tags,
                     Categories = x.Categories,
                     Seller = _mapper.Map<Seller>(x.Seller),
+                    Discounts = x.ProductDiscounts
                 })
                 .FirstOrFailAsync();
 
             return product;
         }
 
-        public async Task<ProductLatestVersionDTO> GetProductWithLatestVersion(string slug)
+        public Task<ProductLatestVersionDTO> GetProductWithLatestVersion(string slug)
         {
-            var product = await _model.Where(p => p.Slug == slug)
+            return _model
+                .IncludeActiveDiscounts()
+                .Where(p => p.Slug == slug)
                 .Select(p => new ProductLatestVersionDTO
                 {
                     Id = p.Id,
                     Name = p.Name,
                     Price = p.Price,
-                    Version = 1
+                    Version = 1,
+                    Discounts = p.ProductDiscounts
                 }).
                 FirstOrFailAsync();
-            return product;
         }
 
         public async Task<IEnumerable<Product>> GetProductsLatest(Guid userId)

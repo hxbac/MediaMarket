@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediaMarket.Application.Bases;
+using MediaMarket.Domain.Entities;
 using MediaMarket.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -54,6 +55,16 @@ namespace MediaMarket.Infrastructure.Extensions
             var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
             var mappedItems = items.Select(mapper.Map<TTarget>).ToList();
             return PaginatedResult<TTarget>.Success(mappedItems, count, pageNumber, pageSize);
+        }
+
+        public static IQueryable<Product> IncludeActiveDiscounts(this IQueryable<Product> query, DateTime currentDate = default)
+        {
+            if (currentDate == default)
+            {
+                currentDate = DateTime.Now;
+            }
+
+            return query.Include(p => p.ProductDiscounts.Where(d => d.StartDate <= currentDate && d.EndDate >= currentDate));
         }
     }
 }

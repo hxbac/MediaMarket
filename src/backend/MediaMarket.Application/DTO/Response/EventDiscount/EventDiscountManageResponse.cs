@@ -1,10 +1,10 @@
-﻿using MediaMarket.Domain.Common;
-using MediaMarket.Domain.Enums;
+﻿using MediaMarket.Domain.Enums;
 
-namespace MediaMarket.Domain.Entities
+namespace MediaMarket.Application.DTO.Response.EventDiscount
 {
-    public class EventDiscount : BaseAuditableEntity<Guid>
+    public class EventDiscountManageResponse
     {
+        public Guid Id { get; set; }
         public required string Name { get; set; }
         public string? Description { get; set; }
         public DiscountType Type { get; set; }

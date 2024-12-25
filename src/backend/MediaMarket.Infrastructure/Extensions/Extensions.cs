@@ -122,6 +122,7 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<IProductDiscountRepository, ProductDiscountRepository>();
+            services.AddScoped<IEventDiscountRepository, EventDiscountRepository>();
 
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<ICategoryService, CategoryService>();
@@ -133,6 +134,7 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddScoped<IWithdrawalService, WithdrawalService>();
             services.AddScoped<IBalanceService, BalanceService>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IEventDiscountService, EventDiscountService>();
 
             services.AddSingleton<IFileService, LocalStorageFileService>();
             services.Configure<StripeConfig>(configuration.GetSection("StripeConfig"));

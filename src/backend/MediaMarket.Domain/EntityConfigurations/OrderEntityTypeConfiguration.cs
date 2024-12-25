@@ -23,6 +23,11 @@ namespace MediaMarket.Domain.EntityConfigurations
                 .WithMany(x => x.Orders)
                 .HasForeignKey(x => x.ProductId);
 
+            builder.Property(p => p.AdminRevenue)
+                .HasDefaultValue(0);
+
+            builder.Property(p => p.SellerRevenue)
+                .HasDefaultValue(0);
         }
     }
 }

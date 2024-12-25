@@ -14,6 +14,7 @@ namespace MediaMarket.Application.Services
         IOrderRepository orderRepository,
         IProductRepository productRepository,
         IProductDetailRepository productDetailRepository,
+        IEventDiscountRepository eventDiscountRepository,
         IBalanceService balanceService,
         IUser user
     ) : BaseResponseHandler, IOrderService
@@ -22,6 +23,7 @@ namespace MediaMarket.Application.Services
         private readonly IPaymentService _paymentService = paymentService;
         private readonly IProductRepository _productRepository = productRepository;
         private readonly IProductDetailRepository _productDetailRepository = productDetailRepository;
+        private readonly IEventDiscountRepository _eventDiscountRepository = eventDiscountRepository;
         private readonly IBalanceService _balanceService = balanceService;
         private readonly IUser _user = user;
 
@@ -63,34 +65,22 @@ namespace MediaMarket.Application.Services
         {
             var product = await _productRepository.GetProductWithLatestVersion(request.ProductSlug);
 
-            var orderPrice = product.Price;
-            if (product.Discounts != null && product.Discounts.Count > 0)
-            {
-                foreach (var item in product.Discounts)
-                {
-                    switch (item.Type)
-                    {
-                        case Domain.Enums.DiscountType.Fixed:
-                            orderPrice -= (long)item.Value;
-                            break;
-                        case Domain.Enums.DiscountType.Percent:
-                            orderPrice -= (long)(product.Price * item.Value / 100);
-                            break;
-                    }
-                }
-            }
-            product.Price = orderPrice;
+            var (adminRevenue, sellerRevenue) = await ApplyDiscounts(product.Price, product.Discounts);
+
+            product.Price = adminRevenue + sellerRevenue;
 
             var order = new Order()
             {
                 Id = Guid.NewGuid(),
                 ProductId = product.Id,
                 ProductName = product.Name,
-                Price = orderPrice,
+                Price = product.Price,
                 Status = Domain.Enums.OrderStatus.Pending,
                 ProductVersion = product.Version,
                 PaymentId = Guid.NewGuid(),
-                PaymentMethod = "Stripe"
+                PaymentMethod = "Stripe",
+                SellerRevenue = sellerRevenue,
+                AdminRevenue = adminRevenue,
             };
             var payment = await _paymentService.Create(product);
 
@@ -103,6 +93,47 @@ namespace MediaMarket.Application.Services
             {
                 RedirectUrl = payment.RedirectUrl,
             });
+        }
+
+        private async Task<(long, long)> ApplyDiscounts(long originalPrice, ICollection<ProductDiscount>? productDiscounts)
+        {
+            var sellerRevenue = originalPrice * 70 / 100;
+            var adminRevenue = originalPrice - sellerRevenue;
+
+            if (productDiscounts != null && productDiscounts.Count > 0)
+            {
+                foreach (var item in productDiscounts)
+                {
+                    switch (item.Type)
+                    {
+                        case Domain.Enums.DiscountType.Fixed:
+                            sellerRevenue -= (long)item.Value;
+                            break;
+                        case Domain.Enums.DiscountType.Percent:
+                            sellerRevenue -= (long)(originalPrice * item.Value / 100);
+                            break;
+                    }
+                }
+            }
+
+            var eventDiscounts = await _eventDiscountRepository.GetEventDiscountActive();
+            if (eventDiscounts.Count > 0)
+            {
+                foreach (var item in eventDiscounts)
+                {
+                    switch (item.Type)
+                    {
+                        case Domain.Enums.DiscountType.Fixed:
+                            adminRevenue -= (long)item.Value;
+                            break;
+                        case Domain.Enums.DiscountType.Percent:
+                            adminRevenue -= (long)(originalPrice * item.Value / 100);
+                            break;
+                    }
+                }
+            }
+
+            return (adminRevenue, sellerRevenue);
         }
 
         public async Task<BaseResponse<PaginatedResult<ProductPurchaseResponse>>> GetMyPurchasesPaginated(GetProductListRequest request)

@@ -27,6 +27,7 @@ namespace MediaMarket.Application.Services
         IMapper mapper,
         ILogger<ProductService> logger,
         IUser user,
+        ISearchService searchService,
         IEventPublisher eventPublisher
     ) : BaseResponseHandler, IProductService
     {
@@ -38,6 +39,7 @@ namespace MediaMarket.Application.Services
         private readonly IGenerativeAIService _generativeAIService = generativeAIService;
         private readonly IImageRepository _imageRepository = imageRepository;
         private readonly IProductDiscountRepository _productDiscountRepository = productDiscountRepository;
+        private readonly ISearchService _searchService = searchService;
         private readonly IMapper _mapper = mapper;
         private readonly IUser _user = user;
         private readonly ILogger<ProductService> _logger = logger;
@@ -141,6 +143,8 @@ namespace MediaMarket.Application.Services
             }
 
             await _previewRepository.SaveChangesAsync();
+
+            await _searchService.IndexProductAsync(product);
 
             return Success(_mapper.Map<CreateProductResponse>(product));
         }

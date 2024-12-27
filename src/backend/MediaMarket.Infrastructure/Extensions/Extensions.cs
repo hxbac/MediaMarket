@@ -10,6 +10,7 @@ using MediaMarket.Infrastructure.Interceptors;
 using MediaMarket.Infrastructure.Messaging.Publishers;
 using MediaMarket.Infrastructure.Payment;
 using MediaMarket.Infrastructure.Repositories;
+using MediaMarket.Infrastructure.Search;
 using MediaMarket.Infrastructure.Seeders;
 using MediaMarket.Infrastructure.Services;
 using MediaMarket.Infrastructure.Storage;
@@ -129,7 +130,6 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<ISearchService, DatabaseSearchService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IWithdrawalService, WithdrawalService>();
             services.AddScoped<IBalanceService, BalanceService>();
@@ -143,6 +143,9 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddSingleton<IGenerativeAIService, GeminiAIService>();
 
             services.AddRabbitMq(configuration);
+
+            services.AddElasticSearch(configuration);
+            services.AddScoped<ISearchService, ElasticSearchService>();
 
             return services;
         }

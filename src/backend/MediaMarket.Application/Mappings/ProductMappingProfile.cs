@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediaMarket.Application.DTO.Product;
 using MediaMarket.Application.DTO.Response.Order;
 using MediaMarket.Application.DTO.Response.Product;
 using MediaMarket.Domain.Entities;
@@ -15,6 +16,9 @@ namespace MediaMarket.Application.Mappings
             CreateMap<Product, ProductPurchaseResponse>();
             CreateMap<Product, ProductOrderResponse>();
             CreateMap<Product, ProductLatestResponse>();
+            CreateMap<Product, ProductDTO>();
+            CreateMap<ProductDTO, Product>();
+            CreateMap<ProductDTO, SearchProductResponse>();
         }
     }
 }

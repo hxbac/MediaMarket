@@ -2,6 +2,7 @@
 using MediaMarket.Application.Contracts.Repositories;
 using MediaMarket.Application.Contracts.Services;
 using MediaMarket.Application.DTO.Response.Product;
+using MediaMarket.Domain.Entities;
 
 namespace MediaMarket.Application.Services
 {
@@ -20,6 +21,11 @@ namespace MediaMarket.Application.Services
             products.OrderBy(x => orderIds[x.Id]);
 
             return Success(products);
+        }
+
+        public Task IndexProductAsync(Product product)
+        {
+            return Task.CompletedTask;
         }
 
         private async Task<IEnumerable<Guid>> GetProductIdsByKeyword(string keyword)

@@ -7,6 +7,7 @@ import { Modal, message, Upload, Empty, Typography, Button } from "antd";
 import { useProductContext } from "../../_context/ProductContext";
 import { UploadChangeParam } from "antd/es/upload";
 import { FileInfo } from "@/interfaces/products";
+import Image from "next/image";
 
 const { Dragger } = Upload;
 
@@ -107,7 +108,7 @@ export default function UploadImage() {
                     {
                       group.map(image => (
                         <div key={image.id} onClick={() => togglePreviewImage(image.url)} className="rounded-xl cursor-pointer overflow-hidden relative">
-                          <img src={image.url} alt={image.url} className="w-full" />
+                          <Image src={image.url} className="w-full" alt={image.url} width={100} height={100} />
                           <div className="absolute top-4 left-4 bg-white p-1 rounded">
                             {
                               previewImages.includes(image.url) ?

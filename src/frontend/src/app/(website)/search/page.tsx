@@ -1,9 +1,7 @@
 'use client';
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import searchService from "@/services/searchService";
-import { ProductType } from "@/enums/ProductType";
 import { toast } from "react-toastify";
 import Card from "@/components/product/card";
 import { ProductCard } from "@/interfaces/products";

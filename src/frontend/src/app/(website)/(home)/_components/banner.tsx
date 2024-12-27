@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export default function Banner() {
   return (
     <section className="bg-white">
@@ -22,7 +24,7 @@ export default function Banner() {
           </div>
         </div>
         <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
-          <img src="https://static.sellfy.com/assets/images/public/1720620680.hero.png" alt="hero image" />
+          <Image src="https://static.sellfy.com/assets/images/public/1720620680.hero.png" alt="hero image" className="w-full" width={100} height={100} />
         </div>
       </div>
     </section>

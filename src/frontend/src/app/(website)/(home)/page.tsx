@@ -6,9 +6,7 @@ import Banner from "./_components/banner";
 import Slider from "./_components/slider";
 import Stats from "./_components/stats";
 import Products from "./_components/products";
-import Sellers from "./_components/sellers";
 import Slogan from "./_components/slogan";
-import FAQ from "./_components/faq";
 import { CategoryHomePage } from "@/interfaces/categories";
 import { useEffect, useState } from "react";
 
@@ -39,9 +37,7 @@ export default function Home() {
       { categories ? <Slider data={categories} /> : <></> }
       <Stats />
       { categories ? <Products categories={categories} /> : <></> }
-      {/* <Sellers /> */}
       <Slogan />
-      {/* <FAQ /> */}
     </div>
   )
 };

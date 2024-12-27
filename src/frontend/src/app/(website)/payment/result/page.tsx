@@ -3,7 +3,6 @@
 import orderService from "@/services/orderService";
 import Link from "next/link";
 import { useEffect } from "react";
-import { toast } from "react-toastify";
 
 export default function Page({
   searchParams,
@@ -20,8 +19,7 @@ export default function Page({
         });
         console.log(response);
       } catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-        // toast.error(errorMessage);
+        console.log(error);
       }
     };
 

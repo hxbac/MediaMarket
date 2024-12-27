@@ -51,3 +51,7 @@ export const showLoading = (show = true) => {
     document.getElementById('loading')?.classList.add('hidden');
   }
 }
+
+export const formatShowDotPrice = (price: number) => {
+  return new Intl.NumberFormat("vi-VN").format(price);
+}

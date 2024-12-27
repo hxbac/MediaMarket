@@ -14,7 +14,8 @@ namespace MediaMarket.Infrastructure.Storage
             var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), publicPath);
             Directory.CreateDirectory(uploadsDirectory);
 
-            var filePath = Path.Combine(uploadsDirectory, file.FileName);
+            var fileName = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString() + file.FileName;
+            var filePath = Path.Combine(uploadsDirectory, fileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
@@ -24,8 +25,8 @@ namespace MediaMarket.Infrastructure.Storage
             var files = new List<UploadSingleFileResponse>();
             files.Add(new UploadSingleFileResponse
             {
-                FileName = file.FileName,
-                Path = "storage/" + pathDateUpload + "/" + file.FileName,
+                FileName = fileName,
+                Path = "storage/" + pathDateUpload + "/" + fileName,
             });
 
             return Success(files);

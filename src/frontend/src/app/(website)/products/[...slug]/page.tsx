@@ -17,8 +17,6 @@ export default async function Page({ params }: { params: ProductParams }) {
   const data = response.data;
   const imagePreview = JSON.parse(data.preview.previewInfo);
 
-  console.log(data);
-
   return (
     <section className="bg-white pt-16">
       <div className="items-center max-w-screen-xl px-4 py-8 mx-auto lg:gap-16 xl:gap-24 lg:py-24 lg:px-6">

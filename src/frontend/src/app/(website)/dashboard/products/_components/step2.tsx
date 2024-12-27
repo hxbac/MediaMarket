@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import { ProductType } from "@/enums/ProductType";
 import productService from "@/services/productService";
 import { PlusOutlined } from "@ant-design/icons";
-import { formatDatetime, formatPrice } from "@/utils/helpers";
+import { formatDatetime, formatPrice, formatShowDotPrice } from "@/utils/helpers";
 import { DatePicker } from 'antd';
 import moment from 'moment';
 import { ProductDiscount } from "@/interfaces/products";
@@ -121,7 +121,7 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
   }
 
   const handleChangePrice = (priceString: string) => {
-    setValue({ ...value, price: Number(priceString) });
+    setValue({ ...value, price: Number(priceString.replace(/\D/g, "")) });
   }
 
   const onChangeFileEvent = (info: UploadChangeParam<UploadFile>) => {
@@ -220,7 +220,7 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
           ]}
         >
           <div className="flex items-center gap-x-4">
-            <Input placeholder="Nhập giá tiền" value={value.price} onChange={(e) => handleChangePrice(e.target.value) } />
+            <Input placeholder="Nhập giá tiền" value={formatShowDotPrice(value.price)} onChange={(e) => handleChangePrice(e.target.value) } />
             <Button type="primary" onClick={() => setIsModalDiscountOpen(true)} icon={<PlusOutlined />} iconPosition={'end'}>
               Giảm giá
             </Button>

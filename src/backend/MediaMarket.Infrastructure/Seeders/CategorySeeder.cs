@@ -1,7 +1,5 @@
-﻿using Bogus;
-using MediaMarket.Domain.Entities;
+﻿using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Data;
-using MediaMarket.Infrastructure.Extensions;
 
 namespace MediaMarket.Infrastructure.Seeders
 {
@@ -16,15 +14,83 @@ namespace MediaMarket.Infrastructure.Seeders
             }
         }
 
-        private IEnumerable<Category> getCategoriesSeed()
+        private List<Category> getCategoriesSeed()
         {
-            var categoryFaker = new Faker<Category>()
-                .RuleFor(c => c.Name, f => f.Name.JobType())
-                .RuleFor(c => c.Image, f => f.Image.LoremFlickrUrl())
-                .RuleFor(c => c.Description, f => f.Lorem.Word())
-                .RuleFor(c => c.Order, f => f.Random.Number());
-
-            return categoryFaker.Generate(10);
+            return new List<Category>()
+            {
+                new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Kinh doanh",
+                    Description = "Kinh doanh",
+                    Image = "https://static.skillshare.com/assets/images/loh/category_carousel/320x400/graphic_design.webp",
+                    Order = 9999,
+                },
+                new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Giải trí",
+                    Description = "Kinh doanh",
+                    Image = "https://static.skillshare.com/assets/images/loh/category_carousel/320x400/fine_art.webp",
+                    Order = 9999,
+                },
+                new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Marketing",
+                    Description = "Kinh doanh",
+                    Image = "https://static.skillshare.com/assets/images/loh/category_carousel/320x400/ui_ux_design.webp",
+                    Order = 9999,
+                },
+                new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Nghệ thuật",
+                    Description = "Kinh doanh",
+                    Image = "https://static.skillshare.com/assets/images/loh/category_carousel/320x400/animation.webp",
+                    Order = 9999,
+                },
+                new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Sáng tạo",
+                    Description = "Kinh doanh",
+                    Image = "https://static.skillshare.com/assets/images/loh/category_carousel/320x400/film_video.webp",
+                    Order = 9999,
+                },
+                new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Thể thao",
+                    Description = "Kinh doanh",
+                    Image = "https://static.skillshare.com/assets/images/loh/category_carousel/320x400/graphic_design.webp",
+                    Order = 9999,
+                },
+                new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Sức khỏe",
+                    Description = "Kinh doanh",
+                    Image = "https://static.skillshare.com/assets/images/loh/category_carousel/320x400/marketing.webp",
+                    Order = 9999,
+                },
+                new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Hội họa",
+                    Description = "Kinh doanh",
+                    Image = "https://static.skillshare.com/assets/images/loh/category_carousel/320x400/animation.webp",
+                    Order = 9999,
+                },
+                new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Hội họa",
+                    Description = "Kinh doanh",
+                    Image = "https://static.skillshare.com/assets/images/loh/category_carousel/320x400/animation.webp",
+                    Order = 9999,
+                }
+            };
         }
     }
 }

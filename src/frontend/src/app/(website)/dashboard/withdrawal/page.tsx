@@ -10,7 +10,7 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { formatDatetime, formatPrice } from "@/utils/helpers";
+import { formatDatetime, formatPrice, formatShowDotPrice } from "@/utils/helpers";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import withdrawalService from "@/services/withdrawalService";
 import WithdrawalStatusTag from "@/components/withdrawal/withdrawalStatus";
@@ -185,7 +185,7 @@ export default function Page() {
             <h2 className="text-sm font-bold mb-4">Số dư hiện tại: {formatPrice(currentBalance)}</h2>
             <div className="mb-4">
               <p className="text-sm font-semibold mb-2">Nhập số tiền</p>
-              <Input type="number" value={withdrawalAmount} onChange={e => setWithdrawalAmount(Number(e.target.value))} />
+              <Input type="text" value={formatShowDotPrice(withdrawalAmount)} onChange={e => setWithdrawalAmount(Number(e.target.value.replace(/\D/g, "")))} />
             </div>
             <div className="mb-4">
               <p className="text-sm font-semibold mb-4">Thông tin thẻ</p>

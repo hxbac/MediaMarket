@@ -101,7 +101,7 @@ namespace MediaMarket.Infrastructure.Extensions
                 options.AddPolicy(name: "frontend",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:8080")
+                        policy.WithOrigins("http://localhost:3000")
                             .AllowAnyMethod()
                             .AllowCredentials()
                             .AllowAnyHeader();

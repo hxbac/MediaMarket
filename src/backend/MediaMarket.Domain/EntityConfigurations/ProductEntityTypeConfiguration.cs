@@ -17,7 +17,7 @@ namespace MediaMarket.Domain.EntityConfigurations
 
             entity.Property(p => p.Description)
                 .IsRequired()
-                .HasColumnType("TEXT");
+                .HasColumnType("NVARCHAR(MAX)");
 
             entity.Property(p => p.Price)
                 .HasDefaultValue(0);

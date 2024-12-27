@@ -94,14 +94,15 @@ namespace MediaMarket.Infrastructure.GenerativeAI
             };
             string jsonData = JsonConvert.SerializeObject(requestData);
             HttpContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            using HttpResponseMessage response = await _httpClient.PostAsync(QueryHelpers.AddQueryString(_geminiUrl, "key", _apiKey), content);
-            response.EnsureSuccessStatusCode();
-
-            string responseData = await response.Content.ReadAsStringAsync();
-            _logger.LogDebug(responseData);
 
             try
             {
+                using HttpResponseMessage response = await _httpClient.PostAsync(QueryHelpers.AddQueryString(_geminiUrl, "key", _apiKey), content);
+                response.EnsureSuccessStatusCode();
+
+                string responseData = await response.Content.ReadAsStringAsync();
+                _logger.LogDebug(responseData);
+
                 var responseDecode = JsonConvert.DeserializeObject<GeminiResponse>(responseData);
                 return responseDecode.Candidates[0].Content.Parts[0].Text;
             }

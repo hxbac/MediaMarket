@@ -59,7 +59,7 @@ namespace MediaMarket.Application.Services
                 ShortDescription = request.ShortDescription,
                 Price = request.Price,
                 ProductType = request.Type,
-                ProductStatus = request.Status,
+                ProductStatus = ProductStatus.Active,
                 ProductContentStatus = ProductContentStatus.Waiting,
                 Categories = categories.ToList(),
                 Tags = tags,

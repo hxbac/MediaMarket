@@ -51,8 +51,8 @@ namespace MediaMarket.Infrastructure.Payment
                 },
             },
                 Mode = "payment",
-                SuccessUrl = "http://localhost:8080/payment/result?session_id={CHECKOUT_SESSION_ID}",
-                CancelUrl = "http://localhost:8080",
+                SuccessUrl = "http://localhost:3000/payment/result?session_id={CHECKOUT_SESSION_ID}",
+                CancelUrl = "http://localhost:3000",
             };
 
             var service = new SessionService();

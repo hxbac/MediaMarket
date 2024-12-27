@@ -63,6 +63,18 @@ export default function RootLayout({
             <BackToTop />
             <ToastContainer />
           </StoreProvider>
+          <div className="fixed top-0 left-0 right-0 bottom-0 z-[100000] flex items-center justify-center overflow-hidden bg-overlay hidden" id="loading">
+            <div className="dot-spinner">
+              <div className="dot-spinner__dot"></div>
+              <div className="dot-spinner__dot"></div>
+              <div className="dot-spinner__dot"></div>
+              <div className="dot-spinner__dot"></div>
+              <div className="dot-spinner__dot"></div>
+              <div className="dot-spinner__dot"></div>
+              <div className="dot-spinner__dot"></div>
+              <div className="dot-spinner__dot"></div>
+            </div>
+          </div>
         </body>
       </html>
     </ConfigProvider>

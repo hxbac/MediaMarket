@@ -8,6 +8,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { login } from '@/store/userSlice';
 import { UserResponse } from "@/interfaces/user";
 import { useRouter } from "next/navigation";
+import { showLoading } from "@/utils/helpers";
 
 interface AuthRequest {
   email: string;
@@ -31,6 +32,7 @@ export default function Page() {
       password
     }
     try {
+      showLoading();
       const result = await authService.login(data);
       if (result.succeeded) {
         const data : LoginResponse = result.data;
@@ -44,6 +46,8 @@ export default function Page() {
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       toast.error(errorMessage);
+    } finally {
+      showLoading(false);
     }
   }
 

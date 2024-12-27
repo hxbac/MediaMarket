@@ -43,3 +43,11 @@ export const forceDownload = (url: string, filename?: string): void => {
   a.target = '_blank';  // Open in a new tab
   a.click();
 }
+
+export const showLoading = (show = true) => {
+  if (show) {
+    document.getElementById('loading')?.classList.remove('hidden');
+  } else {
+    document.getElementById('loading')?.classList.add('hidden');
+  }
+}

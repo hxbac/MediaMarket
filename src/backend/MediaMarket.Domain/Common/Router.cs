@@ -39,6 +39,15 @@
                     public const string Update = Prefix + singleRoute;
                 }
             }
+
+            public static class DashboardRouting
+            {
+                public const string Prefix = AdminRule + "dashboard";
+                public static class Action
+                {
+                    public const string Statistics = Prefix + "/get-statistics";
+                }
+            }
         }
 
         public static class Worker

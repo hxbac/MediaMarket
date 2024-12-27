@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Link from "next/link";
-import { formatPrice } from "@/utils/helpers";
+import { formatPrice, showLoading } from "@/utils/helpers";
 import { useSearchProductContext } from "../../products/_context/SearchProductContext";
 import orderService from "@/services/orderService";
 import OrderStatusTag from "@/components/order/orderStatus";

@@ -2,6 +2,7 @@
 
 import { ProductCheckoutInfo } from "@/interfaces/products";
 import orderService from "@/services/orderService";
+import { showLoading } from "@/utils/helpers";
 import { Button } from "antd";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -11,6 +12,7 @@ export default function OrderSummary({ product }: { product: ProductCheckoutInfo
 
   const processOrder = async () => {
     try {
+      showLoading();
       const result = await orderService.create({
         productSlug: product.slug,
       });
@@ -23,6 +25,8 @@ export default function OrderSummary({ product }: { product: ProductCheckoutInfo
       const errorMessage =
       error instanceof Error ? error.message : "An unexpected error occurred";
       toast.error(errorMessage);
+    } finally {
+      showLoading(false);
     }
   };
 

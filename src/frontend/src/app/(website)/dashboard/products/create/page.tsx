@@ -13,6 +13,7 @@ import { CategoryHomePage } from "@/interfaces/categories";
 import categoryService from "@/services/categoryService";
 import { toast } from "react-toastify";
 import productService from "@/services/productService";
+import { showLoading } from "@/utils/helpers";
 
 export default function Page() {
   const router = useRouter();
@@ -62,6 +63,7 @@ export default function Page() {
 
   const handleSubmitCreateProduct = async () => {
     try {
+      showLoading();
       const result = await productService.create(productInfo);
       if (result.succeeded) {
         router.push('/dashboard/products');
@@ -72,6 +74,8 @@ export default function Page() {
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       toast.error(errorMessage);
+    } finally {
+      showLoading(false);
     }
   }
 

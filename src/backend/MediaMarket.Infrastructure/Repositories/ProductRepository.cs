@@ -21,7 +21,7 @@ namespace MediaMarket.Infrastructure.Repositories
             _mapper = mapper;
         }
 
-        public async Task<PaginatedResult<ProductUserResponse>> GetListProductsForUser(Guid userId, ProductType productType, string? name, int page, int pageSize)
+        public Task<PaginatedResult<ProductUserResponse>> GetListProductsForUser(Guid userId, ProductType productType, string? name, int page, int pageSize)
         {
             var query = _model
                 .Include(p => p.Tags)
@@ -38,7 +38,7 @@ namespace MediaMarket.Infrastructure.Repositories
                 query = query.Where(p => p.Name != null && p.Name.Contains(name));
             }
 
-            return await query
+            return query
                 .OrderByDescending(p => p.CreatedOn)
                 .Select(p => new ProductUserResponse
                 {
@@ -55,9 +55,9 @@ namespace MediaMarket.Infrastructure.Repositories
                 .ToPaginatedListAsync(page, pageSize);
         }
 
-        public async Task<ProductDetailResponse> GetProductActiveWithRelationship(string slug)
+        public Task<ProductDetailResponse> GetProductActiveWithRelationship(string slug)
         {
-            var product = await _model.Include(x => x.Categories)
+            return _model.Include(x => x.Categories)
                 .Include(x => x.Tags)
                 .Include(x => x.Preview)
                 .Include(x => x.Seller)
@@ -82,8 +82,6 @@ namespace MediaMarket.Infrastructure.Repositories
                     Discounts = x.ProductDiscounts
                 })
                 .FirstOrFailAsync();
-
-            return product;
         }
 
         public Task<ProductLatestVersionDTO> GetProductWithLatestVersion(string slug)
@@ -102,9 +100,9 @@ namespace MediaMarket.Infrastructure.Repositories
                 FirstOrFailAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetProductsLatest(Guid userId)
+        public Task<List<Product>> GetProductsLatest(Guid userId)
         {
-            var products = await _model.Where(p => p.CreatedBy == userId)
+            return _model.Where(p => p.CreatedBy == userId)
                 .Where(p => p.ProductStatus == ProductStatus.Active)
                 .OrderBy(p => p.CreatedOn)
                 .Take(8)
@@ -118,15 +116,13 @@ namespace MediaMarket.Infrastructure.Repositories
                     ShortDescription = p.ShortDescription,
                     ProductType = p.ProductType,
                 }).ToListAsync();
-
-            return products;
         }
 
-        public async Task<IEnumerable<Guid>> GetProductIdsMatchKeyword(string keyword, ProductType productType, int take)
+        public Task<List<Guid>> GetProductIdsMatchKeyword(string keyword, int take)
         {
-            return await _model
+            return _model
                 .Where(p => p.ProductStatus == ProductStatus.Active)
-                .Where(p => p.ProductType == productType)
+                .Where(p => p.ProductContentStatus == ProductContentStatus.Approved)
                 .Where(p => p.Name.Contains(keyword) || p.Description.Contains(keyword))
                 .OrderByDescending(p => p.Name.Contains(keyword) && p.Description.Contains(keyword))
                 .ThenByDescending(p => p.Name.Contains(keyword))
@@ -136,12 +132,12 @@ namespace MediaMarket.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Guid>> GetProductIdsMatchTagName(string tagName, ProductType productType, ICollection<Guid> excludedIds, int take)
+        public Task<List<Guid>> GetProductIdsMatchTagName(string tagName, ICollection<Guid> excludedIds, int take)
         {
             var tagSlug = tagName.ToSlug();
-            return await _model
+            return _model
                 .Where(p => p.ProductStatus == ProductStatus.Active)
-                .Where(p => p.ProductType == productType)
+                .Where(p => p.ProductContentStatus == ProductContentStatus.Approved)
                 .Where(p => !excludedIds.Contains(p.Id))
                 .Where(p => p.Tags.Any(t => t.Slug.Contains(tagSlug)))
                 .Take(take)
@@ -149,11 +145,11 @@ namespace MediaMarket.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Guid>> GetProductIdsMatchCategoryName(string search, ProductType productType, ICollection<Guid> excludedIds, int take)
+        public Task<List<Guid>> GetProductIdsMatchCategoryName(string search, ICollection<Guid> excludedIds, int take)
         {
-            return await _model
+            return _model
                 .Where(p => p.ProductStatus == ProductStatus.Active)
-                .Where(p => p.ProductType == productType)
+                .Where(p => p.ProductContentStatus == ProductContentStatus.Approved)
                 .Where(p => !excludedIds.Contains(p.Id))
                 .Where(p => p.Categories.Any(t => t.Name.Contains(search)))
                 .Take(take)
@@ -161,9 +157,9 @@ namespace MediaMarket.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<SearchProductResponse>> GetListProductsByIds(IEnumerable<Guid> ids)
+        public Task<List<SearchProductResponse>> GetListProductsByIds(IEnumerable<Guid> ids)
         {
-            return await _model
+            return _model
                 .Where(p => ids.Contains(p.Id))
                 .Select(p => new SearchProductResponse()
                 {

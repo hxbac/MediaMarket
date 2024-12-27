@@ -13,7 +13,7 @@ namespace MediaMarket.API.Controllers.Client
         [HttpGet(Router.SearchRouting.Action.SearchProduct)]
         public async Task<IActionResult> Search([FromQuery] SearchProductWithTypeRequest request)
         {
-            var response = await _searchService.GetProductsSearchResult(request.Search, request.Type);
+            var response = await _searchService.GetProductsSearchResult(request.Search);
             return CustomResult(response);
         }
     }

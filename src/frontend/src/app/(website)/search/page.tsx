@@ -7,6 +7,7 @@ import { ProductType } from "@/enums/ProductType";
 import { toast } from "react-toastify";
 import Card from "@/components/product/card";
 import { ProductCard } from "@/interfaces/products";
+import { Empty } from "antd";
 
 export default function Page({
   searchParams,
@@ -14,18 +15,16 @@ export default function Page({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const query = searchParams.query;
-  const [searchVideo, setSearchVideo] = useState<ProductCard[]>([]);
-  const [searchImage, setSearchImage] = useState<ProductCard[]>([]);
+  const [searchResult, setsearchResult] = useState<ProductCard[]>([]);
 
   useEffect(() => {
-    const searchProductVideo = async () => {
+    const searchProduct = async () => {
       try {
         const result = await searchService.searchProduct({
-          search: query,
-          type: ProductType.Video
+          search: query
         });
         if (result.succeeded) {
-          setSearchVideo(result.data);
+          setsearchResult(result.data);
         } else {
           throw new Error(result.message);
         }
@@ -35,40 +34,31 @@ export default function Page({
       }
     };
 
-    const searchProductImage = async () => {
-      try {
-        const result = await searchService.searchProduct({
-          search: query,
-          type: ProductType.Image
-        });
-        if (result.succeeded) {
-          setSearchImage(result.data);
-        } else {
-          throw new Error(result.message);
-        }
-      } catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-        toast.error(errorMessage);
-      }
-    };
-
-    searchProductVideo();
-    searchProductImage();
-  }, []);
+    searchProduct();
+  }, [query]);
 
   return (
     <section className="bg-white pt-16">
       <div className="items-center max-w-screen-xl px-4 mx-auto py-8">
         <h1 className="text-6xl font-bold mb-4">Tìm kiếm: {query}</h1>
         <div>
-          <div className="flex items-end justify-between">
+          <div className="flex">
             <h2 className="text-6xl font-bold">Sản phẩm</h2>
-            <Link href={`/search/video?query=${query}`} className="font-bold text-purple-600">Xem tất cả</Link>
           </div>
           <p>Danh sách sản phẩm trùng với kết quả tìm kiếm.</p>
-          <div className="grid grid-cols-4 gap-x-4 gap-y-6 mt-4">
+          <div className="mt-4">
             {
-              searchVideo.map(item => <Card key={item.id} data={item} />)
+              searchResult.length > 0 ? (
+                <div className="grid grid-cols-4 gap-x-4 gap-y-6">
+                  {
+                    searchResult.map(item => <Card key={item.id} data={item} />)
+                  }
+                </div>
+              ) : (
+                <div className="py-32 border rounded-md">
+                  <Empty />
+                </div>
+              )
             }
           </div>
         </div>

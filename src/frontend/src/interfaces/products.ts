@@ -1,3 +1,5 @@
+import { DiscountType } from "@/enums/DiscountType";
+
 export interface ProductCard {
     id: string;
     name: string;
@@ -60,6 +62,20 @@ export interface MyProductLatest {
     thumbnail: string;
 }
 
+export interface DiscountItem {
+    id: string;
+    endDate: string;
+    value: number;
+    type: DiscountType;
+}
+
+export interface EventDiscountItem {
+    id: string;
+    endDate: string;
+    value: number;
+    type: DiscountType;
+}
+
 export interface ProductCheckoutInfo {
     id: string;
     name: string;
@@ -67,4 +83,6 @@ export interface ProductCheckoutInfo {
     thumbnail: string;
     price: number;
     shortDescription: string;
+    eventDiscounts: EventDiscountItem[];
+    productDiscounts: DiscountItem[];
 }

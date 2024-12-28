@@ -3,7 +3,8 @@ import OrderSummary from "./_components/summary";
 import Image from "next/image";
 import { formatPrice } from "@/utils/helpers";
 import Link from "next/link";
-import { ProductCheckoutInfo } from "@/interfaces/products";
+import { DiscountItem, EventDiscountItem, ProductCheckoutInfo } from "@/interfaces/products";
+import { DiscountType } from "@/enums/DiscountType";
 
 interface ProductParams {
   slug: string;
@@ -14,6 +15,31 @@ export default async function Page({ params }: { params: ProductParams }) {
 
   const response = await productService.getCheckoutInfo({ slug: slug.toString() });
   const data: ProductCheckoutInfo = response.data;
+
+  const originalPrice = data.price;
+  const sellerPrice = originalPrice * 70 / 100;
+  const adminPrice = originalPrice - sellerPrice;
+
+  let priceShow: number = originalPrice;
+  if (data.productDiscounts !== null && data.productDiscounts.length > 0) {
+    data.productDiscounts.forEach((item: DiscountItem) => {
+      if (item.type === DiscountType.Fixed) {
+        priceShow -= item.value;
+      } else {
+        priceShow -= (item.value * sellerPrice / 100);
+      }
+    });
+  }
+
+  if (data.eventDiscounts !== null && data.eventDiscounts.length > 0) {
+    data.eventDiscounts.forEach((item: EventDiscountItem) => {
+      if (item.type === DiscountType.Fixed) {
+        priceShow -= item.value;
+      } else {
+        priceShow -= (item.value * adminPrice / 100);
+      }
+    });
+  }
 
   return (
     <section className="bg-white pt-16">
@@ -49,9 +75,18 @@ export default async function Page({ params }: { params: ProductParams }) {
                         </h6>
                       </div>
                     </div>
-                    <div className="flex items-center max-[500px]:justify-center md:justify-end max-md:mt-3 h-full">
+                    <div className="flex flex-col justify-center items-center max-[500px]:justify-center md:justify-end max-md:mt-3 h-full">
+                      {
+                        priceShow !== originalPrice ? (
+                          <p className="font-bold line-through text-lg leading-8 text-gray-600 text-center transition-all duration-300 group-hover:text-indigo-600">
+                            {formatPrice(originalPrice)}
+                          </p>
+                        ) : (
+                          <></>
+                        )
+                      }
                       <p className="font-bold text-lg leading-8 text-gray-600 text-center transition-all duration-300 group-hover:text-indigo-600">
-                        {formatPrice(data.price)}
+                        {formatPrice(priceShow)}
                       </p>
                     </div>
                   </div>

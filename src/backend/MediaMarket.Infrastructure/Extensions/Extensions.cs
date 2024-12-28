@@ -54,7 +54,14 @@ namespace MediaMarket.Infrastructure.Extensions
             services.Configure<JwtConfig>(configuration.GetSection("JwtConfig"));
             var jwtConfig = configuration.GetSection("JwtConfig").Get<JwtConfig>();
 
-            services.AddIdentityCore<User>()
+            services.AddIdentityCore<User>(options =>
+            {
+                options.Password.RequiredLength = 4;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireDigit = false;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             Byte[]? accessSecretKey = Encoding.ASCII.GetBytes(jwtConfig.SecretKey);

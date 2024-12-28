@@ -24,7 +24,7 @@ export default function Page() {
     name: '',
     thumbnail: '',
     shortDescription: '',
-    price: 10000000,
+    price: 100000,
     description: '',
     categoryIds: [],
     tags: [],

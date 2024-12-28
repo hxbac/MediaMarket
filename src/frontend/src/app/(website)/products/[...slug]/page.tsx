@@ -2,9 +2,12 @@ import TagRounded from "@/components/tag/tagRounded";
 import productService from "@/services/productService";
 import { Tag } from "@/interfaces/tag";
 import Link from "next/link";
-import { formatPrice } from "@/utils/helpers";
+import { formatDatetime, formatPrice, timeRemaining } from "@/utils/helpers";
 import Image from "next/image";
 import { ProductType } from "@/enums/ProductType";
+import { DiscountType } from "@/enums/DiscountType";
+import { Tooltip } from "antd";
+import { DiscountItem, EventDiscountItem } from "@/interfaces/products";
 
 interface ProductParams {
   slug: string;
@@ -16,6 +19,31 @@ export default async function Page({ params }: { params: ProductParams }) {
   const response = await productService.getDetail(slug);
   const data = response.data;
   const imagePreview = JSON.parse(data.preview.previewInfo);
+
+  const originalPrice = data.price;
+  const sellerPrice = originalPrice * 70 / 100;
+  const adminPrice = originalPrice - sellerPrice;
+
+  let priceShow: number = originalPrice;
+  if (data.discounts !== null && data.discounts.length > 0) {
+    data.discounts.forEach((item: DiscountItem) => {
+      if (item.type === DiscountType.Fixed) {
+        priceShow -= item.value;
+      } else {
+        priceShow -= (item.value * sellerPrice / 100);
+      }
+    });
+  }
+
+  if (data.eventDiscounts !== null && data.eventDiscounts.length > 0) {
+    data.eventDiscounts.forEach((item: EventDiscountItem) => {
+      if (item.type === DiscountType.Fixed) {
+        priceShow -= item.value;
+      } else {
+        priceShow -= (item.value * adminPrice / 100);
+      }
+    });
+  }
 
   return (
     <section className="bg-white pt-16">
@@ -121,27 +149,48 @@ export default async function Page({ params }: { params: ProductParams }) {
           </div>
           <div className="p-6 border border-gray-200 rounded-xl w-80">
             <div className="rounded-xl border-2 border-purple-600 p-4">
+              {
+                data.eventDiscounts !== null && data.eventDiscounts.length > 0 || data.discounts !== null && data.discounts.length > 0 ? (
+                  <div className="mb-10">
+                    {
+                      data.discounts.map((item: DiscountItem) => (
+                        <div className="flex items-center justify-between font-bold mb-4" key={item.id}>
+                          <span>Giảm {item.type === DiscountType.Fixed ? formatPrice(item.value) : `${item.value}%`}</span>
+                          <Tooltip title={formatDatetime(item.endDate)}>
+                            <span>{timeRemaining(item.endDate)}</span>
+                          </Tooltip>
+                        </div>
+                      ))
+                    }
+                    {
+                      data.eventDiscounts.length > 0 ? (
+                        <>
+                          <p className="text-start text-sm mt-1 mb-4">
+                            Sự kiện giảm giá
+                          </p>
+                          {
+                            data.eventDiscounts.map((item: EventDiscountItem) => (
+                              <div className="flex items-center justify-between font-bold mb-4" key={item.id}>
+                                <span>Giảm {item.type === DiscountType.Fixed ? formatPrice(item.value) : `${item.value}%`}</span>
+                                <Tooltip title={formatDatetime(item.endDate)}>
+                                  <span>{timeRemaining(item.endDate)}</span>
+                                </Tooltip>
+                              </div>
+                            ))
+                          }
+                        </>
+                      ) : <></>
+                    }
+                  </div>
+                ) : (<></>)
+              }
               <div>
-                <h1>{data.name}</h1>
-                <p>{formatPrice(data.price)}</p>
+                <h1 className="text-lg font-bold mb-4">{data.name}</h1>
+                {priceShow !== originalPrice ? (
+                  <p className="mb-2 line-through text-lg font-bold">{formatPrice(originalPrice)}</p>
+                ) : <></>}
+                <p className="text-lg font-bold">{formatPrice(priceShow)}</p>
               </div>
-              {/* <div className="flex items-center justify-between font-bold mb-4">
-                <span>Giảm giá</span>
-                <span>25%</span>
-              </div>
-              <div>
-                <div className="flex items-center justify-between font-bold">
-                  <span>Giảm giá</span>
-                  <span>25%</span>
-                </div>
-                <p className="text-end text-sm mt-1 mb-4">
-                  Sales end on Jan 23, 2025
-                </p>
-              </div>
-              <div className="flex items-center justify-between font-bold mb-4">
-                <span>Giảm giá</span>
-                <span>25%</span>
-              </div> */}
             </div>
             <Link
               href={`/checkout/${data.slug}`}

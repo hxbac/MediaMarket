@@ -24,6 +24,7 @@ namespace MediaMarket.Application.Services
         IGenerativeAIService generativeAIService,
         IImageRepository imageRepository,
         IProductDiscountRepository productDiscountRepository,
+        IEventDiscountRepository eventDiscountRepository,
         IMapper mapper,
         ILogger<ProductService> logger,
         IUser user,
@@ -39,6 +40,7 @@ namespace MediaMarket.Application.Services
         private readonly IGenerativeAIService _generativeAIService = generativeAIService;
         private readonly IImageRepository _imageRepository = imageRepository;
         private readonly IProductDiscountRepository _productDiscountRepository = productDiscountRepository;
+        private readonly IEventDiscountRepository _eventDiscountRepository = eventDiscountRepository;
         private readonly ISearchService _searchService = searchService;
         private readonly IMapper _mapper = mapper;
         private readonly IUser _user = user;
@@ -202,6 +204,8 @@ namespace MediaMarket.Application.Services
         public async Task<BaseResponse<ProductDetailResponse>> GetProductDetail(string slug)
         {
             var product = await _productRepository.GetProductActiveWithRelationship(slug);
+            var eventDiscounts = await _eventDiscountRepository.GetEventDiscountActive();
+            product.EventDiscounts = eventDiscounts;
             return Success(product);
         }
 
@@ -219,7 +223,8 @@ namespace MediaMarket.Application.Services
 
         public async Task<BaseResponse<ProductCheckoutResponse>> GetProductCheckoutInfo(ProductCheckoutRequest request)
         {
-            var product = await _productRepository.FindAsync(x => x.Slug == request.Slug, ["Product"]);
+            var product = await _productRepository.GetProductActiveWithRelationship(request.Slug);
+            var eventDiscounts = await _eventDiscountRepository.GetEventDiscountActive();
             return Success(new ProductCheckoutResponse()
             {
                 Id = product.Id,
@@ -228,6 +233,8 @@ namespace MediaMarket.Application.Services
                 Price = product.Price,
                 Thumbnail = product.Thumbnail,
                 ShortDescription = product.ShortDescription,
+                EventDiscounts = eventDiscounts,
+                ProductDiscounts = product.Discounts,
             });
         }
 
@@ -255,6 +262,7 @@ namespace MediaMarket.Application.Services
                 try
                 {
                     result = await _generativeAIService.GenerateContentAsync<EnhanceInformationResponse>(typeof(ProductPrompt.EnhanceInformation).ReflectedType.Name, replaceContents);
+                    break;
                 }
                 catch (Exception ex)
                 {

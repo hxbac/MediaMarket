@@ -34,12 +34,12 @@ namespace MediaMarket.Infrastructure.Search
                                 .Field(f => f.ShortDescription)
                                 .Query(keyword)
                                 .Fuzziness(Fuzziness.Auto)
-                            ),
-                            m => m.Match(mt => mt
-                                .Field(f => f.Description)
-                                .Query(keyword)
-                                .Fuzziness(Fuzziness.Auto)
                             )
+                            //m => m.Match(mt => mt
+                            //    .Field(f => f.Description)
+                            //    .Query(keyword)
+                            //    .Fuzziness(Fuzziness.Auto)
+                            //)
                         )
                     )
                 )

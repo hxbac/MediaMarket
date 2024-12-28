@@ -278,7 +278,7 @@ export default function Step2({ categories }: { categories: CategoryHomePage[] }
           <span className="ml-2 text-sm font-bold">Cải thiện bằng AI</span>
         </button>
       </div>
-      <div className="mb-4">
+      <div className="mb-16">
         <CustomEditor value={value.description} onChange={onChangeDescription} />
       </div>
       <h2 className="text-sm font-bold mt-8 mb-4">Nhãn sản phẩm</h2>

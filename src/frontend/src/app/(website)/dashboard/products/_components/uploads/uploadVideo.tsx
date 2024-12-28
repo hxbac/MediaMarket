@@ -128,7 +128,7 @@ export default function UploadVideo() {
               <p className="mb-4">Giới hạn thời lượng có thể phát preview là từ {formatSeconds(0)} đến {formatSeconds(videoDuration)}</p>
               <TimePicker.RangePicker
                 onChange={(_, timeString) => onChange(timeString)}
-                format="HH:mm"
+                format="HH:mm:ss"
               />
             </div>
           ) :

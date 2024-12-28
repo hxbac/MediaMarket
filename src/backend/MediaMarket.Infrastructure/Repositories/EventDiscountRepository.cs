@@ -25,6 +25,7 @@ namespace MediaMarket.Infrastructure.Repositories
                     Type = d.Type,
                     Name = d.Name,
                     Value = d.Value,
+                    EndDate = d.EndDate,
                 })
                 .ToListAsync();
         }

@@ -55,3 +55,29 @@ export const showLoading = (show = true) => {
 export const formatShowDotPrice = (price: number) => {
   return new Intl.NumberFormat("vi-VN").format(price);
 }
+
+export const timeRemaining = (targetDate: string): string => {
+  const now = new Date();
+  const target = new Date(targetDate);
+
+  const diffInMs = target.getTime() - now.getTime();
+
+  if (diffInMs <= 0) {
+      return "Đã qua thời gian";
+  }
+
+  const seconds = Math.floor(diffInMs / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (days > 0) {
+      return `Còn ${days} ngày`;
+  } else if (hours > 0) {
+      return `Còn ${hours} giờ`;
+  } else if (minutes > 0) {
+      return `Còn ${minutes} phút`;
+  } else {
+      return `Còn ${seconds} giây`;
+  }
+}

@@ -22,6 +22,7 @@ namespace MediaMarket.Application.DTO.Response.Product
         public ICollection<Entities.Tag>? Tags { get; set; }
         public ICollection<Entities.Category>? Categories { get; set; }
         public Entities.Preview? Preview { get; set; }
-        public ICollection<ProductDiscount> Discounts { get; set; }
+        public ICollection<ProductDiscount> Discounts { get; set; } = new List<ProductDiscount>();
+        public List<Entities.EventDiscount> EventDiscounts { get; set; } = new List<Entities.EventDiscount>();
     }
 }

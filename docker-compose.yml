@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   rabbitmq:
     image: rabbitmq:management
@@ -17,7 +18,17 @@ services:
       - "9200:9200"
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
+  redis:
+    image: redis:7.0.12
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: ["redis-server", "--appendonly", "yes"]
 
 volumes:
   elasticsearch-data:
+    driver: local
+  redis-data:
     driver: local

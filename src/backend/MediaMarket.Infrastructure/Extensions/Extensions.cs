@@ -4,6 +4,7 @@ using MediaMarket.Application.Contracts.Repositories;
 using MediaMarket.Application.Contracts.Services;
 using MediaMarket.Application.Services;
 using MediaMarket.Domain.Entities;
+using MediaMarket.Infrastructure.Cache;
 using MediaMarket.Infrastructure.Data;
 using MediaMarket.Infrastructure.GenerativeAI;
 using MediaMarket.Infrastructure.Interceptors;
@@ -114,6 +115,8 @@ namespace MediaMarket.Infrastructure.Extensions
                             .AllowAnyHeader();
                     });
             });
+
+            services.AddRedisCache(configuration);
 
             services.AddHttpContextAccessor();
             services.AddScoped<IUser, CurrentUser>();

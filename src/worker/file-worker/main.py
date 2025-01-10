@@ -36,10 +36,10 @@ def handle_queue(ch, method, properties, body):
         for url in payload['ImagesUrl']:
             path = download_file(url, folder_path)
             imagesPath.append(path)
-            # result = check_image_content(path)
-            # if (result != 3):
-            #     content_status = result
-            #     break
+            result = check_image_content(path)
+            if (result != 3):
+                content_status = result
+                break
 
         if (content_status == 3):
             compressPath = f"{folder_path}/{payload['ProductId']}-compress.zip"

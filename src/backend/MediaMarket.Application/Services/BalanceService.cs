@@ -13,43 +13,41 @@ namespace MediaMarket.Application.Services
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IBalanceHistoryRepository _balanceHistoryRepository = balanceHistoryRepository;
 
-        public async Task UpdateUserBalance(Guid? accountId, long amount, Guid transactionId, TransactionType transactionType, BalanceType balanceType)
+        public async Task UpdateUserBalance(Guid accountId, long amount, Guid transactionId, TransactionType transactionType, BalanceType balanceType)
         {
-            if (accountId == null)
+            using var transaction = await _userRepository.BeginTransaction(System.Data.IsolationLevel.RepeatableRead);
+            try
             {
-                return;
-            }
+                var user = await _userRepository.FindByIdAsync(accountId);
+                if (user == null)
+                {
+                    await transaction.CommitAsync();
+                    return;
+                }
 
-            var user = await _userRepository.FindByIdAsync(accountId ?? Guid.Empty);
-            if (user == null)
-            {
-                return;
-            }
+                var newBalance = balanceType == BalanceType.TopUp ? user.Balance + amount : user.Balance - amount;
+                user.Balance = newBalance;
 
-            var newBalance = user.Balance;
-            if (balanceType == BalanceType.TopUp)
-            {
-                newBalance += amount;
-            }
-            else
-            {
-                newBalance -= amount;
-            }
+                var balanceHistory = new BalanceHistory()
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = accountId,
+                    PreviousBalance = user.Balance,
+                    NewBalance = newBalance,
+                    TransactionId = transactionId,
+                    TransactionType = transactionType,
+                    CreatedOn = DateTime.UtcNow,
+                };
+                await _balanceHistoryRepository.AddAsync(balanceHistory);
 
-            var balanceHistory = new BalanceHistory()
+                await _userRepository.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
             {
-                Id = Guid.NewGuid(),
-                UserId = accountId ?? Guid.Empty,
-                PreviousBalance = user.Balance,
-                NewBalance = newBalance,
-                TransactionId = transactionId,
-                TransactionType = transactionType,
-                CreatedOn = DateTime.UtcNow,
-            };
-            user.Balance = balanceHistory.NewBalance;
-            await _balanceHistoryRepository.AddAsync(balanceHistory);
-
-            await _userRepository.SaveChangesAsync();
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 }

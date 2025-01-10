@@ -1,9 +1,13 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
+using System.Linq.Expressions;
 
 namespace MediaMarket.Application.Contracts.Repositories
 {
     public interface IBaseRepository<T> where T : class
     {
+        Task<IDbContextTransaction> BeginTransaction();
+        Task<IDbContextTransaction> BeginTransaction(IsolationLevel isolationLevel);
         Task<T> FindByIdAsync(Guid id);
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes = null);

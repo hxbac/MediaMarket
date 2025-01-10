@@ -1,6 +1,7 @@
 ﻿using MediaMarket.Application.Contracts.Repositories;
 using MediaMarket.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
 
 namespace MediaMarket.Infrastructure.Repositories
@@ -28,14 +29,14 @@ namespace MediaMarket.Infrastructure.Repositories
             return entities;
         }
 
-        public async Task<int> CountAsync()
+        public Task<int> CountAsync()
         {
-            return await _context.Set<T>().CountAsync();
+            return _context.Set<T>().CountAsync();
         }
 
-        public async Task<int> CountAsync(Expression<Func<T, bool>> criteria)
+        public Task<int> CountAsync(Expression<Func<T, bool>> criteria)
         {
-            return await _context.Set<T>().CountAsync(criteria);
+            return _context.Set<T>().CountAsync(criteria);
         }
 
         public void Remove(T entity)
@@ -110,6 +111,16 @@ namespace MediaMarket.Infrastructure.Repositories
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public Task<IDbContextTransaction> BeginTransaction()
+        {
+            return _context.Database.BeginTransactionAsync();
+        }
+
+        public Task<IDbContextTransaction> BeginTransaction(System.Data.IsolationLevel isolationLevel)
+        {
+            return _context.Database.BeginTransactionAsync(isolationLevel);
         }
     }
 }

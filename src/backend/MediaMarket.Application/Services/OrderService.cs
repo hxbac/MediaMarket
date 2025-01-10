@@ -38,13 +38,16 @@ namespace MediaMarket.Application.Services
                 await FulFillOrderSuccess(order);
 
                 var product = await _productRepository.FindByIdAsync(order.ProductId);
-                await _balanceService.UpdateUserBalance(
-                    product.CreatedBy,
-                    order.Price,
-                    order.Id,
-                    Domain.Enums.TransactionType.Sell,
-                    Domain.Enums.BalanceType.TopUp
-                );
+                if (product.CreatedBy.HasValue)
+                {
+                    await _balanceService.UpdateUserBalance(
+                        product.CreatedBy.Value,
+                        order.Price,
+                        order.Id,
+                        Domain.Enums.TransactionType.Sell,
+                        Domain.Enums.BalanceType.TopUp
+                    );
+                }
             }
 
             return Success(new CallbackStripeResponse()

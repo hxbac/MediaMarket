@@ -6,6 +6,7 @@ using MediaMarket.Application.Contracts.Services;
 using MediaMarket.Application.DTO.Request.Withdrawal;
 using MediaMarket.Application.DTO.Response.Withdrawal;
 using MediaMarket.Domain.Entities;
+using MediaMarket.Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
 
 namespace MediaMarket.Application.Services
@@ -45,6 +46,10 @@ namespace MediaMarket.Application.Services
         public async Task<BaseResponse<CreateWithdrawalResponse>> CreateRequest(CreateWithdrawalRequest request)
         {
             var user = await _userManager.FindByIdAsync(_user.Id.ToString());
+            if (user == null)
+            {
+                throw new EntityNotFoundException();
+            }
 
             var accountId = user.StripeAccountId;
             if (accountId == null)

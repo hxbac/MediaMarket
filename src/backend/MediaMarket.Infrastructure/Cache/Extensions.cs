@@ -1,4 +1,4 @@
-﻿using MediaMarket.Application.Contracts.Infrastructures.Cạche;
+﻿using MediaMarket.Application.Contracts.Infrastructures.Cache;
 using MediaMarket.Infrastructure.Cache.Redis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

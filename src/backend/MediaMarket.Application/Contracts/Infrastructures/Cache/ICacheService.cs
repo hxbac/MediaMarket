@@ -1,4 +1,4 @@
-﻿namespace MediaMarket.Application.Contracts.Infrastructures.Cạche
+﻿namespace MediaMarket.Application.Contracts.Infrastructures.Cache
 {
     public interface ICacheService
     {

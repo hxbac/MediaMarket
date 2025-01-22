@@ -1,4 +1,4 @@
-﻿using MediaMarket.Application.Contracts.Infrastructures.Cạche;
+﻿using MediaMarket.Application.Contracts.Infrastructures.Cache;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using System.Text.Json;

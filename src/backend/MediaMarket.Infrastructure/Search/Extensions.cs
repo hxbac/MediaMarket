@@ -2,9 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
 
-namespace MediaMarket.Infrastructure.Extensions
+namespace MediaMarket.Infrastructure.Search
 {
-    public static class ElasticSearchExtensions
+    public static class Extensions
     {
         public static IServiceCollection AddElasticSearch(this IServiceCollection services, IConfiguration configuration)
         {

@@ -6,6 +6,7 @@ using MediaMarket.Application.Services;
 using MediaMarket.Domain.Entities;
 using MediaMarket.Infrastructure.Cache;
 using MediaMarket.Infrastructure.Data;
+using MediaMarket.Infrastructure.Event;
 using MediaMarket.Infrastructure.GenerativeAI;
 using MediaMarket.Infrastructure.Interceptors;
 using MediaMarket.Infrastructure.Messaging.Publishers;
@@ -156,6 +157,9 @@ namespace MediaMarket.Infrastructure.Extensions
 
             services.AddElasticSearch(configuration);
             services.AddScoped<ISearchService, ElasticSearchService>();
+
+            services.AddSingleton<GenericHandler>();
+            services.AddEvents();
 
             return services;
         }

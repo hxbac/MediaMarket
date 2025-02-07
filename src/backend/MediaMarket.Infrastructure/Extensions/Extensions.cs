@@ -122,30 +122,9 @@ namespace MediaMarket.Infrastructure.Extensions
             services.AddHttpContextAccessor();
             services.AddScoped<IUser, CurrentUser>();
 
-            services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
-            services.AddScoped<ITagRepository, TagRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<IPreviewRepository, PreviewRepository>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IVideoSolutionRepository, VideoSolutionRepository>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IWithdrawalRepository, WithdrawalRepository>();
-            services.AddScoped<IBalanceHistoryRepository, BalanceHistoryRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IImageRepository, ImageRepository>();
-            services.AddScoped<IProductDiscountRepository, ProductDiscountRepository>();
-            services.AddScoped<IEventDiscountRepository, EventDiscountRepository>();
+            services.AddRepositories();
+            services.AddServices();
 
-            services.AddScoped<ITagService, TagService>();
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IWithdrawalService, WithdrawalService>();
-            services.AddScoped<IBalanceService, BalanceService>();
-            services.AddScoped<IImageService, ImageService>();
-            services.AddScoped<IEventDiscountService, EventDiscountService>();
 
             services.AddSingleton<IFileService, LocalStorageFileService>();
             services.Configure<StripeConfig>(configuration.GetSection("StripeConfig"));
@@ -160,6 +139,40 @@ namespace MediaMarket.Infrastructure.Extensions
 
             services.AddSingleton<GenericHandler>();
             services.AddEvents();
+
+            return services;
+        }
+
+        public static IServiceCollection AddRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
+            services.AddScoped<ITagRepository, TagRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IPreviewRepository, PreviewRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IVideoSolutionRepository, VideoSolutionRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IWithdrawalRepository, WithdrawalRepository>();
+            services.AddScoped<IBalanceHistoryRepository, BalanceHistoryRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IProductDiscountRepository, ProductDiscountRepository>();
+            services.AddScoped<IEventDiscountRepository, EventDiscountRepository>();
+
+            return services;
+        }
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            services.AddScoped<ITagService, TagService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IWithdrawalService, WithdrawalService>();
+            services.AddScoped<IBalanceService, BalanceService>();
+            services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IEventDiscountService, EventDiscountService>();
 
             return services;
         }

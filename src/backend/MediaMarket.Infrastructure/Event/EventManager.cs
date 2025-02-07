@@ -1,17 +1,17 @@
 ﻿using MediaMarket.Application.Bases;
 using MediaMarket.Application.Contracts.Common;
+using MediaMarket.Infrastructure.Services;
 
 namespace MediaMarket.Infrastructure.Event
 {
-    public class EventManager
+    public class EventManager(
+        IEventPublisher eventPublisher,
+        GenericHandler genericHandler
+    )
     {
         private readonly Dictionary<Type, List<Type>> _listeners = new();
-        private readonly IEventPublisher _eventPublisher;
-
-        public EventManager(IEventPublisher eventPublisher)
-        {
-            _eventPublisher = eventPublisher;
-        }
+        private readonly IEventPublisher _eventPublisher = eventPublisher;
+        private readonly GenericHandler _genericHandler = genericHandler;
 
         public void AddListener<TEvent>(Type listener) where TEvent : EventBase
         {
@@ -35,7 +35,7 @@ namespace MediaMarket.Infrastructure.Event
             }
         }
 
-        public async Task TriggerAsync<TEvent>(TEvent @event) where TEvent : EventBase
+        public async Task TriggerAsync<TEvent>(TEvent? @event) where TEvent : EventBase
         {
             var eventType = typeof(TEvent);
 
@@ -43,7 +43,15 @@ namespace MediaMarket.Infrastructure.Event
             {
                 foreach (var listener in _listeners[eventType])
                 {
-                    //await listener.HandleAsync(@event);
+                    if (Array.Exists(listener.GetInterfaces(), i => i == typeof(IShouldQueue)))
+                    {
+                        await _eventPublisher.PublishAsync(@event, "default");
+                    }
+                    else
+                    {
+                        var method = _genericHandler.GetType().GetMethod("InvokeAsync")!.MakeGenericMethod(listener);
+                        await (method.Invoke(_genericHandler, [@event]) as Task);
+                    }
                 }
             }
         }

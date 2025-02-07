@@ -4,16 +4,10 @@ using MediaMarket.Application.Contracts.Services;
 
 namespace MediaMarket.Application.Listeners
 {
-    public class TestListener : IListener
+    public class TestListener(ICategoryService categoryService, IBalanceService balanceService) : IListener, IShouldQueue
     {
-        private readonly ICategoryService _categoryService;
-        private readonly IBalanceService _balanceService;
-
-        public TestListener(ICategoryService categoryService, IBalanceService balanceService)
-        {
-            _categoryService = categoryService;
-            _balanceService = balanceService;
-        }
+        private readonly ICategoryService _categoryService = categoryService;
+        private readonly IBalanceService _balanceService = balanceService;
 
         public async Task HandleAsync(EventBase @event)
         {

@@ -1,4 +1,6 @@
 ## Media Market application
+Media Market is an online content marketplace where users can be both sellers and customers. It also features integrated online content moderation powered by Picpurify.
+This project is for me to implement some patterns like Dependency Injection, Observer Pattern, Inversion of Control, etc., and learn more technologies to support my work.
 ### Technologies and Frameworks
 - .NET 8
 - ASP.NET 8
